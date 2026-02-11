@@ -4,11 +4,9 @@ import "@xyflow/react/dist/style.css";
 import { initialNodes, initialEdges } from "./components/nodeBank";
 import { customNode } from "./model/nodeModel";
 import "./app.css";
-import { JunctionNode } from "./model/junctionNodeModel";
 
 const nodeTypes = {
   customNode: customNode,
-  junctionNode: JunctionNode,
 };
 
 export default function App() {

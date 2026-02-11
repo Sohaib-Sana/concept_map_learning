@@ -1,4 +1,4 @@
-import { Background, Position } from "@xyflow/react";
+import { Position } from "@xyflow/react";
 
 export const initialNodes = [
   {
