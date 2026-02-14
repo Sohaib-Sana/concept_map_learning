@@ -202,7 +202,7 @@ export const initialEdges = [
   // Balance group
   { id: "n5-j3", source: "n5", target: "j3", sourceHandle: "h2", type: "step" },
   { id: "n6-j3", source: "n6", target: "j3", sourceHandle: "h3", type: "step" },
-  { id: "j3-n7", source: "j3", target: "n9", label: "balance between them determines" },
+  { id: "j3-n9", source: "j3", target: "n9", label: "balance between them determines" },
 
   { id: "n9-n10", source: "n9", target: "n10", label: "attraction > movement" },
   { id: "n9-n11", source: "n9", target: "n11", label: "attraction = movement" },
