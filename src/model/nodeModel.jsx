@@ -13,14 +13,19 @@ function handleStyle(position, offset) {
 export function customNode(props) {
   const handles = props.data?.handles ?? [];
   const isJunction = props.data?.isJunction;
-  const isNew = props.data?.isNew;
+
+  const isGhost = props.data?.isGhost; // ✅ NEW
 
   return (
     <div
-      className={[isJunction ? "junction-node" : "nodeStyle", !isJunction ? "node-animate" : "", !isJunction && isNew ? "node-animate--in" : ""].join(
-        " ",
-      )}
-      style={{ position: "relative" }}
+      className={isJunction ? "junction-node" : "nodeStyle"}
+      style={{
+        position: "relative",
+        opacity: isGhost ? 0 : 1,
+        transform: isGhost ? "scale(0.98)" : "scale(1)",
+        transition: "opacity 350ms ease, transform 350ms ease",
+        pointerEvents: isGhost ? "none" : "auto",
+      }}
     >
       {!isJunction && (props.data?.label ?? "Default Text")}
 

@@ -84,6 +84,7 @@ export default function App() {
   const step = storySteps[stepIndex];
   const [beatIndex, setBeatIndex] = useState(0);
   const currentBeat = step?.beats?.[beatIndex];
+  const [ghostNodeIds, setGhostNodeIds] = useState([]);
 
   // ---------- Voice (TTS) ----------
   const voiceSupported = typeof window !== "undefined" && "speechSynthesis" in window && typeof window.SpeechSynthesisUtterance !== "undefined";
@@ -160,18 +161,22 @@ export default function App() {
   // ---------- Render subsets + animation flags ----------
   const nodesToRender = useMemo(() => {
     const visible = new Set(visibleNodeIds);
+    const ghost = new Set(ghostNodeIds);
     const newly = new Set(newNodeIds);
 
+    const renderable = new Set([...visible, ...ghost]);
+
     return allNodes
-      .filter((n) => visible.has(n.id))
+      .filter((n) => renderable.has(n.id))
       .map((n) => ({
         ...n,
         data: {
           ...n.data,
           isNew: newly.has(n.id),
+          isGhost: ghost.has(n.id) && !visible.has(n.id),
         },
       }));
-  }, [allNodes, visibleNodeIds, newNodeIds]);
+  }, [allNodes, visibleNodeIds, ghostNodeIds, newNodeIds]);
 
   const edgesToRender = useMemo(() => {
     const visible = new Set(visibleEdgeIds);
@@ -199,36 +204,24 @@ export default function App() {
   );
 
   // Helper: apply a step's reveal config + compute newly revealed nodes (FIXED)
-  const applyStepReveal = useCallback((s) => {
+  const applyStepReveal = useCallback((beat) => {
+    const nextVisible = beat.reveal.nodes ?? [];
+    const nextGhost = beat.reveal.ghostNodes ?? [];
+
+    setGhostNodeIds(nextGhost);
+    setVisibleEdgeIds(beat.reveal.edges ?? []);
+
     setVisibleNodeIds((prev) => {
       const prevSet = new Set(prev);
-      const next = s.reveal.nodes;
-
-      const added = next.filter((id) => !prevSet.has(id));
+      const added = nextVisible.filter((id) => !prevSet.has(id));
       setNewNodeIds(added);
 
-      if (added.length > 0) {
-        window.setTimeout(() => setNewNodeIds([]), 750);
-      } else {
-        setNewNodeIds([]);
-      }
+      if (added.length > 0) window.setTimeout(() => setNewNodeIds([]), 750);
+      else setNewNodeIds([]);
 
-      return next;
+      return nextVisible;
     });
-
-    setVisibleEdgeIds(s.reveal.edges);
   }, []);
-
-  // Go to a step index reliably
-  // const goToStep = useCallback(
-  //   (idx) => {
-  //     const clamped = Math.max(0, Math.min(idx, storySteps.length - 1));
-  //     setStepIndex(clamped);
-  //     applyStepReveal(storySteps[clamped]);
-  //     return clamped;
-  //   },
-  //   [applyStepReveal],
-  // );
 
   const goToBeat = useCallback(
     (sIdx, bIdx) => {

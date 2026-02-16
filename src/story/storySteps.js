@@ -6,7 +6,12 @@ export const storySteps = [
     title: "Things",
     beats: [
       {
-        narration: "Let’s start with things. \nJust look around you for a moment.\nA chair. A table. Your phone. Your bag.",
+        narration: "Let’s start with things.\nJust look around you for a moment.\nA chair. A table. Your phone. Your bag.",
+        reveal: { nodes: ["n1"], edges: [] },
+        focus: "n1",
+      },
+      {
+        narration: "What about air?\nYou can’t see it… but you can feel it when the wind blows, or when you breathe.\nAll of these count as things.",
         reveal: { nodes: ["n1"], edges: [] },
         focus: "n1",
       },
@@ -18,16 +23,21 @@ export const storySteps = [
     title: "Substances / Materials",
     beats: [
       {
+        narration: "Now here’s a question:\nwhat are these things actually made of?",
+        reveal: { nodes: ["n1"], ghostNodes: ["n2"], edges: ["n1-n2"] },
+        focus: "n2",
+      },
+      {
         narration:
-          "“They’re made of different substances or materials. \nFor example, a chair might be made of wood or metal. \n Clothes are made of fabric. \n Paper is made from wood. \n And air — even though it’s invisible — is still a material.",
+          "They’re made of different substances or materials.\nFor example, a chair might be made of wood or metal.\nClothes are made of fabric.\nPaper is made from wood.\nAnd air — even though it’s invisible — is still a material.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: "n2",
       },
-      // {
-      //   narration: "For example: metal, plastic, wood, glass, paper, and cloth.",
-      //   reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
-      //   focus: "n2",
-      // },
+      {
+        narration: "So substances and materials can be solid, liquid, or gas.",
+        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
+        focus: "n2",
+      },
     ],
   },
 
@@ -36,7 +46,17 @@ export const storySteps = [
     title: "Matter",
     beats: [
       {
-        narration: "That word is matter. Matter is the term that covers all substances and materials.",
+        narration: "Scientists like grouping ideas together,\nso instead of listing every material separately…",
+        reveal: {
+          nodes: ["n1", "n2"],
+          ghostNodes: ["n3"],
+          edges: ["n1-n2", "n2-n3"],
+        },
+        focus: "n2",
+      },
+      {
+        narration:
+          "…they use one word that covers all of them.\nThat word is matter.\nSo, matter means anything made of substances or materials — including solids, liquids, and gases.",
         reveal: { nodes: ["n1", "n2", "n3"], edges: ["n1-n2", "n2-n3"] },
         focus: "n3",
       },
@@ -48,7 +68,16 @@ export const storySteps = [
     title: "Particles",
     beats: [
       {
-        narration: "All matter is made of tiny particles. Much too small to see, even with a microscope.",
+        narration: "Now let’s zoom in — way in.",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4"],
+          edges: ["n1-n2", "n2-n3", "n3-n4"],
+        },
+        focus: "n4",
+      },
+      {
+        narration:
+          "All matter is made of tiny particles.\nThese particles are incredibly small — much too small to see, even with powerful microscopes.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4"],
           edges: ["n1-n2", "n2-n3", "n3-n4"],
@@ -56,17 +85,10 @@ export const storySteps = [
         focus: "n4",
       },
 
-      // ---- EITHER: Atoms / Molecules (uses junction j2) ----
+      // Atoms/Molecules branch (junction j2)
       {
-        narration: "Those particles can be atoms… or they can be molecules.",
-        reveal: {
-          nodes: ["n1", "n2", "n3", "n4", "j2"],
-          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2"],
-        },
-        focus: "n4",
-      },
-      {
-        narration: "Here are atoms and molecules — two ways we describe what particles are.",
+        narration:
+          "These particles can be atoms or molecules.\nYou don’t need to know the difference just yet.\nFor now, it’s enough to know that matter is made of particles.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8"],
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8"],
@@ -74,9 +96,9 @@ export const storySteps = [
         focus: ["n7", "n8"],
       },
 
-      // ---- HAVE BOTH: Attraction / Movement (uses junction j1) ----
+      // Attraction/Movement branch (junction j1)
       {
-        narration: "And all particles have two things going on at the same time.",
+        narration: "There are two really important things about these particles.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1"],
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1"],
@@ -84,17 +106,42 @@ export const storySteps = [
         focus: "n4",
       },
       {
-        narration: "They attract each other… and they also move.",
+        narration: "First — particles are attracted to each other.\nThat means they pull towards one another.",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5"],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5"],
+        },
+        focus: "n5",
+      },
+      {
+        narration: "Second — particles are always moving.\nEven in a solid, where things look completely still,\nthe particles are still moving.",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6"],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6"],
+        },
+        focus: "n6",
+      },
+
+      // Balance -> State of Matter (junction j3 + state)
+      {
+        narration: "So particles are always being pulled together…\nand always trying to move.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6"],
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6"],
         },
         focus: ["n5", "n6"],
       },
-
-      // ---- Balance -> State of Matter (uses junction j3) ----
       {
-        narration: "The balance between attraction and movement decides the state of matter.",
+        narration:
+          "What really matters is the balance between these two.\nIs attraction stronger?\nIs movement stronger?\nOr are they about the same?",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3"],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3"],
+        },
+        focus: "j3",
+      },
+      {
+        narration: "This balance is what determines the state of matter.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9"],
           edges: [
@@ -109,15 +156,24 @@ export const storySteps = [
             "j1-n6",
             "n5-j3",
             "n6-j3",
-            "j3-n9", // NOTE: your edge id is "j3-n7" but target is n9 in nodeBank; keep the same id!
+            "j3-n9", // <-- use your corrected id here
           ],
         },
         focus: "n9",
       },
 
-      // ---- Solid / Liquid / Gas ----
+      // Solid / Liquid / Gas reveals one-by-one
       {
-        narration: "If attraction is stronger than movement, you get a solid.",
+        narration: "That’s why matter can exist as a solid, a liquid, or a gas.\nLet’s connect each one to that balance.",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9"],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9"],
+        },
+        focus: "n9",
+      },
+      {
+        narration:
+          "In a solid, attraction is much stronger than movement.\nParticles are packed closely together.\nThey vibrate — but they don’t move from place to place.\nThat’s why solids have a fixed shape and don’t flow.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9", "n10"],
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9", "n9-n10"],
@@ -125,7 +181,8 @@ export const storySteps = [
         focus: "n10",
       },
       {
-        narration: "If attraction and movement are balanced, you get a liquid.",
+        narration:
+          "In a liquid, attraction and movement are about equal.\nParticles are still close together, but arranged irregularly.\nThey can slide past each other.\nThat’s why liquids don’t have a fixed shape — but they can flow.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9", "n10", "n11"],
           edges: [
@@ -150,7 +207,8 @@ export const storySteps = [
         focus: "n11",
       },
       {
-        narration: "If movement is stronger than attraction, you get a gas.",
+        narration:
+          "In a gas, movement is much greater than attraction.\nParticles are far apart and move freely in all directions.\nThat’s why gases spread out and fill the space they’re in.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9", "n10", "n11", "n12"],
           edges: [
@@ -179,4 +237,12 @@ export const storySteps = [
       },
     ],
   },
+
+  // ---- FUTURE: Temperature + changes of state ----
+  // Add these once you create nodes/edges for temperature and change-of-state arrows.
+  // {
+  //   id: "step-4",
+  //   title: "Temperature",
+  //   beats: [...]
+  // }
 ];
