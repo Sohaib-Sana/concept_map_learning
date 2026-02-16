@@ -1,4 +1,3 @@
-// nodeModel.jsx
 import { Handle, Position } from "@xyflow/react";
 
 function handleStyle(position, offset) {
@@ -9,25 +8,22 @@ function handleStyle(position, offset) {
   }
   return { top: `calc(50% + ${offset}px)` };
 }
-
 export function customNode(props) {
   const handles = props.data?.handles ?? [];
   const isJunction = props.data?.isJunction;
-
-  const isGhost = props.data?.isGhost; // ✅ NEW
+  const isGhost = props.data?.isGhost;
 
   return (
     <div
-      className={isJunction ? "junction-node" : "nodeStyle"}
+      className={isJunction ? "junction-node" : "nodeWrapper"}
       style={{
         position: "relative",
-        opacity: isGhost ? 0 : 1,
         transform: isGhost ? "scale(0.98)" : "scale(1)",
-        transition: "opacity 350ms ease, transform 350ms ease",
-        pointerEvents: isGhost ? "none" : "auto",
+        transition: "transform 350ms ease",
+        pointerEvents: isGhost ? "none" : "auto", // keep if you want node non-interactive
       }}
     >
-      {!isJunction && (props.data?.label ?? "Default Text")}
+      {!isJunction && <div className={`nodeStyle nodeContent ${isGhost ? "ghostContent" : ""}`}>{props.data?.label ?? "Default Text"}</div>}
 
       {handles.map((h) => (
         <Handle

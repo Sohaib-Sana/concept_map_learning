@@ -195,3 +195,37 @@
     transform: scale(1);
   }
 }
+
+/* Keep the handle visible, but hide border when ghost */
+.ghostHandle {
+  border-color: transparent !important;   /* or border: none */
+  box-shadow: none !important;           /* if you have glow/shadow */
+}
+
+/* If you want border to fade with content instead of instant */
+.ghostHandle {
+  transition: border-color 350ms ease, box-shadow 350ms ease;
+}
+
+/* New wrapper: no border/background */
+.nodeWrapper {
+  position: relative;
+}
+
+/* Keep your existing .nodeStyle, but remove border/background from it if you want,
+   OR keep it and override via .nodeContent (shown below). */
+
+/* Put border/background on the content layer */
+.nodeContent {
+  background: white;
+  color: #111;
+  border: 1px solid #222138;
+  padding: 6px 16px;
+  font-size: 14px;
+}
+
+/* Ghost: fade the content (and therefore its border) */
+.ghostContent {
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
