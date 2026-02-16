@@ -6,7 +6,7 @@ import "@xyflow/react/dist/style.css";
 import { initialNodes, initialEdges } from "./components/nodeBank";
 import { customNode } from "./model/nodeModel";
 
-import "./app.css";
+import "./App.css";
 
 import { storySteps } from "./story/storySteps";
 import { LessonPanel } from "./components/lessonPanel";
