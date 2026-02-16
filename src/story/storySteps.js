@@ -1,5 +1,4 @@
 // src/story/storySteps.js
-
 export const storySteps = [
   {
     id: "step-0",
@@ -9,11 +8,13 @@ export const storySteps = [
         narration: "Let’s start with things.\nJust look around you for a moment.\nA chair. A table. Your phone. Your bag.",
         reveal: { nodes: ["n1"], edges: [] },
         focus: "n1",
+        images: ["/images/things-everyday-objects.png"],
       },
       {
         narration: "What about air?\nYou can’t see it… but you can feel it when the wind blows, or when you breathe.\nAll of these count as things.",
         reveal: { nodes: ["n1"], edges: [] },
         focus: "n1",
+        images: ["/images/things-air-wind.png"],
       },
     ],
   },
@@ -26,17 +27,20 @@ export const storySteps = [
         narration: "Now here’s a question:\nwhat are these things actually made of?",
         reveal: { nodes: ["n1"], ghostNodes: ["n2"], edges: ["n1-n2"] },
         focus: "n2",
+        images: ["/images/materials-question-mark.png"],
       },
       {
         narration:
           "They’re made of different substances or materials.\nFor example, a chair might be made of wood or metal.\nClothes are made of fabric.\nPaper is made from wood.\nAnd air — even though it’s invisible — is still a material.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: "n2",
+        images: ["/images/materials-collage-wood-metal-fabric-paper-air.png"],
       },
       {
         narration: "So substances and materials can be solid, liquid, or gas.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: "n2",
+        images: [], // optional, but explicit
       },
     ],
   },
@@ -53,12 +57,14 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3"],
         },
         focus: "n2",
+        images: [],
       },
       {
         narration:
           "…they use one word that covers all of them.\nThat word is matter.\nSo, matter means anything made of substances or materials — including solids, liquids, and gases.",
         reveal: { nodes: ["n1", "n2", "n3"], edges: ["n1-n2", "n2-n3"] },
         focus: "n3",
+        images: [],
       },
     ],
   },
@@ -74,6 +80,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4"],
         },
         focus: "n4",
+        images: ["/images/zoom-in-magnify.png"],
       },
       {
         narration:
@@ -83,6 +90,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4"],
         },
         focus: "n4",
+        images: ["/images/particles-tiny-dots.png"],
       },
 
       // Atoms/Molecules branch (junction j2)
@@ -94,6 +102,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8"],
         },
         focus: ["n7", "n8"],
+        images: ["/images/atoms-vs-molecules-simple.png"],
       },
 
       // Attraction/Movement branch (junction j1)
@@ -104,6 +113,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1"],
         },
         focus: "n4",
+        images: ["/images/particles-two-rules.png"],
       },
       {
         narration: "First — particles are attracted to each other.\nThat means they pull towards one another.",
@@ -112,6 +122,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5"],
         },
         focus: "n5",
+        images: ["/images/particle-attraction-arrows.png"],
       },
       {
         narration: "Second — particles are always moving.\nEven in a solid, where things look completely still,\nthe particles are still moving.",
@@ -120,6 +131,8 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6"],
         },
         focus: "n6",
+        images: ["/images/particle-motion-wiggle.png"],
+        // If you later want an image, add it here as: images: ["/images/particle-motion-wiggle.png"]
       },
 
       // Balance -> State of Matter (junction j3 + state)
@@ -130,6 +143,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6"],
         },
         focus: ["n5", "n6"],
+        images: ["/images/attraction-vs-motion-tug-of-war.png"],
       },
       {
         narration:
@@ -139,27 +153,16 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3"],
         },
         focus: "j3",
+        images: ["/images/balance-scale-attraction-motion.png"],
       },
       {
         narration: "This balance is what determines the state of matter.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9"],
-          edges: [
-            "n1-n2",
-            "n2-n3",
-            "n3-n4",
-            "n4-j2",
-            "j2-n7",
-            "j2-n8",
-            "n4-j1",
-            "j1-n5",
-            "j1-n6",
-            "n5-j3",
-            "n6-j3",
-            "j3-n9", // <-- use your corrected id here
-          ],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9"],
         },
         focus: "n9",
+        images: ["/images/state-of-matter-bridge.png"],
       },
 
       // Solid / Liquid / Gas reveals one-by-one
@@ -170,6 +173,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9"],
         },
         focus: "n9",
+        images: ["/images/three-states-overview.png"],
       },
       {
         narration:
@@ -179,6 +183,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9", "n9-n10"],
         },
         focus: "n10",
+        images: ["/images/solid-particles-packed.png"],
       },
       {
         narration:
@@ -205,6 +210,7 @@ export const storySteps = [
           ],
         },
         focus: "n11",
+        images: ["/images/liquid-particles-slide.png"],
       },
       {
         narration:
@@ -234,15 +240,45 @@ export const storySteps = [
           ],
         },
         focus: "n12",
+        images: ["/images/gas-particles-spread.png"],
       },
     ],
   },
 
-  // ---- FUTURE: Temperature + changes of state ----
-  // Add these once you create nodes/edges for temperature and change-of-state arrows.
-  // {
-  //   id: "step-4",
-  //   title: "Temperature",
-  //   beats: [...]
-  // }
+  {
+    id: "step-4",
+    title: "Pressure",
+    beats: [
+      {
+        narration: "Testing Pressure node",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9", "n10", "n11", "n12", "n13"],
+          edges: [
+            "n1-n2",
+            "n2-n3",
+            "n3-n4",
+            "n4-j2",
+            "j2-n7",
+            "j2-n8",
+            "n4-j1",
+            "j1-n5",
+            "j1-n6",
+            "n5-j3",
+            "n6-j3",
+            "j3-n9",
+            "n9-n10",
+            "n9-n11",
+            "n9-n12",
+            "n10-n11",
+            "n11-n12",
+            "n11-n10",
+            "n12-n11",
+            "n13-n12",
+          ],
+        },
+        focus: ["n12", "n13"],
+        images: ["/images/pressure-gas-in-container.png"],
+      },
+    ],
+  },
 ];

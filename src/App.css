@@ -81,21 +81,22 @@
 }
 /* Target handles: show as an inward-pointing arrow */
 .react-flow__handle.targetHandle {
-  width: 16px;
-  height: 16px;
+  width: 1px;
+  height: 1px;
   background: transparent;
   border: none;
 }
 
 .react-flow__handle.targetHandle::before {
-  content: "";
+  display: none;
+  /* content: "";
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 0;
   height: 0;
-  border-style: solid;
+  border-style: solid; */
 }
 /* Remove arrow from junction target handles */
 .junction-node .react-flow__handle.targetHandle::before {

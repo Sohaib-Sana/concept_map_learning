@@ -18,7 +18,7 @@ export function LessonPanel({ started, title, progressText, beatText, beatImages
               alt={`reference ${i + 1}`}
               style={{
                 width: "100%",
-                height: 130,
+                height: "100%",
                 objectFit: "cover",
                 borderRadius: 10,
                 border: "1px solid #eee",
