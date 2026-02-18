@@ -15,40 +15,118 @@ const nodeTypes = {
   customNode: customNode,
 };
 
-function FlowCanvas({ nodes, edges, onNodesChange, onEdgesChange, onConnect, focusTarget }) {
+function FlowCanvas({ nodes, edges, onNodesChange, onEdgesChange, onConnect, focusTarget, overlayRect }) {
   const rf = useReactFlow();
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+  const intersects = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+
+  const focusAvoidingOverlay = useCallback(
+    (ids) => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const fallbackPanel = { left: 16, top: 16, width: 360, height: 260 };
+      const p = overlayRect?.width ? overlayRect : fallbackPanel;
+
+      const panelBox = {
+        left: p.left,
+        top: p.top,
+        right: p.left + p.width,
+        bottom: p.top + p.height,
+      };
+
+      const margin = 16;
+
+      const focusNodes = ids
+        .map((id) => rf.getNode(id))
+        .filter(Boolean)
+        .filter((n) => !n?.data?.isJunction);
+
+      if (focusNodes.length === 0) return;
+
+      // --- Build bounds in FLOW coords ---
+      const bounds = focusNodes.reduce(
+        (acc, n) => {
+          const x = n.positionAbsolute?.x ?? n.position.x ?? 0;
+          const y = n.positionAbsolute?.y ?? n.position.y ?? 0;
+          const w = n.measured?.width ?? 150;
+          const h = n.measured?.height ?? 50;
+
+          acc.minX = Math.min(acc.minX, x);
+          acc.minY = Math.min(acc.minY, y);
+          acc.maxX = Math.max(acc.maxX, x + w);
+          acc.maxY = Math.max(acc.maxY, y + h);
+          return acc;
+        },
+        { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity },
+      );
+
+      const boxW = Math.max(1, bounds.maxX - bounds.minX);
+      const boxH = Math.max(1, bounds.maxY - bounds.minY);
+      const centerX = bounds.minX + boxW / 2;
+      const centerY = bounds.minY + boxH / 2;
+
+      // --- Choose zoom ---
+      const paddingPx = 48;
+
+      let zoom;
+      if (focusNodes.length === 1) {
+        zoom = 1.15;
+      } else {
+        const z = Math.min((vw - paddingPx * 2) / boxW, (vh - paddingPx * 2) / boxH);
+        zoom = clamp(z, 0.2, 1.4);
+      }
+
+      // --- Default anchor (screen) is the true center ---
+      let anchorX = vw / 2;
+      let anchorY = vh / 2;
+
+      // Screen-space box if placed at (anchorX, anchorY)
+      const screenW = boxW * zoom;
+      const screenH = boxH * zoom;
+
+      const screenBox = {
+        left: anchorX - screenW / 2,
+        top: anchorY - screenH / 2,
+        right: anchorX + screenW / 2,
+        bottom: anchorY + screenH / 2,
+      };
+
+      // If it would be behind the panel, shift the anchor (prefer right, else down)
+      if (intersects(screenBox, panelBox)) {
+        const neededAnchorX = panelBox.right + margin + screenW / 2;
+        const maxAnchorX = vw - margin - screenW / 2;
+
+        if (neededAnchorX <= maxAnchorX) {
+          anchorX = Math.max(anchorX, neededAnchorX);
+        } else {
+          const neededAnchorY = panelBox.bottom + margin + screenH / 2;
+          const maxAnchorY = vh - margin - screenH / 2;
+          anchorY = Math.max(anchorY, Math.min(neededAnchorY, maxAnchorY));
+        }
+      }
+
+      // --- Convert desired anchor position to viewport transform ---
+      // screen = flow * zoom + viewportTranslate
+      const x = anchorX - centerX * zoom;
+      const y = anchorY - centerY * zoom;
+
+      rf.setViewport({ x, y, zoom }, { duration: focusNodes.length === 1 ? 650 : 700 });
+    },
+    [rf, overlayRect],
+  );
 
   useEffect(() => {
     if (!focusTarget || focusTarget.length === 0) return;
 
     const t = window.setTimeout(() => {
-      const ids = focusTarget;
-
-      // If only one node: keep your existing setCenter behavior
-      if (ids.length === 1) {
-        const node = rf.getNode(ids[0]);
-        if (!node || node?.data?.isJunction) return;
-
-        const x = node.positionAbsolute?.x ?? node.position.x ?? 0;
-        const y = node.positionAbsolute?.y ?? node.position.y ?? 0;
-
-        const w = node.measured?.width ?? 150;
-        const h = node.measured?.height ?? 50;
-
-        rf.setCenter(x + w / 2, y + h / 2, { zoom: 1.15, duration: 650 });
-        return;
-      }
-
-      // Multiple nodes: fitView to all of them
-      rf.fitView({
-        nodes: ids.map((id) => rf.getNode(id)).filter(Boolean),
-        padding: 0.35,
-        duration: 700,
-      });
+      focusAvoidingOverlay(focusTarget);
     }, 60);
 
     return () => window.clearTimeout(t);
-  }, [focusTarget, rf]);
+  }, [focusTarget, focusAvoidingOverlay]);
 
   return (
     <ReactFlow
@@ -74,10 +152,10 @@ export default function App() {
 
   // Lesson state
   const [started, setStarted] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(-1);
 
   // Visible graph state
-  const [visibleNodeIds, setVisibleNodeIds] = useState(["n1"]);
+  const [visibleNodeIds, setVisibleNodeIds] = useState([""]);
   const [visibleEdgeIds, setVisibleEdgeIds] = useState([]);
   const [newNodeIds, setNewNodeIds] = useState([]);
 
@@ -157,6 +235,34 @@ export default function App() {
       if (voiceSupported) window.speechSynthesis.cancel();
     };
   }, [voiceSupported]);
+
+  // ---------- Panel Location  ----------//
+  const panelRef = useRef(null);
+  const [panelRect, setPanelRect] = useState(null);
+
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const r = el.getBoundingClientRect();
+      setPanelRect({ left: r.left, top: r.top, width: r.width, height: r.height });
+    };
+
+    update();
+
+    let ro;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(update);
+      ro.observe(el);
+    }
+
+    window.addEventListener("resize", update);
+    return () => {
+      if (ro) ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   // ---------- Render subsets + animation flags ----------
   const nodesToRender = useMemo(() => {
@@ -291,14 +397,19 @@ export default function App() {
   // Start lesson:
   // - if first time: start at 0
   // - if stopped mid-way: resume from current stepIndex
+  // Replace handleStart with this:
   const handleStart = useCallback(() => {
     setStarted(true);
     setAutoplayOn(true);
     autoplayRef.current = true;
 
-    stopVoice();
+    // If TTS is currently paused, resume mid-sentence
+    if (voiceSupported && window.speechSynthesis.paused) {
+      resumeVoice();
+      return;
+    }
 
-    // if first time, start at (0,0). If resuming, continue from current beat.
+    // otherwise (re)start narration from the current beat
     const sIdx = started ? stepIndex : 0;
     const bIdx = started ? beatIndex : 0;
 
@@ -308,13 +419,16 @@ export default function App() {
       if (!autoplayRef.current) return;
       speakBeatAndAutoadvance(sIdx, bIdx);
     }, 200);
-  }, [started, stepIndex, beatIndex, goToBeat, speakBeatAndAutoadvance, stopVoice]);
+  }, [started, stepIndex, beatIndex, goToBeat, speakBeatAndAutoadvance, voiceSupported, resumeVoice]);
 
+  // Replace handleStopLesson with this (pause, don’t cancel):
   const handleStopLesson = useCallback(() => {
     setAutoplayOn(false);
     autoplayRef.current = false;
-    stopVoice();
-  }, [stopVoice]);
+
+    // Pause TTS instead of canceling it
+    pauseVoice();
+  }, [pauseVoice]);
 
   const handleBack = useCallback(() => {
     // If there is a previous beat in the same step
@@ -431,10 +545,12 @@ export default function App() {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             focusTarget={focusTarget}
+            overlayRect={panelRect}
           />
         </div>
 
         <LessonPanel
+          panelRef={panelRef} // ✅ NEW
           started={started}
           title={step?.title}
           progressText={`${currentBeatNumber}/${totalBeats}`}
@@ -442,11 +558,11 @@ export default function App() {
           beatImages={currentBeat?.images ?? []}
           isRunning={autoplayOn}
           canGoBack={canGoBack}
-          canGoNext={canGoNext} // ✅ add
+          canGoNext={canGoNext}
           onStart={handleStart}
           onStop={handleStopLesson}
           onBack={handleBack}
-          onNext={handleNext} // ✅ add
+          onNext={handleNext}
         />
       </div>
     </ReactFlowProvider>

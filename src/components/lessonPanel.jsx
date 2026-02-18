@@ -1,5 +1,6 @@
 // src/components/lessonPanel.jsx
 export function LessonPanel({
+  panelRef, // ✅ NEW
   started,
   title,
   progressText,
@@ -7,16 +8,19 @@ export function LessonPanel({
   beatImages,
   isRunning,
   canGoBack,
-  canGoNext, // ✅ add
+  canGoNext,
   onStart,
   onStop,
   onBack,
-  onNext, // ✅ add
+  onNext,
 }) {
+  const primaryLabel = !started ? "Start" : isRunning ? "Pause" : "Resume";
+  const onPrimaryClick = !started ? onStart : isRunning ? onStop : onStart;
+
   return (
-    <div style={panelStyle}>
+    <div ref={panelRef} style={panelStyle}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontWeight: 700, fontSize: 15, color: "#222" }}>{title ?? "Concept Map Lesson"}</div>
+        <div style={{ fontWeight: 700, fontSize: 15, color: "#222" }}>{title ?? "States of Matter"}</div>
         {started && <div style={{ fontSize: 12, color: "#666" }}>{progressText}</div>}
       </div>
 
@@ -56,17 +60,10 @@ export function LessonPanel({
           </button>
         )}
 
-        {!isRunning ? (
-          <button onClick={onStart} style={{ ...btnPrimary, flex: 1 }}>
-            Start
-          </button>
-        ) : (
-          <button onClick={onStop} style={{ ...btnDanger, flex: 1 }}>
-            Stop
-          </button>
-        )}
+        <button onClick={onPrimaryClick} style={{ ...(isRunning ? btnDanger : btnPrimary), flex: 1 }}>
+          {primaryLabel}
+        </button>
 
-        {/* ✅ Next button on the RIGHT of Start/Stop */}
         {started && (
           <button
             onClick={onNext}
@@ -86,8 +83,8 @@ export function LessonPanel({
 }
 
 const panelStyle = {
-  position: "absolute",
-  right: 16,
+  position: "fixed", // ✅ was "absolute"
+  left: 16,
   top: 16,
   width: 360,
   background: "rgba(255,255,255,0.95)",
@@ -96,7 +93,9 @@ const panelStyle = {
   padding: 14,
   boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   textAlign: "left",
+  zIndex: 50, // ✅ ensure it stays above canvas
 };
+
 const btnPrimary = {
   padding: "10px 12px",
   borderRadius: 10,
