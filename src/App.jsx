@@ -373,6 +373,52 @@ export default function App() {
   }, [stepIndex, beatIndex]);
 
   const canGoBack = started && (stepIndex > 0 || beatIndex > 0);
+  const beatsInThisStep = storySteps[stepIndex]?.beats ?? [];
+  const isLastBeatInStep = beatIndex >= Math.max(0, beatsInThisStep.length - 1);
+  const isLastStep = stepIndex >= storySteps.length - 1;
+
+  const canGoNext = started && !(isLastStep && isLastBeatInStep);
+
+  const handleNext = useCallback(() => {
+    // stop any current speech so it doesn't overlap
+    stopVoice();
+
+    const stepObj = storySteps[stepIndex];
+    const beats = stepObj?.beats ?? [];
+    const lastBeatIdx = Math.max(0, beats.length - 1);
+
+    const isLastBeatInStep = beatIndex >= lastBeatIdx;
+    const isLastStep = stepIndex >= storySteps.length - 1;
+
+    // Next beat in same step
+    if (!isLastBeatInStep) {
+      const next = goToBeat(stepIndex, beatIndex + 1);
+
+      // if autoplay is on, keep autoplay chain going from this new position
+      if (autoplayRef.current) {
+        window.setTimeout(() => {
+          if (!autoplayRef.current) return;
+          speakBeatAndAutoadvance(next.stepIndex, next.beatIndex);
+        }, 200);
+      }
+      return;
+    }
+
+    // Next step, first beat
+    if (!isLastStep) {
+      const next = goToBeat(stepIndex + 1, 0);
+
+      if (autoplayRef.current) {
+        window.setTimeout(() => {
+          if (!autoplayRef.current) return;
+          speakBeatAndAutoadvance(next.stepIndex, next.beatIndex);
+        }, 200);
+      }
+      return;
+    }
+
+    // End of lesson: nothing to go to
+  }, [beatIndex, stepIndex, goToBeat, stopVoice, speakBeatAndAutoadvance]);
 
   return (
     <ReactFlowProvider>
@@ -396,9 +442,11 @@ export default function App() {
           beatImages={currentBeat?.images ?? []}
           isRunning={autoplayOn}
           canGoBack={canGoBack}
+          canGoNext={canGoNext} // ✅ add
           onStart={handleStart}
           onStop={handleStopLesson}
           onBack={handleBack}
+          onNext={handleNext} // ✅ add
         />
       </div>
     </ReactFlowProvider>

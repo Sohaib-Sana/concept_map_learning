@@ -1,5 +1,18 @@
 // src/components/lessonPanel.jsx
-export function LessonPanel({ started, title, progressText, beatText, beatImages, isRunning, canGoBack, onStart, onStop, onBack }) {
+export function LessonPanel({
+  started,
+  title,
+  progressText,
+  beatText,
+  beatImages,
+  isRunning,
+  canGoBack,
+  canGoNext, // ✅ add
+  onStart,
+  onStop,
+  onBack,
+  onNext, // ✅ add
+}) {
   return (
     <div style={panelStyle}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -52,6 +65,21 @@ export function LessonPanel({ started, title, progressText, beatText, beatImages
             Stop
           </button>
         )}
+
+        {/* ✅ Next button on the RIGHT of Start/Stop */}
+        {started && (
+          <button
+            onClick={onNext}
+            disabled={!canGoNext}
+            style={{
+              ...btnSecondary,
+              opacity: canGoNext ? 1 : 0.5,
+              cursor: canGoNext ? "pointer" : "not-allowed",
+            }}
+          >
+            Next
+          </button>
+        )}
       </div>
     </div>
   );
@@ -69,7 +97,6 @@ const panelStyle = {
   boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   textAlign: "left",
 };
-
 const btnPrimary = {
   padding: "10px 12px",
   borderRadius: 10,
@@ -80,7 +107,6 @@ const btnPrimary = {
   fontWeight: 700,
   cursor: "pointer",
 };
-
 const btnSecondary = {
   padding: "10px 12px",
   borderRadius: 10,
@@ -91,7 +117,6 @@ const btnSecondary = {
   fontWeight: 700,
   cursor: "pointer",
 };
-
 const btnDanger = {
   padding: "10px 12px",
   borderRadius: 10,

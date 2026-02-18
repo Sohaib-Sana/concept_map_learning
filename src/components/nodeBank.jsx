@@ -137,10 +137,13 @@ export const initialNodes = [
   {
     id: "n13",
     data: {
-      label: "Pressure",
-      handles: [{ id: "h1", type: "source", position: Position.Bottom }],
+      label: "Temperature",
+      handles: [
+        { id: "h1", type: "source", position: Position.Bottom },
+        { id: "h2", type: "source", position: Position.Left },
+      ],
     },
-    position: { x: 615, y: 480 },
+    position: { x: 830, y: 380 },
     type: "customNode",
   },
   {
@@ -221,5 +224,6 @@ export const initialEdges = [
   { id: "n11-n10", source: "n11", target: "n10", sourceHandle: "h4", targetHandle: "h3", markerEnd: { type: "arrowclosed" } },
   { id: "n12-n11", source: "n12", target: "n11", targetHandle: "h5", markerEnd: { type: "arrowclosed" } },
 
-  { id: "n13-n12", source: "n13", target: "n12", label: "influences", markerEnd: { type: "arrowclosed" } },
+  { id: "n13-n6", source: "n13", target: "n6", label: "affects", sourceHandle: "h2", targetHandle: "h2", markerEnd: { type: "arrowclosed" } },
+  { id: "n13-n9", source: "n13", target: "n9", label: "affects volume of all three states", markerEnd: { type: "arrowclosed" }, type: "step" },
 ];
