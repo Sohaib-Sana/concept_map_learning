@@ -19,7 +19,6 @@ function FlowCanvas({ nodes, edges, onNodesChange, onEdgesChange, onConnect, foc
   const rf = useReactFlow();
 
   const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
-
   const intersects = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 
   const focusAvoidingOverlay = useCallback(
@@ -46,7 +45,6 @@ function FlowCanvas({ nodes, edges, onNodesChange, onEdgesChange, onConnect, foc
 
       if (focusNodes.length === 0) return;
 
-      // --- Build bounds in FLOW coords ---
       const bounds = focusNodes.reduce(
         (acc, n) => {
           const x = n.positionAbsolute?.x ?? n.position.x ?? 0;
@@ -68,7 +66,6 @@ function FlowCanvas({ nodes, edges, onNodesChange, onEdgesChange, onConnect, foc
       const centerX = bounds.minX + boxW / 2;
       const centerY = bounds.minY + boxH / 2;
 
-      // --- Choose zoom ---
       const paddingPx = 48;
 
       let zoom;
@@ -79,11 +76,9 @@ function FlowCanvas({ nodes, edges, onNodesChange, onEdgesChange, onConnect, foc
         zoom = clamp(z, 0.2, 1.4);
       }
 
-      // --- Default anchor (screen) is the true center ---
       let anchorX = vw / 2;
       let anchorY = vh / 2;
 
-      // Screen-space box if placed at (anchorX, anchorY)
       const screenW = boxW * zoom;
       const screenH = boxH * zoom;
 
@@ -94,7 +89,6 @@ function FlowCanvas({ nodes, edges, onNodesChange, onEdgesChange, onConnect, foc
         bottom: anchorY + screenH / 2,
       };
 
-      // If it would be behind the panel, shift the anchor (prefer right, else down)
       if (intersects(screenBox, panelBox)) {
         const neededAnchorX = panelBox.right + margin + screenW / 2;
         const maxAnchorX = vw - margin - screenW / 2;
@@ -108,8 +102,6 @@ function FlowCanvas({ nodes, edges, onNodesChange, onEdgesChange, onConnect, foc
         }
       }
 
-      // --- Convert desired anchor position to viewport transform ---
-      // screen = flow * zoom + viewportTranslate
       const x = anchorX - centerX * zoom;
       const y = anchorY - centerY * zoom;
 
@@ -169,10 +161,13 @@ export default function App() {
 
   const [speakingState, setSpeakingState] = useState("idle"); // "idle" | "speaking" | "paused"
 
-  // ✅ NEW: highlight range for the currently spoken word
+  // ✅ highlight range for the currently spoken word
   const [ttsRange, setTtsRange] = useState(null); // { start, end } | null
   const HIGHLIGHT_WORDS = 6;
   const LOOKAHEAD_WORDS = 1;
+
+  // ✅ NEW: whether "Resume" is truly possible (paused utterance exists)
+  const [canResume, setCanResume] = useState(false);
 
   // Clear highlight whenever the visible narration changes
   useEffect(() => {
@@ -190,9 +185,19 @@ export default function App() {
 
   const stopVoice = useCallback(() => {
     if (!voiceSupported) return;
-    window.speechSynthesis.cancel();
+
+    const synth = window.speechSynthesis;
+
+    // Force resume before cancel to avoid "stuck paused" in some browsers
+    try {
+      synth.resume();
+    } catch {}
+
+    synth.cancel();
+
     setSpeakingState("idle");
-    setTtsRange(null); // ✅ NEW
+    setTtsRange(null);
+    setCanResume(false);
   }, [voiceSupported]);
 
   const speak = useCallback(
@@ -204,18 +209,18 @@ export default function App() {
 
       // Stop current speech before starting new
       window.speechSynthesis.cancel();
+      setCanResume(false);
       setTtsRange(null);
 
-      // ✅ Build "token" spans once for this utterance (non-whitespace chunks)
+      // Build token spans once for this utterance (non-whitespace chunks)
       const spans = [];
-      const re = /\S+/g; // treats punctuation attached to words as part of the token
+      const re = /\S+/g;
       let m;
       while ((m = re.exec(raw))) {
         spans.push({ start: m.index, end: m.index + m[0].length });
       }
 
       const findSpanIndex = (charIndex) => {
-        // Binary search for the span containing charIndex
         let lo = 0;
         let hi = spans.length - 1;
 
@@ -227,7 +232,6 @@ export default function App() {
           else return mid;
         }
 
-        // If boundary lands on whitespace/punctuation weirdness, pick closest "next" token
         return Math.max(0, Math.min(lo, spans.length - 1));
       };
 
@@ -248,15 +252,10 @@ export default function App() {
 
         const i = findSpanIndex(e.charIndex);
 
-        // ✅ trailing window: previous (HIGHLIGHT_WORDS - 1) + current word
         const startToken = Math.max(0, i - (HIGHLIGHT_WORDS - 1));
-
-        // optionally include a tiny lookahead (0 recommended)
         const endToken = Math.min(spans.length - 1, i + LOOKAHEAD_WORDS);
 
         const start = spans[startToken].start;
-
-        // ✅ include spaces after the last highlighted token by ending at next token start
         const end = endToken + 1 < spans.length ? spans[endToken + 1].start : raw.length;
 
         setTtsRange({ start, end });
@@ -265,22 +264,20 @@ export default function App() {
       u.onend = () => {
         setSpeakingState("idle");
         setTtsRange(null);
+        setCanResume(false); // ended => can't resume
         if (onEnd) onEnd();
       };
 
       u.onerror = () => {
         setSpeakingState("idle");
         setTtsRange(null);
+        setCanResume(false);
       };
 
       window.speechSynthesis.speak(u);
     },
     [voiceSupported],
   );
-
-  // const playVoice = useCallback(() => {
-  //   speak(step?.narration);
-  // }, [speak, step]);
 
   const pauseVoice = useCallback(() => {
     if (!voiceSupported) return;
@@ -376,7 +373,7 @@ export default function App() {
     [visibleNodeIds],
   );
 
-  // Helper: apply a step's reveal config + compute newly revealed nodes (FIXED)
+  // Helper: apply a step's reveal config + compute newly revealed nodes
   const applyStepReveal = useCallback((beat) => {
     const nextVisible = beat.reveal.nodes ?? [];
     const nextGhost = beat.reveal.ghostNodes ?? [];
@@ -415,7 +412,7 @@ export default function App() {
     [applyStepReveal],
   );
 
-  // Autoplay engine: speak current step, then advance on end (if autoplay still on)
+  // Autoplay engine: speak beat, then advance on end (if autoplay still on)
   const speakBeatAndAutoadvance = useCallback(
     (sIdx, bIdx) => {
       const stepObj = storySteps[sIdx];
@@ -432,7 +429,6 @@ export default function App() {
           const isLastBeatInStep = bIdx >= beats.length - 1;
           const isLastStep = sIdx >= storySteps.length - 1;
 
-          // Next beat in same step
           if (!isLastBeatInStep) {
             const next = goToBeat(sIdx, bIdx + 1);
             window.setTimeout(() => {
@@ -442,7 +438,6 @@ export default function App() {
             return;
           }
 
-          // Move to next step, first beat
           if (!isLastStep) {
             const next = goToBeat(sIdx + 1, 0);
             window.setTimeout(() => {
@@ -452,31 +447,26 @@ export default function App() {
             return;
           }
 
-          // End of lesson
           setAutoplayOn(false);
           autoplayRef.current = false;
+          setCanResume(false);
         },
       });
     },
     [goToBeat, speak],
   );
 
-  // Start lesson:
-  // - if first time: start at 0
-  // - if stopped mid-way: resume from current stepIndex
-  // Replace handleStart with this:
-  const handleStart = useCallback(() => {
+  // ✅ Start fresh from the current beat/page
+  const startFromHere = useCallback(() => {
     setStarted(true);
     setAutoplayOn(true);
     autoplayRef.current = true;
 
-    // If TTS is currently paused, resume mid-sentence
-    if (voiceSupported && window.speechSynthesis.paused) {
-      resumeVoice();
-      return;
-    }
+    setCanResume(false);
 
-    // otherwise (re)start narration from the current beat
+    // ensure engine is not stuck
+    stopVoice();
+
     const sIdx = started ? stepIndex : 0;
     const bIdx = started ? beatIndex : 0;
 
@@ -486,24 +476,42 @@ export default function App() {
       if (!autoplayRef.current) return;
       speakBeatAndAutoadvance(sIdx, bIdx);
     }, 200);
-  }, [started, stepIndex, beatIndex, goToBeat, speakBeatAndAutoadvance, voiceSupported, resumeVoice]);
+  }, [started, stepIndex, beatIndex, goToBeat, speakBeatAndAutoadvance, stopVoice]);
 
-  // Replace handleStopLesson with this (pause, don’t cancel):
+  // ✅ Resume if possible, else start from current page
+  const handleResume = useCallback(() => {
+    setAutoplayOn(true);
+    autoplayRef.current = true;
+
+    const synth = voiceSupported ? window.speechSynthesis : null;
+    if (synth && synth.paused && canResume) {
+      resumeVoice();
+      return;
+    }
+
+    startFromHere();
+  }, [voiceSupported, canResume, resumeVoice, startFromHere]);
+
+  // ✅ Pause lesson (do NOT cancel), mark resumability
   const handleStopLesson = useCallback(() => {
     setAutoplayOn(false);
     autoplayRef.current = false;
 
-    // Pause TTS instead of canceling it
+    const synth = voiceSupported ? window.speechSynthesis : null;
+    const resumable = !!(synth && synth.speaking); // must be speaking to pause & resume
+    setCanResume(resumable);
+
     pauseVoice();
-  }, [pauseVoice]);
+  }, [pauseVoice, voiceSupported]);
 
   const handleBack = useCallback(() => {
-    // If there is a previous beat in the same step
+    stopVoice();
+    setCanResume(false);
+
     if (beatIndex > 0) {
       const prev = goToBeat(stepIndex, beatIndex - 1);
 
       if (autoplayRef.current) {
-        stopVoice();
         window.setTimeout(() => {
           if (!autoplayRef.current) return;
           speakBeatAndAutoadvance(prev.stepIndex, prev.beatIndex);
@@ -512,7 +520,6 @@ export default function App() {
       return;
     }
 
-    // Otherwise go to previous step's LAST beat
     if (stepIndex > 0) {
       const prevStepBeats = storySteps[stepIndex - 1].beats ?? [];
       const lastBeatIndex = Math.max(0, prevStepBeats.length - 1);
@@ -520,7 +527,6 @@ export default function App() {
       const prev = goToBeat(stepIndex - 1, lastBeatIndex);
 
       if (autoplayRef.current) {
-        stopVoice();
         window.setTimeout(() => {
           if (!autoplayRef.current) return;
           speakBeatAndAutoadvance(prev.stepIndex, prev.beatIndex);
@@ -529,9 +535,8 @@ export default function App() {
     }
   }, [beatIndex, stepIndex, goToBeat, stopVoice, speakBeatAndAutoadvance]);
 
-  // Only focus if the focus node is currently visible
   const focusTarget = useMemo(() => {
-    const f = currentBeat?.focus; // (in beats) or step?.focus if you still use that somewhere
+    const f = currentBeat?.focus;
     if (!f) return null;
 
     const arr = Array.isArray(f) ? f : [f];
@@ -561,8 +566,8 @@ export default function App() {
   const canGoNext = started && !(isLastStep && isLastBeatInStep);
 
   const handleNext = useCallback(() => {
-    // stop any current speech so it doesn't overlap
     stopVoice();
+    setCanResume(false);
 
     const stepObj = storySteps[stepIndex];
     const beats = stepObj?.beats ?? [];
@@ -571,11 +576,9 @@ export default function App() {
     const isLastBeatInStep = beatIndex >= lastBeatIdx;
     const isLastStep = stepIndex >= storySteps.length - 1;
 
-    // Next beat in same step
     if (!isLastBeatInStep) {
       const next = goToBeat(stepIndex, beatIndex + 1);
 
-      // if autoplay is on, keep autoplay chain going from this new position
       if (autoplayRef.current) {
         window.setTimeout(() => {
           if (!autoplayRef.current) return;
@@ -585,7 +588,6 @@ export default function App() {
       return;
     }
 
-    // Next step, first beat
     if (!isLastStep) {
       const next = goToBeat(stepIndex + 1, 0);
 
@@ -597,8 +599,6 @@ export default function App() {
       }
       return;
     }
-
-    // End of lesson: nothing to go to
   }, [beatIndex, stepIndex, goToBeat, stopVoice, speakBeatAndAutoadvance]);
 
   return (
@@ -617,7 +617,7 @@ export default function App() {
         </div>
 
         <LessonPanel
-          panelRef={panelRef} // ✅ NEW
+          panelRef={panelRef}
           started={started}
           title={step?.title}
           progressText={`${currentBeatNumber}/${totalBeats}`}
@@ -626,11 +626,13 @@ export default function App() {
           isRunning={autoplayOn}
           canGoBack={canGoBack}
           canGoNext={canGoNext}
-          onStart={handleStart}
+          onStart={startFromHere}
+          onResume={handleResume}
           onStop={handleStopLesson}
           onBack={handleBack}
           onNext={handleNext}
-          highlightRange={ttsRange} // ✅ NEW
+          canResume={canResume}
+          highlightRange={ttsRange}
         />
       </div>
     </ReactFlowProvider>

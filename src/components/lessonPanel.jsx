@@ -1,6 +1,6 @@
 // src/components/lessonPanel.jsx
 export function LessonPanel({
-  panelRef, // ✅ NEW
+  panelRef,
   started,
   title,
   progressText,
@@ -10,15 +10,15 @@ export function LessonPanel({
   canGoBack,
   canGoNext,
   onStart,
+  onResume,
   onStop,
   onBack,
   onNext,
-
-  // ✅ NEW: { start:number, end:number } | null
+  canResume,
   highlightRange,
 }) {
-  const primaryLabel = !started ? "Start" : isRunning ? "Pause" : "Resume";
-  const onPrimaryClick = !started ? onStart : isRunning ? onStop : onStart;
+  const primaryLabel = !started ? "Start" : isRunning ? "Pause" : canResume ? "Resume" : "Start";
+  const onPrimaryClick = !started ? onStart : isRunning ? onStop : canResume ? onResume : onStart;
 
   return (
     <div ref={panelRef} style={panelStyle}>
@@ -87,7 +87,6 @@ export function LessonPanel({
   );
 }
 
-// ✅ NEW helper
 function renderHighlighted(text, range) {
   const t = text ?? "";
   if (!range || typeof range.start !== "number" || typeof range.end !== "number") return t;
@@ -114,7 +113,7 @@ function renderHighlighted(text, range) {
 }
 
 const panelStyle = {
-  position: "fixed", // ✅ was "absolute"
+  position: "fixed",
   left: 16,
   top: 16,
   width: 300,
@@ -124,7 +123,7 @@ const panelStyle = {
   padding: 12,
   boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   textAlign: "left",
-  zIndex: 50, // ✅ ensure it stays above canvas
+  zIndex: 50,
 };
 
 const btnPrimary = {
@@ -137,6 +136,7 @@ const btnPrimary = {
   fontWeight: 700,
   cursor: "pointer",
 };
+
 const btnSecondary = {
   padding: "10px 12px",
   borderRadius: 10,
@@ -147,6 +147,7 @@ const btnSecondary = {
   fontWeight: 700,
   cursor: "pointer",
 };
+
 const btnDanger = {
   padding: "10px 12px",
   borderRadius: 10,
