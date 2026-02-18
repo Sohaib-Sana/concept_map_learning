@@ -169,6 +169,16 @@ export default function App() {
 
   const [speakingState, setSpeakingState] = useState("idle"); // "idle" | "speaking" | "paused"
 
+  // ✅ NEW: highlight range for the currently spoken word
+  const [ttsRange, setTtsRange] = useState(null); // { start, end } | null
+  const HIGHLIGHT_WORDS = 6;
+  const LOOKAHEAD_WORDS = 1;
+
+  // Clear highlight whenever the visible narration changes
+  useEffect(() => {
+    setTtsRange(null);
+  }, [currentBeat?.narration]);
+
   // Autoplay flag
   const [autoplayOn, setAutoplayOn] = useState(false);
 
@@ -182,38 +192,95 @@ export default function App() {
     if (!voiceSupported) return;
     window.speechSynthesis.cancel();
     setSpeakingState("idle");
+    setTtsRange(null); // ✅ NEW
   }, [voiceSupported]);
 
   const speak = useCallback(
     (text, { onEnd } = {}) => {
       if (!voiceSupported) return;
 
-      const t = (text ?? "").trim();
-      if (!t) return;
+      const raw = text ?? "";
+      if (!raw.trim()) return;
 
       // Stop current speech before starting new
       window.speechSynthesis.cancel();
+      setTtsRange(null);
 
-      const u = new window.SpeechSynthesisUtterance(t);
+      // ✅ Build "token" spans once for this utterance (non-whitespace chunks)
+      const spans = [];
+      const re = /\S+/g; // treats punctuation attached to words as part of the token
+      let m;
+      while ((m = re.exec(raw))) {
+        spans.push({ start: m.index, end: m.index + m[0].length });
+      }
+
+      const findSpanIndex = (charIndex) => {
+        // Binary search for the span containing charIndex
+        let lo = 0;
+        let hi = spans.length - 1;
+
+        while (lo <= hi) {
+          const mid = (lo + hi) >> 1;
+          const s = spans[mid];
+          if (charIndex < s.start) hi = mid - 1;
+          else if (charIndex >= s.end) lo = mid + 1;
+          else return mid;
+        }
+
+        // If boundary lands on whitespace/punctuation weirdness, pick closest "next" token
+        return Math.max(0, Math.min(lo, spans.length - 1));
+      };
+
+      const u = new window.SpeechSynthesisUtterance(raw);
       u.rate = 1;
       u.pitch = 1;
       u.volume = 1;
 
-      u.onstart = () => setSpeakingState("speaking");
+      u.onstart = () => {
+        setSpeakingState("speaking");
+        setTtsRange({ start: 0, end: 0 });
+      };
+
+      u.onboundary = (e) => {
+        if (typeof e.charIndex !== "number") return;
+        if (e.name && e.name !== "word") return;
+        if (spans.length === 0) return;
+
+        const i = findSpanIndex(e.charIndex);
+
+        // ✅ trailing window: previous (HIGHLIGHT_WORDS - 1) + current word
+        const startToken = Math.max(0, i - (HIGHLIGHT_WORDS - 1));
+
+        // optionally include a tiny lookahead (0 recommended)
+        const endToken = Math.min(spans.length - 1, i + LOOKAHEAD_WORDS);
+
+        const start = spans[startToken].start;
+
+        // ✅ include spaces after the last highlighted token by ending at next token start
+        const end = endToken + 1 < spans.length ? spans[endToken + 1].start : raw.length;
+
+        setTtsRange({ start, end });
+      };
+
       u.onend = () => {
         setSpeakingState("idle");
+        setTtsRange(null);
         if (onEnd) onEnd();
       };
-      u.onerror = () => setSpeakingState("idle");
+
+      u.onerror = () => {
+        setSpeakingState("idle");
+        setTtsRange(null);
+      };
 
       window.speechSynthesis.speak(u);
     },
     [voiceSupported],
   );
 
-  const playVoice = useCallback(() => {
-    speak(step?.narration);
-  }, [speak, step]);
+  // const playVoice = useCallback(() => {
+  //   speak(step?.narration);
+  // }, [speak, step]);
 
   const pauseVoice = useCallback(() => {
     if (!voiceSupported) return;
@@ -563,6 +630,7 @@ export default function App() {
           onStop={handleStopLesson}
           onBack={handleBack}
           onNext={handleNext}
+          highlightRange={ttsRange} // ✅ NEW
         />
       </div>
     </ReactFlowProvider>

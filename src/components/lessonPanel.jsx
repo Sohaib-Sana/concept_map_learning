@@ -13,6 +13,9 @@ export function LessonPanel({
   onStop,
   onBack,
   onNext,
+
+  // ✅ NEW: { start:number, end:number } | null
+  highlightRange,
 }) {
   const primaryLabel = !started ? "Start" : isRunning ? "Pause" : "Resume";
   const onPrimaryClick = !started ? onStart : isRunning ? onStop : onStart;
@@ -24,7 +27,9 @@ export function LessonPanel({
         {started && <div style={{ fontSize: 12, color: "#666" }}>{progressText}</div>}
       </div>
 
-      <div style={{ fontSize: 13, color: "#222", marginTop: 10, lineHeight: 1.5 }}>{started ? beatText : "Tap Start to begin the lesson."}</div>
+      <div style={{ fontSize: 13, color: "#222", marginTop: 10, lineHeight: 1.5 }}>
+        {started ? renderHighlighted(beatText, highlightRange) : "Tap Start to begin the lesson."}
+      </div>
 
       {started && beatImages?.length > 0 && (
         <div style={{ marginTop: 12, display: "grid", gap: 2 }}>
@@ -79,6 +84,32 @@ export function LessonPanel({
         )}
       </div>
     </div>
+  );
+}
+
+// ✅ NEW helper
+function renderHighlighted(text, range) {
+  const t = text ?? "";
+  if (!range || typeof range.start !== "number" || typeof range.end !== "number") return t;
+
+  const start = Math.max(0, Math.min(range.start, t.length));
+  const end = Math.max(start, Math.min(range.end, t.length));
+  if (start === end) return t;
+
+  return (
+    <>
+      {t.slice(0, start)}
+      <mark
+        style={{
+          background: "rgba(255, 230, 0, 0.55)",
+          borderRadius: 6,
+          padding: "0 2px",
+        }}
+      >
+        {t.slice(start, end)}
+      </mark>
+      {t.slice(end)}
+    </>
   );
 }
 
