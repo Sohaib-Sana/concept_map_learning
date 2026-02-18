@@ -27,16 +27,16 @@ export function LessonPanel({
       <div style={{ fontSize: 13, color: "#222", marginTop: 10, lineHeight: 1.5 }}>{started ? beatText : "Tap Start to begin the lesson."}</div>
 
       {started && beatImages?.length > 0 && (
-        <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
+        <div style={{ marginTop: 12, display: "grid", gap: 2 }}>
           {beatImages.map((src, i) => (
             <img
               key={`${src}-${i}`}
               src={src}
               alt={`reference ${i + 1}`}
               style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
+                width: "18rem",
+                height: "18rem",
+                objectFit: "fill",
                 borderRadius: 10,
                 border: "1px solid #eee",
               }}
@@ -86,11 +86,11 @@ const panelStyle = {
   position: "fixed", // ✅ was "absolute"
   left: 16,
   top: 16,
-  width: 360,
+  width: 300,
   background: "rgba(255,255,255,0.95)",
   border: "1px solid #e9e9e9",
   borderRadius: 12,
-  padding: 14,
+  padding: 12,
   boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   textAlign: "left",
   zIndex: 50, // ✅ ensure it stays above canvas
