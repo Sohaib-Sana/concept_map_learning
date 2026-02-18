@@ -46,7 +46,7 @@ export const initialNodes = [
   },
   {
     id: "n5",
-    position: { x: 400, y: 380 },
+    position: { x: 430, y: 380 },
     data: {
       label: "Attraction",
       handles: [
@@ -58,7 +58,7 @@ export const initialNodes = [
   },
   {
     id: "n6",
-    position: { x: 650, y: 380 },
+    position: { x: 620, y: 380 },
     data: {
       label: "Movement",
       handles: [
@@ -118,7 +118,7 @@ export const initialNodes = [
         { id: "h5", type: "target", position: Position.Right, offset: 10 },
       ],
     },
-    position: { x: 540, y: 650 },
+    position: { x: 545, y: 650 },
     type: "customNode",
   },
   {
@@ -131,7 +131,7 @@ export const initialNodes = [
         { id: "h3", type: "source", position: Position.Left, offset: 10 },
       ],
     },
-    position: { x: 850, y: 650 },
+    position: { x: 800, y: 650 },
     type: "customNode",
   },
   {
@@ -143,7 +143,7 @@ export const initialNodes = [
         { id: "h2", type: "source", position: Position.Left },
       ],
     },
-    position: { x: 830, y: 380 },
+    position: { x: 800, y: 380 },
     type: "customNode",
   },
   {
@@ -180,7 +180,7 @@ export const initialNodes = [
   },
   {
     id: "j3",
-    position: { x: 580, y: 460 }, // between n5 and n6
+    position: { x: 580, y: 465 }, // between n5 and n6
     data: {
       label: "",
       isJunction: true,
@@ -196,34 +196,34 @@ export const initialNodes = [
 ];
 
 export const initialEdges = [
-  { id: "n1-n2", source: "n1", target: "n2", label: "made of various", markerEnd: { type: "arrowclosed" } },
-  { id: "n2-n3", source: "n2", target: "n3", label: "that scientist call", markerEnd: { type: "arrowclosed" } },
-  { id: "n3-n4", source: "n3", target: "n4", label: "made of tiny", markerEnd: { type: "arrowclosed" } },
+  { id: "n1-n2", source: "n1", target: "n2", label: "Made of various", markerEnd: { type: "arrowclosed" } },
+  { id: "n2-n3", source: "n2", target: "n3", label: "That scientist call", markerEnd: { type: "arrowclosed" } },
+  { id: "n3-n4", source: "n3", target: "n4", label: "Made of tiny", markerEnd: { type: "arrowclosed" } },
 
   // HAVE BOTH group
-  { id: "n4-j1", source: "n4", target: "j1", sourceHandle: "h3", label: "have both" },
+  { id: "n4-j1", source: "n4", target: "j1", sourceHandle: "h3", label: "Have both" },
   { id: "j1-n5", source: "j1", target: "n5", sourceHandle: "out1", type: "step", markerEnd: { type: "arrowclosed" } },
   { id: "j1-n6", source: "j1", target: "n6", sourceHandle: "out2", type: "step", markerEnd: { type: "arrowclosed" } },
 
   // EITHER group
-  { id: "n4-j2", source: "n4", target: "j2", sourceHandle: "h2", label: "either" },
+  { id: "n4-j2", source: "n4", target: "j2", sourceHandle: "h2", label: "Either" },
   { id: "j2-n7", source: "j2", target: "n7", sourceHandle: "out1", type: "step", markerEnd: { type: "arrowclosed" } },
   { id: "j2-n8", source: "j2", target: "n8", sourceHandle: "out2", type: "step", markerEnd: { type: "arrowclosed" } },
 
   // Balance group
   { id: "n5-j3", source: "n5", target: "j3", sourceHandle: "h2", type: "step" },
   { id: "n6-j3", source: "n6", target: "j3", sourceHandle: "h3", type: "step" },
-  { id: "j3-n9", source: "j3", target: "n9", label: "balance between them determines", markerEnd: { type: "arrowclosed" } },
+  { id: "j3-n9", source: "j3", target: "n9", label: "Balance between them determines", markerEnd: { type: "arrowclosed" } },
 
   { id: "n9-n10", source: "n9", target: "n10", label: "attraction > movement", markerEnd: { type: "arrowclosed" } },
   { id: "n9-n11", source: "n9", target: "n11", label: "attraction = movement", markerEnd: { type: "arrowclosed" } },
   { id: "n9-n12", source: "n9", target: "n12", label: "attraction < movement", markerEnd: { type: "arrowclosed" } },
-  { id: "n10-n11", source: "n10", target: "n11", targetHandle: "h2", markerEnd: { type: "arrowclosed" } },
+  { id: "n10-n11", source: "n10", target: "n11", targetHandle: "h2", label: "Melting", markerEnd: { type: "arrowclosed" } },
   { id: "n11-n12", source: "n11", target: "n12", targetHandle: "h2", markerEnd: { type: "arrowclosed" } },
 
-  { id: "n11-n10", source: "n11", target: "n10", sourceHandle: "h4", targetHandle: "h3", markerEnd: { type: "arrowclosed" } },
-  { id: "n12-n11", source: "n12", target: "n11", targetHandle: "h5", markerEnd: { type: "arrowclosed" } },
+  { id: "n11-n10", source: "n11", target: "n10", sourceHandle: "h4", label: "Freezing", targetHandle: "h3", markerEnd: { type: "arrowclosed" } },
+  { id: "n12-n11", source: "n12", target: "n11", targetHandle: "h5", label: "Condensation", markerEnd: { type: "arrowclosed" } },
 
-  { id: "n13-n6", source: "n13", target: "n6", label: "affects", sourceHandle: "h2", targetHandle: "h2", markerEnd: { type: "arrowclosed" } },
-  { id: "n13-n9", source: "n13", target: "n9", label: "affects volume of all three states", markerEnd: { type: "arrowclosed" }, type: "step" },
+  { id: "n13-n6", source: "n13", target: "n6", label: "Affects", sourceHandle: "h2", targetHandle: "h2", markerEnd: { type: "arrowclosed" } },
+  { id: "n13-n9", source: "n13", target: "n9", label: "Affects volume of all three states", markerEnd: { type: "arrowclosed" }, type: "step" },
 ];

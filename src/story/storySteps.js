@@ -466,4 +466,41 @@ export const storySteps = [
       },
     ],
   },
+  {
+    id: "step-4",
+    title: "Concept Recap",
+    beats: [
+      {
+        narration:
+          "So instead of memorising facts about solids, liquids, and gases… …you can always come back to the same core idea. \n Particles. \n Attraction. \n Movement. \n And temperature.",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9", "n10", "n11", "n12", "n13"],
+          edges: [
+            "n1-n2",
+            "n2-n3",
+            "n3-n4",
+            "n4-j2",
+            "j2-n7",
+            "j2-n8",
+            "n4-j1",
+            "j1-n5",
+            "j1-n6",
+            "n5-j3",
+            "n6-j3",
+            "j3-n9",
+            "n9-n10",
+            "n9-n11",
+            "n9-n12",
+            "n13-n6",
+            "n13-n9",
+            "n10-n11",
+            "n11-n12",
+            "n12-n11",
+            "n11-n10",
+          ],
+        },
+        focus: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9", "n10", "n11", "n12", "n13"],
+      },
+    ],
+  },
 ];
