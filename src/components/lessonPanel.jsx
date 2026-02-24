@@ -16,9 +16,13 @@ export function LessonPanel({
   onNext,
   canResume,
   highlightRange,
+  speakingState,
 }) {
-  const primaryLabel = !started ? "Start" : isRunning ? "Pause" : canResume ? "Resume" : "Start";
+  const primaryLabel = !started ? "Start" : isRunning ? (speakingState === "loading" ? "Loading..." : "Pause") : canResume ? "Resume" : "Start";
   const onPrimaryClick = !started ? onStart : isRunning ? onStop : canResume ? onResume : onStart;
+
+  // ✅ Disable Pause if audio isn't actually speaking (loading/fetching)
+  const disablePrimary = started && isRunning && speakingState !== "speaking";
 
   return (
     <div ref={panelRef} style={panelStyle}>
@@ -65,7 +69,16 @@ export function LessonPanel({
           </button>
         )}
 
-        <button onClick={onPrimaryClick} style={{ ...(isRunning ? btnDanger : btnPrimary), flex: 1 }}>
+        <button
+          onClick={onPrimaryClick}
+          disabled={disablePrimary}
+          style={{
+            ...(isRunning ? btnDanger : btnPrimary),
+            flex: 1,
+            opacity: disablePrimary ? 0.5 : 1,
+            cursor: disablePrimary ? "not-allowed" : "pointer",
+          }}
+        >
           {primaryLabel}
         </button>
 
