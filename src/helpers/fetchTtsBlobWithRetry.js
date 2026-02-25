@@ -1,4 +1,4 @@
-// ✅ Put this helper somewhere above speak() (inside App.jsx, outside the component or inside App()).
+// src/helpers/fetchTtsBlobWithRetry.js
 export async function fetchTtsBlobWithRetry(payload, { tries = 2, baseDelayMs = 250 } = {}) {
   let lastText = "";
   for (let attempt = 0; attempt < tries; attempt++) {
