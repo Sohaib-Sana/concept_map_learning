@@ -231,3 +231,254 @@
   opacity: 0;
   transition: opacity 350ms ease;
 }
+
+/* =========================
+   Lesson Panel (lp*)
+   ========================= */
+
+.lpPanel {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  width: 320px;
+  z-index: 50;
+
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+
+  box-shadow: 0 14px 40px rgba(2, 6, 23, 0.1);
+  text-align: left;
+}
+
+/* Header */
+.lpHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.lpHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lpHeaderTitle {
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: #0f172a;
+}
+
+.lpHeaderSub {
+  font-size: 12px;
+  line-height: 1.2;
+  color: rgba(15, 23, 42, 0.6);
+  min-height: 14px; /* keeps header stable */
+}
+
+.lpProgressPill {
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(15, 23, 42, 0.75);
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* Body */
+.lpBodyText {
+  margin-top: 12px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(15, 23, 42, 0.92);
+}
+
+.lpHighlight {
+  background: rgba(255, 230, 0, 0.55);
+  border-radius: 6px;
+  padding: 0 2px;
+}
+
+/* Images */
+.lpImageGrid {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.lpImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.08);
+}
+
+/* Controls */
+.lpControlsRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.lpBtn {
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 900;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, border-color 120ms ease,
+    opacity 120ms ease;
+}
+
+.lpBtnPrimary {
+  border-color: rgba(79, 70, 229, 0.3);
+  background: linear-gradient(180deg, rgba(79, 70, 229, 0.95), rgba(67, 56, 202, 0.95));
+  color: #fff;
+  box-shadow: 0 10px 18px rgba(79, 70, 229, 0.18);
+}
+
+.lpBtnSecondary {
+  border-color: rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  color: rgba(15, 23, 42, 0.92);
+  box-shadow: 0 8px 16px rgba(2, 6, 23, 0.06);
+}
+
+.lpBtnDanger {
+  border-color: rgba(220, 38, 38, 0.25);
+  background: rgba(254, 242, 242, 0.9);
+  color: rgba(153, 27, 27, 0.95);
+  box-shadow: 0 8px 16px rgba(220, 38, 38, 0.08);
+}
+
+.lpBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.lpBtn:active:not(:disabled) {
+  transform: translateY(0px);
+}
+
+.lpBtn:focus-visible {
+  outline: 3px solid rgba(79, 70, 229, 0.35);
+  outline-offset: 2px;
+}
+
+.lpBtn.isDisabled,
+.lpBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Question */
+.lpQCard {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: linear-gradient(180deg, rgba(248, 250, 252, 1), rgba(255, 255, 255, 1));
+  box-shadow: 0 12px 28px rgba(2, 6, 23, 0.08);
+}
+
+.lpQPrompt {
+  font-size: 16px;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.lpQOptions {
+  display: grid;
+  gap: 10px;
+}
+
+.lpQOptionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: #fff;
+  color: #0b1220;
+
+  cursor: pointer;
+  text-align: left;
+
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.lpQOptionBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(79, 70, 229, 0.35);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.1);
+}
+
+.lpQOptionBtn:active {
+  transform: translateY(0px) scale(0.99);
+}
+
+.lpQOptionBtn:focus-visible {
+  outline: 3px solid rgba(79, 70, 229, 0.35);
+  outline-offset: 2px;
+}
+
+.lpQOptionText {
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.lpQChevron {
+  font-size: 20px;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+/* Feedback states */
+.lpQOptionBtn.isCorrect {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.10);
+  color: #064e3b;
+  box-shadow: 0 10px 22px rgba(34, 197, 94, 0.10);
+}
+
+.lpQOptionBtn.isWrong {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.10);
+  color: #7f1d1d;
+  box-shadow: 0 10px 22px rgba(239, 68, 68, 0.10);
+}
+
+.lpQOptionBtn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* Small screens */
+@media (max-width: 520px) {
+  .lpPanel {
+    width: 92vw;
+    left: 4vw;
+  }
+}

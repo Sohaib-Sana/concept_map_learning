@@ -41,6 +41,11 @@ export const storySteps = [
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: "n2",
         images: [], // optional, but explicit
+        question: {
+          prompt: "Particles can be what?",
+          options: ["Atoms", "Molecules", "Atoms or molecules"],
+          correctIndex: 2,
+        },
       },
     ],
   },
@@ -132,7 +137,6 @@ export const storySteps = [
         },
         focus: "n6",
         images: ["/images/particle-motion-wiggle.png"],
-        // If you later want an image, add it here as: images: ["/images/particle-motion-wiggle.png"]
       },
 
       // Balance -> State of Matter (junction j3 + state)
@@ -190,24 +194,7 @@ export const storySteps = [
           "In a liquid, attraction and movement are about equal.\nParticles are still close together, but arranged irregularly.\nThey can slide past each other.\nThat’s why liquids don’t have a fixed shape — but they can flow.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "j2", "n7", "n8", "j1", "n5", "n6", "j3", "n9", "n10", "n11"],
-          edges: [
-            "n1-n2",
-            "n2-n3",
-            "n3-n4",
-            "n4-j2",
-            "j2-n7",
-            "j2-n8",
-            "n4-j1",
-            "j1-n5",
-            "j1-n6",
-            "n5-j3",
-            "n6-j3",
-            "j3-n9",
-            "n9-n10",
-            "n9-n11",
-            // "n10-n11",
-            // "n11-n10",
-          ],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9", "n9-n10", "n9-n11"],
         },
         focus: "n11",
         images: ["/images/liquid-particles-slide.png"],
@@ -233,10 +220,6 @@ export const storySteps = [
             "n9-n10",
             "n9-n11",
             "n9-n12",
-            // "n10-n11",
-            // "n11-n12",
-            // "n11-n10",
-            // "n12-n11",
           ],
         },
         focus: "n12",

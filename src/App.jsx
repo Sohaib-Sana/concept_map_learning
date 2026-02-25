@@ -25,6 +25,9 @@ export default function App() {
   // Lesson state
   const [started, setStarted] = useState(false);
   const [stepIndex, setStepIndex] = useState(-1);
+  // NEW: remember correct answers per beat so user can't skip later
+  const [answeredCorrectByBeat, setAnsweredCorrectByBeat] = useState({});
+  // key format: `${stepIndex}:${beatIndex}` -> true
 
   // Visible graph state
   const [visibleNodeIds, setVisibleNodeIds] = useState([""]);
@@ -46,6 +49,18 @@ export default function App() {
     autoplayRef.current = autoplayOn;
   }, [autoplayOn]);
 
+  // Lesson question gate
+  const [activeQuestion, setActiveQuestion] = useState(null);
+  // shape: { stepIndex, beatIndex, prompt, options, correctIndex?, selectedIndex? }
+  const [waitingForAnswer, setWaitingForAnswer] = useState(false);
+  const [questionFeedback, setQuestionFeedback] = useState(null);
+  // shape: { selectedIndex, isCorrect }
+
+  const clearQuestionGate = useCallback(() => {
+    setActiveQuestion(null);
+    setWaitingForAnswer(false);
+  }, []);
+
   // Prefetch hook
   const { prefetchUpcomingBeats, PREFETCH_AHEAD } = useTtsPrefetch({
     storySteps,
@@ -66,6 +81,16 @@ export default function App() {
     // handled by player end/stop, but keep parity with original
     // (LessonPanel gets null highlight until speak starts)
   }, [currentBeat?.narration]);
+
+  const showQuestionForBeat = useCallback((sIdx, bIdx) => {
+    const beat = storySteps[sIdx]?.beats?.[bIdx];
+    if (!beat?.question?.prompt || !Array.isArray(beat.question.options)) return false;
+
+    setActiveQuestion({ stepIndex: sIdx, beatIndex: bIdx, ...beat.question });
+    setQuestionFeedback(null);
+    setWaitingForAnswer(true);
+    return true;
+  }, []);
 
   // ---------- Panel Location ----------
   const panelRef = useRef(null);
@@ -137,6 +162,9 @@ export default function App() {
 
   const goToBeat = useCallback(
     (sIdx, bIdx) => {
+      clearQuestionGate(); // 👈 NEW (prevents stale question when navigating)
+      setQuestionFeedback(null);
+
       const stepCount = storySteps.length;
       const safeStep = Math.max(0, Math.min(sIdx, stepCount - 1));
 
@@ -151,7 +179,7 @@ export default function App() {
 
       return { stepIndex: safeStep, beatIndex: safeBeat };
     },
-    [applyStepReveal],
+    [applyStepReveal, clearQuestionGate],
   );
 
   // Autoplay engine: speak beat, then advance on end (if autoplay still on)
@@ -168,7 +196,26 @@ export default function App() {
         stepIdxForPrefetch: sIdx,
         beatIdxForPrefetch: bIdx,
         onEnd: () => {
+          const key = `${sIdx}:${bIdx}`;
+
+          // 👇 show question only if not already answered correctly
+          if (!answeredCorrectByBeat[key] && beat.question?.prompt && Array.isArray(beat.question?.options)) {
+            setActiveQuestion({ stepIndex: sIdx, beatIndex: bIdx, ...beat.question });
+            setQuestionFeedback(null);
+            setWaitingForAnswer(true);
+            return;
+          }
           if (!autoplayRef.current) return;
+          if (beat.question?.prompt && Array.isArray(beat.question?.options)) {
+            setActiveQuestion({
+              stepIndex: sIdx,
+              beatIndex: bIdx,
+              ...beat.question,
+            });
+            setQuestionFeedback(null);
+            setWaitingForAnswer(true);
+            return; // IMPORTANT: do not advance until answered
+          }
 
           const isLastBeatInStep = bIdx >= beats.length - 1;
           const isLastStep = sIdx >= storySteps.length - 1;
@@ -201,7 +248,7 @@ export default function App() {
         },
       });
     },
-    [goToBeat, speak, prefetchUpcomingBeats, PREFETCH_AHEAD, setCanResume],
+    [goToBeat, speak, prefetchUpcomingBeats, PREFETCH_AHEAD, setCanResume, answeredCorrectByBeat],
   );
 
   // Start fresh from the current beat/page
@@ -286,6 +333,15 @@ export default function App() {
     stopVoice();
     setCanResume(false);
 
+    const current = storySteps[stepIndex]?.beats?.[beatIndex];
+    const key = `${stepIndex}:${beatIndex}`;
+
+    if (current?.question && !answeredCorrectByBeat[key]) {
+      // show the question instead of moving forward
+      showQuestionForBeat(stepIndex, beatIndex);
+      return;
+    }
+
     const stepObj = storySteps[stepIndex];
     const beats = stepObj?.beats ?? [];
     const lastBeatIdx = Math.max(0, beats.length - 1);
@@ -366,7 +422,74 @@ export default function App() {
   const beatsInThisStep = storySteps[stepIndex]?.beats ?? [];
   const isLastBeatInStep = beatIndex >= Math.max(0, beatsInThisStep.length - 1);
   const isLastStep = stepIndex >= storySteps.length - 1;
-  const canGoNext = started && !(isLastStep && isLastBeatInStep);
+
+  const isQuestionMode = waitingForAnswer && activeQuestion;
+  // allow next only if not in question mode OR user has answered correctly
+  const allowForward = !isQuestionMode || questionFeedback?.isCorrect === true;
+  const canGoNext = started && !(isLastStep && isLastBeatInStep) && allowForward;
+
+  const handleAnswer = useCallback(
+    (selectedIndex) => {
+      if (!activeQuestion) return;
+
+      const correctIndex = activeQuestion.correctIndex;
+      const isCorrect = selectedIndex === correctIndex;
+
+      setQuestionFeedback({ selectedIndex, isCorrect });
+
+      // ❌ Wrong: stay here (do not continue)
+      if (!isCorrect) return;
+      if (isCorrect) {
+        const key = `${activeQuestion.stepIndex}:${activeQuestion.beatIndex}`;
+        setAnsweredCorrectByBeat((prev) => ({ ...prev, [key]: true }));
+      }
+
+      // ✅ Correct: close question and continue
+      setWaitingForAnswer(false);
+
+      // continue autoplay if it was on
+      if (!autoplayRef.current) return;
+
+      const sIdx = activeQuestion.stepIndex;
+      const bIdx = activeQuestion.beatIndex;
+
+      const stepObj = storySteps[sIdx];
+      const beats = stepObj?.beats ?? [];
+
+      const isLastBeatInStep = bIdx >= beats.length - 1;
+      const isLastStep = sIdx >= storySteps.length - 1;
+
+      // small delay so user sees green feedback
+      window.setTimeout(() => {
+        if (!isLastBeatInStep) {
+          const next = goToBeat(sIdx, bIdx + 1);
+          prefetchUpcomingBeats(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
+
+          window.setTimeout(() => {
+            if (!autoplayRef.current) return;
+            speakBeatAndAutoadvance(next.stepIndex, next.beatIndex);
+          }, 200);
+          return;
+        }
+
+        if (!isLastStep) {
+          const next = goToBeat(sIdx + 1, 0);
+          prefetchUpcomingBeats(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
+
+          window.setTimeout(() => {
+            if (!autoplayRef.current) return;
+            speakBeatAndAutoadvance(next.stepIndex, next.beatIndex);
+          }, 200);
+          return;
+        }
+
+        setAutoplayOn(false);
+        autoplayRef.current = false;
+        setCanResume(false);
+      }, 450);
+    },
+    [activeQuestion, goToBeat, prefetchUpcomingBeats, PREFETCH_AHEAD, speakBeatAndAutoadvance, setCanResume],
+  );
 
   return (
     <ReactFlowProvider>
@@ -404,6 +527,10 @@ export default function App() {
           teachingToneOn={teachingToneOn}
           onToggleTeachingTone={() => setTeachingToneOn((v) => !v)}
           speakingState={speakingState}
+          question={activeQuestion}
+          waitingForAnswer={waitingForAnswer}
+          onAnswer={handleAnswer}
+          questionFeedback={questionFeedback}
         />
       </div>
     </ReactFlowProvider>
