@@ -45,6 +45,10 @@ export const storySteps = [
           prompt: "Particles can be what?",
           options: ["Atoms", "Molecules", "Atoms or molecules"],
           correctIndex: 2,
+          feedback: {
+            correct: "✅ Nice! Particles can be atoms or molecules.",
+            incorrect: "❌ Not quite. Remember: molecules are made of atoms, and atoms can exist alone too.",
+          },
         },
       },
     ],

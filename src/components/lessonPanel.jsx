@@ -23,8 +23,11 @@ export function LessonPanel({
   questionFeedback,
 }) {
   const isQuestionMode = !!(waitingForAnswer && question);
+
   const primaryLabel = !started ? "Start" : isRunning ? (speakingState === "loading" ? "Loading..." : "Pause") : canResume ? "Resume" : "Start";
+
   const onPrimaryClick = !started ? onStart : isRunning ? onStop : canResume ? onResume : onStart;
+
   const disablePrimary = started && isRunning && speakingState !== "speaking";
 
   return (
@@ -33,7 +36,16 @@ export function LessonPanel({
       <div className="lpHeaderRow">
         <div className="lpHeaderLeft">
           <div className="lpHeaderTitle">{isQuestionMode ? "QUESTION" : (title ?? "States of Matter")}</div>
-          <div className="lpHeaderSub">{isQuestionMode ? "Choose one option to continue" : started ? "Lesson" : ""}</div>
+
+          <div className="lpHeaderSub">
+            {isQuestionMode
+              ? questionFeedback?.isCorrect
+                ? "Correct — press Next to continue"
+                : "Choose one option to continue"
+              : started
+                ? "Lesson"
+                : ""}
+          </div>
         </div>
 
         {!isQuestionMode && started && <div className="lpProgressPill">{progressText}</div>}
@@ -64,7 +76,7 @@ export function LessonPanel({
               const selected = questionFeedback?.selectedIndex === idx;
               const isCorrect = idx === question.correctIndex;
 
-              const showFeedback = !!questionFeedback; // after first click
+              const showFeedback = !!questionFeedback;
               const isWrongSelected = showFeedback && selected && !questionFeedback.isCorrect;
               const isCorrectShown = showFeedback && isCorrect;
 
@@ -76,7 +88,7 @@ export function LessonPanel({
                   onClick={() => onAnswer(idx)}
                   className={cls}
                   type="button"
-                  disabled={questionFeedback?.isCorrect === true} // lock after correct (optional)
+                  disabled={!!questionFeedback} // lock after first selection (right or wrong)
                 >
                   <span className="lpQOptionText">{opt}</span>
                   <span className="lpQChevron">{isCorrectShown ? "✓" : "›"}</span>
@@ -84,29 +96,42 @@ export function LessonPanel({
               );
             })}
           </div>
+
+          {/* Feedback under options */}
+          {questionFeedback && (
+            <div className="lpQFeedbackWrap">
+              <div className={`lpQFeedback ${questionFeedback.isCorrect ? "isCorrect" : "isWrong"}`}>
+                {questionFeedback.isCorrect
+                  ? (question.feedback?.correct ?? "Correct! Press Next to continue.")
+                  : (question.feedback?.incorrect ?? "Not quite. Press Try again to re-attempt.")}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
       {/* Controls */}
-      <div className="lpControlsRow">
+      <div className="lpControlsRow justify-between">
         {started && (
           <button onClick={onBack} disabled={!canGoBack} className={`lpBtn lpBtnSecondary ${!canGoBack ? "isDisabled" : ""}`} type="button">
             Back
           </button>
         )}
 
-        <button
-          onClick={onPrimaryClick}
-          disabled={disablePrimary}
-          className={`lpBtn ${isRunning ? "lpBtnDanger" : "lpBtnPrimary"} ${disablePrimary ? "isDisabled" : ""}`}
-          type="button"
-          style={{ flex: 1 }}
-        >
-          {primaryLabel}
-        </button>
+        {!isQuestionMode && (
+          <button
+            onClick={onPrimaryClick}
+            disabled={disablePrimary}
+            className={`lpBtn ${isRunning ? "lpBtnDanger" : "lpBtnPrimary"} ${disablePrimary ? "isDisabled" : ""}`}
+            type="button"
+            style={{ flex: 1 }}
+          >
+            {primaryLabel}
+          </button>
+        )}
 
         {started && (
-          <button onClick={onNext} disabled={!canGoNext} className={`lpBtn lpBtnSecondary ${!canGoNext ? "isDisabled" : ""}`} type="button">
+          <button onClick={onNext} disabled={!canGoNext} className={`lpBtn lpBtnSecondary  ${!canGoNext ? "isDisabled" : ""}`} type="button">
             Next
           </button>
         )}

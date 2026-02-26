@@ -27,7 +27,8 @@ export default function App() {
   // Lesson state
   const [started, setStarted] = useState(false);
   const [stepIndex, setStepIndex] = useState(-1);
-  // NEW: remember correct answers per beat so user can't skip later
+
+  // remember correct answers per beat so user can't skip later
   const [answeredCorrectByBeat, setAnsweredCorrectByBeat] = useState({});
   // key format: `${stepIndex}:${beatIndex}` -> true
 
@@ -41,7 +42,7 @@ export default function App() {
   const currentBeat = step?.beats?.[beatIndex];
   const [ghostNodeIds, setGhostNodeIds] = useState([]);
 
-  // NEW: teaching tone toggle
+  // teaching tone toggle
   const [teachingToneOn, setTeachingToneOn] = useState(true);
 
   // Autoplay flag
@@ -53,7 +54,7 @@ export default function App() {
 
   // Lesson question gate
   const [activeQuestion, setActiveQuestion] = useState(null);
-  // shape: { stepIndex, beatIndex, prompt, options, correctIndex?, selectedIndex? }
+  // shape: { stepIndex, beatIndex, prompt, options, correctIndex }
   const [waitingForAnswer, setWaitingForAnswer] = useState(false);
   const [questionFeedback, setQuestionFeedback] = useState(null);
   // shape: { selectedIndex, isCorrect }
@@ -77,22 +78,6 @@ export default function App() {
     prefetchUpcomingBeats: (sIdx, bIdx) => prefetchUpcomingBeats(sIdx, bIdx, PREFETCH_AHEAD),
     highlightConfig: { highlightWords: 6, lookaheadWords: 1 },
   });
-
-  // Clear highlight whenever the visible narration changes
-  useEffect(() => {
-    // handled by player end/stop, but keep parity with original
-    // (LessonPanel gets null highlight until speak starts)
-  }, [currentBeat?.narration]);
-
-  const showQuestionForBeat = useCallback((sIdx, bIdx) => {
-    const beat = storySteps[sIdx]?.beats?.[bIdx];
-    if (!beat?.question?.prompt || !Array.isArray(beat.question.options)) return false;
-
-    setActiveQuestion({ stepIndex: sIdx, beatIndex: bIdx, ...beat.question });
-    setQuestionFeedback(null);
-    setWaitingForAnswer(true);
-    return true;
-  }, []);
 
   // ---------- Panel Location ----------
   const panelRef = useRef(null);
@@ -164,7 +149,7 @@ export default function App() {
 
   const goToBeat = useCallback(
     (sIdx, bIdx) => {
-      clearQuestionGate(); // 👈 NEW (prevents stale question when navigating)
+      clearQuestionGate();
       setQuestionFeedback(null);
 
       const stepCount = storySteps.length;
@@ -184,7 +169,25 @@ export default function App() {
     [applyStepReveal, clearQuestionGate],
   );
 
-  // Autoplay engine: speak beat, then advance on end (if autoplay still on)
+  // Show question and pause autoplay
+  const showQuestionForBeat = useCallback(
+    (sIdx, bIdx) => {
+      const beat = storySteps[sIdx]?.beats?.[bIdx];
+      if (!beat?.question?.prompt || !Array.isArray(beat.question.options)) return false;
+
+      setAutoplayOn(false);
+      autoplayRef.current = false;
+      setCanResume(false);
+
+      setActiveQuestion({ stepIndex: sIdx, beatIndex: bIdx, ...beat.question });
+      setQuestionFeedback(null);
+      setWaitingForAnswer(true);
+      return true;
+    },
+    [setCanResume],
+  );
+
+  // Autoplay engine: speak beat, then advance on end (ONLY if no question gate)
   const speakBeatAndAutoadvance = useCallback(
     (sIdx, bIdx) => {
       const stepObj = storySteps[sIdx];
@@ -200,24 +203,13 @@ export default function App() {
         onEnd: () => {
           const key = `${sIdx}:${bIdx}`;
 
-          // 👇 show question only if not already answered correctly
+          // If beat has a question and not answered correctly yet: show question and STOP.
           if (!answeredCorrectByBeat[key] && beat.question?.prompt && Array.isArray(beat.question?.options)) {
-            setActiveQuestion({ stepIndex: sIdx, beatIndex: bIdx, ...beat.question });
-            setQuestionFeedback(null);
-            setWaitingForAnswer(true);
+            showQuestionForBeat(sIdx, bIdx);
             return;
           }
+
           if (!autoplayRef.current) return;
-          if (beat.question?.prompt && Array.isArray(beat.question?.options)) {
-            setActiveQuestion({
-              stepIndex: sIdx,
-              beatIndex: bIdx,
-              ...beat.question,
-            });
-            setQuestionFeedback(null);
-            setWaitingForAnswer(true);
-            return; // IMPORTANT: do not advance until answered
-          }
 
           const isLastBeatInStep = bIdx >= beats.length - 1;
           const isLastStep = sIdx >= storySteps.length - 1;
@@ -250,7 +242,7 @@ export default function App() {
         },
       });
     },
-    [goToBeat, speak, prefetchUpcomingBeats, PREFETCH_AHEAD, setCanResume, answeredCorrectByBeat],
+    [speak, goToBeat, prefetchUpcomingBeats, PREFETCH_AHEAD, setCanResume, answeredCorrectByBeat, showQuestionForBeat],
   );
 
   // Start fresh from the current beat/page
@@ -279,12 +271,10 @@ export default function App() {
     setAutoplayOn(true);
     autoplayRef.current = true;
 
-    // player owns the Audio element; canResume means it’s really resumable
     if (canResume) {
       resumeVoice();
       return;
     }
-
     startFromHere();
   }, [canResume, resumeVoice, startFromHere]);
 
@@ -293,7 +283,6 @@ export default function App() {
     setAutoplayOn(false);
     autoplayRef.current = false;
 
-    // we mirror your original logic: pausing while playing implies resumable
     setCanResume(true);
     pauseVoice();
   }, [pauseVoice, setCanResume]);
@@ -339,9 +328,12 @@ export default function App() {
     const key = `${stepIndex}:${beatIndex}`;
 
     if (current?.question && !answeredCorrectByBeat[key]) {
-      // show the question instead of moving forward
-      showQuestionForBeat(stepIndex, beatIndex);
-      return;
+      // if user hasn't selected anything yet, show question and stop
+      if (!questionFeedback) {
+        showQuestionForBeat(stepIndex, beatIndex);
+        return;
+      }
+      // user selected something (even if wrong) → allow Next to proceed
     }
 
     const stepObj = storySteps[stepIndex];
@@ -375,7 +367,18 @@ export default function App() {
         }, 200);
       }
     }
-  }, [beatIndex, stepIndex, goToBeat, stopVoice, speakBeatAndAutoadvance, prefetchUpcomingBeats, PREFETCH_AHEAD, setCanResume]);
+  }, [
+    beatIndex,
+    stepIndex,
+    goToBeat,
+    stopVoice,
+    speakBeatAndAutoadvance,
+    prefetchUpcomingBeats,
+    PREFETCH_AHEAD,
+    setCanResume,
+    answeredCorrectByBeat,
+    showQuestionForBeat,
+  ]);
 
   // ---------- Render subsets + animation flags ----------
   const nodesToRender = useMemo(() => {
@@ -410,6 +413,7 @@ export default function App() {
   }, [currentBeat, visibleNodeIds]);
 
   const totalBeats = useMemo(() => storySteps.reduce((sum, s) => sum + (s.beats?.length ?? 0), 0), []);
+
   const currentBeatNumber = useMemo(() => {
     let n = 0;
     for (let i = 0; i < storySteps.length; i++) {
@@ -426,72 +430,37 @@ export default function App() {
   const isLastStep = stepIndex >= storySteps.length - 1;
 
   const isQuestionMode = waitingForAnswer && activeQuestion;
-  // allow next only if not in question mode OR user has answered correctly
-  const allowForward = !isQuestionMode || questionFeedback?.isCorrect === true;
+
+  // enable Next if not in question mode OR user has selected an option
+  const allowForward = !isQuestionMode || !!questionFeedback;
+
   const canGoNext = started && !(isLastStep && isLastBeatInStep) && allowForward;
 
+  // Answer: set feedback ONLY (no navigation)
   const handleAnswer = useCallback(
     (selectedIndex) => {
       if (!activeQuestion) return;
+
+      // prevent changing answer unless user hits "Try again"
+      if (questionFeedback) return;
 
       const correctIndex = activeQuestion.correctIndex;
       const isCorrect = selectedIndex === correctIndex;
 
       setQuestionFeedback({ selectedIndex, isCorrect });
 
-      // ❌ Wrong: stay here (do not continue)
-      if (!isCorrect) return;
       if (isCorrect) {
         const key = `${activeQuestion.stepIndex}:${activeQuestion.beatIndex}`;
         setAnsweredCorrectByBeat((prev) => ({ ...prev, [key]: true }));
       }
-
-      // ✅ Correct: close question and continue
-      setWaitingForAnswer(false);
-
-      // continue autoplay if it was on
-      if (!autoplayRef.current) return;
-
-      const sIdx = activeQuestion.stepIndex;
-      const bIdx = activeQuestion.beatIndex;
-
-      const stepObj = storySteps[sIdx];
-      const beats = stepObj?.beats ?? [];
-
-      const isLastBeatInStep = bIdx >= beats.length - 1;
-      const isLastStep = sIdx >= storySteps.length - 1;
-
-      // small delay so user sees green feedback
-      window.setTimeout(() => {
-        if (!isLastBeatInStep) {
-          const next = goToBeat(sIdx, bIdx + 1);
-          prefetchUpcomingBeats(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
-
-          window.setTimeout(() => {
-            if (!autoplayRef.current) return;
-            speakBeatAndAutoadvance(next.stepIndex, next.beatIndex);
-          }, 200);
-          return;
-        }
-
-        if (!isLastStep) {
-          const next = goToBeat(sIdx + 1, 0);
-          prefetchUpcomingBeats(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
-
-          window.setTimeout(() => {
-            if (!autoplayRef.current) return;
-            speakBeatAndAutoadvance(next.stepIndex, next.beatIndex);
-          }, 200);
-          return;
-        }
-
-        setAutoplayOn(false);
-        autoplayRef.current = false;
-        setCanResume(false);
-      }, 450);
     },
-    [activeQuestion, goToBeat, prefetchUpcomingBeats, PREFETCH_AHEAD, speakBeatAndAutoadvance, setCanResume],
+    [activeQuestion, questionFeedback],
   );
+
+  // Unlock retry (only used when wrong)
+  const handleRetryQuestion = useCallback(() => {
+    setQuestionFeedback(null);
+  }, []);
 
   return (
     <ReactFlowProvider>
@@ -533,6 +502,7 @@ export default function App() {
           question={activeQuestion}
           waitingForAnswer={waitingForAnswer}
           onAnswer={handleAnswer}
+          onRetryQuestion={handleRetryQuestion}
           questionFeedback={questionFeedback}
         />
       </div>

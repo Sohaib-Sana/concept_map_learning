@@ -328,6 +328,7 @@
   display: flex;
   gap: 8px;
   margin-top: 14px;
+  justify-content: space-around;
 }
 
 .lpBtn {
@@ -473,7 +474,35 @@
   cursor: not-allowed;
   transform: none;
 }
+.lpQFeedbackWrap {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
+.lpQFeedback {
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.lpQFeedback.isCorrect {
+  color: #0b6b3a;
+}
+
+.lpQFeedback.isWrong {
+  color: #8a1c1c;
+}
+
+.lpQRetryBtn {
+  align-self: flex-start;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: white;
+  cursor: pointer;
+}
 
 /* Small screens */
 @media (max-width: 520px) {
