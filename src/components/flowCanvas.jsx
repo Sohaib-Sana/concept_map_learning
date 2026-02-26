@@ -2,7 +2,7 @@
 import { useCallback, useEffect } from "react";
 import { Background, Controls, ReactFlow, useReactFlow } from "@xyflow/react";
 
-export function FlowCanvas({ nodes, edges, nodeTypes, onNodesChange, onEdgesChange, onConnect, focusTarget, overlayRect }) {
+export function FlowCanvas({ nodes, edges, nodeTypes, edgeTypes, onNodesChange, onEdgesChange, onConnect, focusTarget, overlayRect }) {
   const rf = useReactFlow();
 
   const clampLocal = (v, min, max) => Math.max(min, Math.min(max, v));
@@ -112,6 +112,7 @@ export function FlowCanvas({ nodes, edges, nodeTypes, onNodesChange, onEdgesChan
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}

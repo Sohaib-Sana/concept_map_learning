@@ -88,6 +88,7 @@ export const initialNodes = [
       handles: [
         { id: "h1", type: "target", position: Position.Top },
         { id: "h2", type: "source", position: Position.Bottom },
+        { id: "h3", type: "target", position: Position.Right },
       ],
     },
     position: { x: 515, y: 520 },
@@ -219,11 +220,31 @@ export const initialEdges = [
   { id: "n9-n11", source: "n9", target: "n11", label: "attraction = movement", markerEnd: { type: "arrowclosed" } },
   { id: "n9-n12", source: "n9", target: "n12", label: "attraction < movement", markerEnd: { type: "arrowclosed" } },
   { id: "n10-n11", source: "n10", target: "n11", targetHandle: "h2", label: "Melting", markerEnd: { type: "arrowclosed" } },
-  { id: "n11-n12", source: "n11", target: "n12", targetHandle: "h2", markerEnd: { type: "arrowclosed" } },
+  {
+    id: "n10-n11-custom",
+    source: "n10",
+    target: "n11",
+    targetHandle: "h2",
+    type: "PhaseEdge",
+    markerEnd: { type: "arrowclosed" },
+    data: {
+      topLabel: "Melting Point",
+      mainLabel: "Melting",
+    },
+  },
+  { id: "n11-n12", source: "n11", target: "n12", targetHandle: "h2", label: "Evaporation", markerEnd: { type: "arrowclosed" } },
 
   { id: "n11-n10", source: "n11", target: "n10", sourceHandle: "h4", label: "Freezing", targetHandle: "h3", markerEnd: { type: "arrowclosed" } },
   { id: "n12-n11", source: "n12", target: "n11", targetHandle: "h5", label: "Condensation", markerEnd: { type: "arrowclosed" } },
 
   { id: "n13-n6", source: "n13", target: "n6", label: "Affects", sourceHandle: "h2", targetHandle: "h2", markerEnd: { type: "arrowclosed" } },
-  { id: "n13-n9", source: "n13", target: "n9", label: "Affects volume of all three states", markerEnd: { type: "arrowclosed" }, type: "step" },
+  {
+    id: "n13-n9",
+    source: "n13",
+    target: "n9",
+    label: "Affects volume of all three states",
+    targetHandle: "h3",
+    markerEnd: { type: "arrowclosed" },
+    type: "step",
+  },
 ];

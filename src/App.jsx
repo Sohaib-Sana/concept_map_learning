@@ -5,6 +5,7 @@ import "@xyflow/react/dist/style.css";
 
 import { initialNodes, initialEdges } from "./components/nodeBank";
 import { customNode } from "./model/nodeModel";
+import { PhaseEdge } from "./model/edgeModel";
 import "./App.css";
 
 import { storySteps } from "./story/storySteps";
@@ -16,6 +17,7 @@ import { useTtsPrefetch } from "./hooks/useTtsPrefetch";
 import { useTtsPlayer } from "./hooks/useTtsPlayer";
 
 const nodeTypes = { customNode };
+const edgeTypes = { PhaseEdge };
 
 export default function App() {
   // Full graph
@@ -499,6 +501,7 @@ export default function App() {
             nodes={nodesToRender}
             edges={edgesToRender}
             nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
