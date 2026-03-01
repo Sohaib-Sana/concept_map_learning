@@ -10,7 +10,7 @@ import "./App.css";
 
 import { LessonPanel } from "./components/lessonPanel";
 import { fetchTtsBlobWithRetry } from "./helpers/fetchTtsBlobWithRetry";
-import { FlowCanvas } from "./components/FlowCanvas";
+import { FlowCanvas } from "./components/flowCanvas";
 
 import { useTtsPrefetch } from "./hooks/useTtsPrefetch";
 import { useTtsPlayer } from "./hooks/useTtsPlayer";
