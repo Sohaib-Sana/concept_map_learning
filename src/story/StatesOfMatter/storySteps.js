@@ -1,21 +1,23 @@
 // src/story/storySteps.js
+
 export const storySteps = [
   {
     id: "step-0",
     title: "Things",
     beats: [
       {
-        narration: "Let’s start with things.\nJust look around you for a moment.\nA chair. A table. Your phone. Your bag.",
+        narration:
+          "Look around you. There are things everywhere.\n\nYour phone.\nYour desk.\nYour clothes.\nThe air around you.\n\nOur world is full of different things — big things, small things, and even things we cannot see.",
         reveal: { nodes: ["n1"], edges: [] },
         focus: "n1",
         images: ["/images/things-everyday-objects.png"],
       },
-      {
-        narration: "What about air?\nYou can’t see it… but you can feel it when the wind blows, or when you breathe.\nAll of these count as things.",
-        reveal: { nodes: ["n1"], edges: [] },
-        focus: "n1",
-        images: ["/images/things-air-wind.png"],
-      },
+      // {
+      //   narration: "What about air?\nYou can’t see it… but you can feel it when the wind blows, or when you breathe.\nAll of these count as things.",
+      //   reveal: { nodes: ["n1"], edges: [] },
+      //   focus: "n1",
+      //   images: ["/images/things-air-wind.png"],
+      // },
     ],
   },
 
@@ -24,32 +26,11 @@ export const storySteps = [
     title: "Substances / Materials",
     beats: [
       {
-        narration: "Now here’s a question:\nwhat are these things actually made of?",
+        narration:
+          "But here’s something interesting…\n All of these different things are made from something.\n\nDifferent things are made from different materials or substances.\n\nFor example:\nA water bottle is made of plastic.\nA window is made of glass.\nA metal spoon is made of steel.",
         reveal: { nodes: ["n1"], ghostNodes: ["n2"], edges: [] },
         focus: "n2",
         images: ["/images/materials-question-mark.png"],
-      },
-      {
-        narration:
-          "They’re made of different substances or materials.\nFor example, a chair might be made of wood or metal.\nClothes are made of fabric.\nPaper is made from wood.\nAnd air — even though it’s invisible — is still a material.",
-        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
-        focus: "n2",
-        images: ["/images/materials-collage-wood-metal-fabric-paper-air.png"],
-      },
-      {
-        narration: "So substances and materials can be solid, liquid, or gas.",
-        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
-        focus: "n2",
-        images: [], // optional, but explicit
-        question: {
-          prompt: "Particles can be what?",
-          options: ["Atoms", "Molecules", "Atoms or molecules"],
-          correctIndex: 2,
-          feedback: {
-            correct: "✅ Nice! Particles can be atoms or molecules.",
-            incorrect: "❌ Not quite. Remember: molecules are made of atoms, and atoms can exist alone too.",
-          },
-        },
       },
     ],
   },
@@ -59,20 +40,14 @@ export const storySteps = [
     title: "Matter",
     beats: [
       {
-        narration: "Scientists like grouping ideas together,\nso instead of listing every material separately…",
+        narration:
+          "Scientists use one word for all these different materials and substances.\n\nThey call them matter.\n\nSo, all the different materials or substances\nthat things are made from\nare called matter.",
         reveal: {
           nodes: ["n1", "n2"],
           ghostNodes: ["n3"],
           edges: ["n1-n2"],
         },
         focus: "n2",
-        images: [],
-      },
-      {
-        narration:
-          "…they use one word that covers all of them.\nThat word is matter.\nSo, matter means anything made of substances or materials — including solids, liquids, and gases.",
-        reveal: { nodes: ["n1", "n2", "n3"], edges: ["n1-n2", "n2-n3"] },
-        focus: "n3",
         images: [],
       },
     ],

@@ -1,23 +1,34 @@
 // src/tts/request.js
 
-function buildTeachingPrompt(text) {
-  return ["Use a patient teaching tone: clear articulation, warm pace, and brief pauses after sentences.", text].join("\n");
-}
-
 export function buildTtsRequest(rawText, teachingToneOn) {
-  const raw = String(rawText ?? "");
-  const promptText = teachingToneOn ? buildTeachingPrompt(raw) : raw;
+  const raw = String(rawText ?? "").trim();
 
-  // If you truly want the accent instruction to apply, it MUST be included in the text sent to Gemini.
-  const finalText = [
-    "Read the transcript in a British English accent (UK).",
-    "Keep the transcript wording exactly the same (do not add or remove words).",
-    promptText,
-  ].join("\n");
+  // Optional: slightly adjust voice settings when teachingToneOn is enabled
+  // (These are safe knobs; tweak as you like.)
+  const voiceSettings = teachingToneOn
+    ? {
+        stability: 0.55,
+        similarity_boost: 0.85,
+        style: 0.25,
+        use_speaker_boost: true,
+      }
+    : {
+        stability: 0.45,
+        similarity_boost: 0.85,
+        style: 0.2,
+        use_speaker_boost: true,
+      };
 
   return {
-    model: "gemini-2.5-flash-preview-tts",
-    voiceName: "Kore",
-    text: finalText,
+    // Leave empty to let the server pick a usable voice automatically
+    voiceId: import.meta.env.VITE_ELEVENLABS_VOICE_ID || "",
+
+    modelId: "eleven_multilingual_v2",
+    outputFormat: "mp3_44100_128",
+
+    voiceSettings,
+
+    // IMPORTANT: send ONLY the text you want spoken
+    text: raw,
   };
 }

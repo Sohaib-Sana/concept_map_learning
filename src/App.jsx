@@ -3,12 +3,11 @@ import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { ReactFlowProvider, applyNodeChanges, applyEdgeChanges, addEdge } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
-import { initialNodes, initialEdges } from "./components/nodeBank";
+import { LESSONS } from "./lessons";
 import { customNode } from "./model/nodeModel";
 import { PhaseEdge } from "./model/edgeModel";
 import "./App.css";
 
-import { storySteps } from "./story/storySteps";
 import { LessonPanel } from "./components/lessonPanel";
 import { fetchTtsBlobWithRetry } from "./helpers/fetchTtsBlobWithRetry";
 import { FlowCanvas } from "./components/FlowCanvas";
@@ -19,10 +18,15 @@ import { useTtsPlayer } from "./hooks/useTtsPlayer";
 const nodeTypes = { customNode };
 const edgeTypes = { PhaseEdge };
 
+const ACTIVE_LESSON_ID = "makingSenseOfStuff"; // <-- switch here
+const lesson = LESSONS[ACTIVE_LESSON_ID];
+const storySteps = lesson.storySteps;
+
 export default function App() {
+  const DEV_DISABLE_TTS = import.meta.env.VITE_DISABLE_TTS === "true";
   // Full graph
-  const [allNodes, setAllNodes] = useState(initialNodes);
-  const [allEdges, setAllEdges] = useState(initialEdges);
+  const [allNodes, setAllNodes] = useState(() => lesson.initialNodes);
+  const [allEdges, setAllEdges] = useState(() => lesson.initialEdges);
 
   // Lesson state
   const [started, setStarted] = useState(false);
@@ -71,11 +75,19 @@ export default function App() {
     fetchTtsBlobWithRetry,
   });
 
+  const safePrefetch = useCallback(
+    (sIdx, bIdx, ahead) => {
+      if (DEV_DISABLE_TTS) return;
+      prefetchUpcomingBeats(sIdx, bIdx, ahead);
+    },
+    [prefetchUpcomingBeats],
+  );
+
   // TTS player hook
   const { speak, stopVoice, pauseVoice, resumeVoice, speakingState, ttsRange, canResume, setCanResume } = useTtsPlayer({
     teachingToneOn,
     fetchTtsBlobWithRetry,
-    prefetchUpcomingBeats: (sIdx, bIdx) => prefetchUpcomingBeats(sIdx, bIdx, PREFETCH_AHEAD),
+    prefetchUpcomingBeats: (sIdx, bIdx) => safePrefetch(sIdx, bIdx, PREFETCH_AHEAD),
     highlightConfig: { highlightWords: 6, lookaheadWords: 1 },
   });
 
@@ -190,6 +202,7 @@ export default function App() {
   // Autoplay engine: speak beat, then advance on end (ONLY if no question gate)
   const speakBeatAndAutoadvance = useCallback(
     (sIdx, bIdx) => {
+      if (DEV_DISABLE_TTS) return;
       const stepObj = storySteps[sIdx];
       if (!stepObj) return;
 
@@ -216,7 +229,7 @@ export default function App() {
 
           if (!isLastBeatInStep) {
             const next = goToBeat(sIdx, bIdx + 1);
-            prefetchUpcomingBeats(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
+            safePrefetch(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
 
             window.setTimeout(() => {
               if (!autoplayRef.current) return;
@@ -227,7 +240,7 @@ export default function App() {
 
           if (!isLastStep) {
             const next = goToBeat(sIdx + 1, 0);
-            prefetchUpcomingBeats(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
+            safePrefetch(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
 
             window.setTimeout(() => {
               if (!autoplayRef.current) return;
@@ -242,32 +255,49 @@ export default function App() {
         },
       });
     },
-    [speak, goToBeat, prefetchUpcomingBeats, PREFETCH_AHEAD, setCanResume, answeredCorrectByBeat, showQuestionForBeat],
+    [speak, goToBeat, safePrefetch, PREFETCH_AHEAD, setCanResume, answeredCorrectByBeat, showQuestionForBeat],
   );
 
   // Start fresh from the current beat/page
   const startFromHere = useCallback(() => {
     setStarted(true);
+
+    const sIdx = started ? stepIndex : 0;
+    const bIdx = started ? beatIndex : 0;
+
+    goToBeat(sIdx, bIdx);
+
+    if (DEV_DISABLE_TTS) {
+      // No autoplay, no voice. User reads and clicks Next/Back.
+      setAutoplayOn(false);
+      autoplayRef.current = false;
+      setCanResume(false);
+      return;
+    }
+
     setAutoplayOn(true);
     autoplayRef.current = true;
 
     setCanResume(false);
     stopVoice();
 
-    const sIdx = started ? stepIndex : 0;
-    const bIdx = started ? beatIndex : 0;
-
-    goToBeat(sIdx, bIdx);
-    prefetchUpcomingBeats(sIdx, bIdx, PREFETCH_AHEAD);
+    safePrefetch(sIdx, bIdx, PREFETCH_AHEAD);
 
     window.setTimeout(() => {
       if (!autoplayRef.current) return;
       speakBeatAndAutoadvance(sIdx, bIdx);
     }, 200);
-  }, [started, stepIndex, beatIndex, goToBeat, speakBeatAndAutoadvance, stopVoice, prefetchUpcomingBeats, PREFETCH_AHEAD, setCanResume]);
+  }, [DEV_DISABLE_TTS, started, stepIndex, beatIndex, goToBeat, stopVoice, speakBeatAndAutoadvance, safePrefetch, PREFETCH_AHEAD, setCanResume]);
 
-  // Resume if possible, else start from current page
   const handleResume = useCallback(() => {
+    if (DEV_DISABLE_TTS) {
+      // Resume just means "stay in manual mode"
+      setAutoplayOn(false);
+      autoplayRef.current = false;
+      setCanResume(false);
+      return;
+    }
+
     setAutoplayOn(true);
     autoplayRef.current = true;
 
@@ -276,24 +306,24 @@ export default function App() {
       return;
     }
     startFromHere();
-  }, [canResume, resumeVoice, startFromHere]);
+  }, [DEV_DISABLE_TTS, canResume, resumeVoice, startFromHere, setCanResume]);
 
-  // Pause lesson (do NOT cancel), mark resumability
   const handleStopLesson = useCallback(() => {
+    if (DEV_DISABLE_TTS) return; // nothing to pause
     setAutoplayOn(false);
     autoplayRef.current = false;
 
     setCanResume(true);
     pauseVoice();
-  }, [pauseVoice, setCanResume]);
+  }, [DEV_DISABLE_TTS, pauseVoice, setCanResume]);
 
   const handleBack = useCallback(() => {
-    stopVoice();
+    if (!DEV_DISABLE_TTS) stopVoice();
     setCanResume(false);
 
     if (beatIndex > 0) {
       const prev = goToBeat(stepIndex, beatIndex - 1);
-      prefetchUpcomingBeats(prev.stepIndex, prev.beatIndex, PREFETCH_AHEAD);
+      safePrefetch(prev.stepIndex, prev.beatIndex, PREFETCH_AHEAD);
 
       if (autoplayRef.current) {
         window.setTimeout(() => {
@@ -309,7 +339,7 @@ export default function App() {
       const lastBeatIndex = Math.max(0, prevStepBeats.length - 1);
 
       const prev = goToBeat(stepIndex - 1, lastBeatIndex);
-      prefetchUpcomingBeats(prev.stepIndex, prev.beatIndex, PREFETCH_AHEAD);
+      safePrefetch(prev.stepIndex, prev.beatIndex, PREFETCH_AHEAD);
 
       if (autoplayRef.current) {
         window.setTimeout(() => {
@@ -318,10 +348,10 @@ export default function App() {
         }, 200);
       }
     }
-  }, [beatIndex, stepIndex, goToBeat, stopVoice, speakBeatAndAutoadvance, prefetchUpcomingBeats, PREFETCH_AHEAD, setCanResume]);
+  }, [beatIndex, stepIndex, goToBeat, stopVoice, speakBeatAndAutoadvance, safePrefetch, PREFETCH_AHEAD, setCanResume]);
 
   const handleNext = useCallback(() => {
-    stopVoice();
+    if (!DEV_DISABLE_TTS) stopVoice();
     setCanResume(false);
 
     const current = storySteps[stepIndex]?.beats?.[beatIndex];
@@ -345,7 +375,7 @@ export default function App() {
 
     if (!isLastBeatInStepLocal) {
       const next = goToBeat(stepIndex, beatIndex + 1);
-      prefetchUpcomingBeats(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
+      safePrefetch(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
 
       if (autoplayRef.current) {
         window.setTimeout(() => {
@@ -358,7 +388,7 @@ export default function App() {
 
     if (!isLastStepLocal) {
       const next = goToBeat(stepIndex + 1, 0);
-      prefetchUpcomingBeats(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
+      safePrefetch(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
 
       if (autoplayRef.current) {
         window.setTimeout(() => {
@@ -373,7 +403,7 @@ export default function App() {
     goToBeat,
     stopVoice,
     speakBeatAndAutoadvance,
-    prefetchUpcomingBeats,
+    safePrefetch,
     PREFETCH_AHEAD,
     setCanResume,
     answeredCorrectByBeat,

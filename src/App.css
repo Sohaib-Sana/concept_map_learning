@@ -299,6 +299,7 @@
   font-size: 13.5px;
   line-height: 1.6;
   color: rgba(15, 23, 42, 0.92);
+  white-space: pre-wrap; /* \n becomes new line, sequences of spaces still collapse */
 }
 
 .lpHighlight {
