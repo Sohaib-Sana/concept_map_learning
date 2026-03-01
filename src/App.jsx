@@ -18,7 +18,7 @@ import { useTtsPlayer } from "./hooks/useTtsPlayer";
 const nodeTypes = { customNode };
 const edgeTypes = { PhaseEdge };
 
-const ACTIVE_LESSON_ID = "makingSenseOfStuff"; // <-- switch here
+const ACTIVE_LESSON_ID = "makingSenseOfStuff";
 const lesson = LESSONS[ACTIVE_LESSON_ID];
 const storySteps = lesson.storySteps;
 
