@@ -15,6 +15,9 @@ import { FlowCanvas } from "./components/FlowCanvas";
 import { useTtsPrefetch } from "./hooks/useTtsPrefetch";
 import { useTtsPlayer } from "./hooks/useTtsPlayer";
 
+import { useQuiz } from "./hooks/useQuiz";
+import { QuizPanel } from "./components/quizPanelBig";
+
 const nodeTypes = { customNode };
 const edgeTypes = { PhaseEdge };
 
@@ -24,6 +27,8 @@ const storySteps = lesson.storySteps;
 
 export default function App() {
   const DEV_DISABLE_TTS = import.meta.env.VITE_DISABLE_TTS === "true";
+  const quiz = useQuiz(lesson.quiz);
+
   // Full graph
   const [allNodes, setAllNodes] = useState(() => lesson.initialNodes);
   const [allEdges, setAllEdges] = useState(() => lesson.initialEdges);
@@ -466,6 +471,20 @@ export default function App() {
 
   const canGoNext = started && !(isLastStep && isLastBeatInStep) && allowForward;
 
+  const isLessonComplete = started && isLastStep && isLastBeatInStep;
+
+  const inQuiz = quiz.mode === "inProgress";
+
+  const handleTakeQuizNow = useCallback(() => {
+    // stop any voice/autoplay
+    setAutoplayOn(false);
+    autoplayRef.current = false;
+    setCanResume(false);
+    stopVoice();
+
+    quiz.startQuiz();
+  }, [quiz, stopVoice, setCanResume]);
+
   // Answer: set feedback ONLY (no navigation)
   const handleAnswer = useCallback(
     (selectedIndex) => {
@@ -492,6 +511,9 @@ export default function App() {
     setQuestionFeedback(null);
   }, []);
 
+  const canGoBackLocked = inQuiz ? false : canGoBack;
+  const canGoNextLocked = inQuiz ? false : canGoNext;
+
   return (
     <ReactFlowProvider>
       <div style={{ backgroundColor: "white", width: "100vw", height: "100vh" }}>
@@ -509,32 +531,44 @@ export default function App() {
           />
         </div>
 
-        <LessonPanel
-          panelRef={panelRef}
-          started={started}
-          title={step?.title}
-          progressText={`${currentBeatNumber}/${totalBeats}`}
-          beatText={currentBeat?.narration}
-          beatImages={currentBeat?.images ?? []}
-          isRunning={autoplayOn}
-          canGoBack={canGoBack}
-          canGoNext={canGoNext}
-          onStart={startFromHere}
-          onResume={handleResume}
-          onStop={handleStopLesson}
-          onBack={handleBack}
-          onNext={handleNext}
-          canResume={canResume}
-          highlightRange={ttsRange}
-          teachingToneOn={teachingToneOn}
-          onToggleTeachingTone={() => setTeachingToneOn((v) => !v)}
-          speakingState={speakingState}
-          question={activeQuestion}
-          waitingForAnswer={waitingForAnswer}
-          onAnswer={handleAnswer}
-          onRetryQuestion={handleRetryQuestion}
-          questionFeedback={questionFeedback}
-        />
+        {inQuiz ? (
+          <QuizPanel
+            panelRef={panelRef}
+            title={lesson.quiz?.title ?? "QUIZ"}
+            progressText={quiz.progressText}
+            question={quiz.currentQuestion}
+            feedback={quiz.currentFeedback}
+            onAnswer={quiz.answer}
+            onNext={quiz.next}
+          />
+        ) : (
+          <LessonPanel
+            panelRef={panelRef}
+            started={started}
+            title={step?.title}
+            progressText={`${currentBeatNumber}/${totalBeats}`}
+            beatText={currentBeat?.narration}
+            beatImages={currentBeat?.images ?? []}
+            isRunning={autoplayOn}
+            canGoBack={canGoBackLocked}
+            canGoNext={canGoNextLocked}
+            onStart={startFromHere}
+            onResume={handleResume}
+            onStop={handleStopLesson}
+            onBack={handleBack}
+            onNext={handleNext}
+            canResume={canResume}
+            highlightRange={ttsRange}
+            speakingState={speakingState}
+            question={activeQuestion}
+            waitingForAnswer={waitingForAnswer}
+            onAnswer={handleAnswer}
+            onRetryQuestion={handleRetryQuestion}
+            questionFeedback={questionFeedback}
+            showTakeQuizNow={isLessonComplete}
+            onTakeQuizNow={handleTakeQuizNow}
+          />
+        )}
       </div>
     </ReactFlowProvider>
   );

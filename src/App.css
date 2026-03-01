@@ -1,174 +1,50 @@
+/* =========================
+   Root / Misc
+   ========================= */
+
 #root {
   width: 100%;
   height: 100%;
   margin: 0;
-
   padding: 0.2rem;
   text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
 }
 
 .read-the-docs {
   color: #888;
 }
 
+/* =========================
+   React Flow / Nodes
+   ========================= */
+
 .nodeStyle {
   background: white;
   color: #111;
   border: 1px solid #222138;
-  /* width: 150px; */
   padding: 6px 16px;
   font-size: 14px;
 }
 
-
-/* Junction node */
-.junction-node {
-  width: 10px;
-  height: 10px;
-  background: #555;
-  border-radius: 50%;
-  border: none;
-  padding: 0;
+/* Wrapper + content split (used for ghost fade) */
+.nodeWrapper {
+  position: relative;
 }
 
-/* Hide handles visually on junction */
-.junction-node .react-flow__handle {
-  width: 6px;
-  height: 6px;
-  background: transparent;
-  border: none;
+.nodeContent {
+  background: white;
+  color: #111;
+  border: 1px solid #222138;
+  padding: 6px 16px;
+  font-size: 14px;
 }
 
-/* Source handles: invisible but still usable */
-.react-flow__handle.sourceHandle {
+.ghostContent {
   opacity: 0;
-  background: transparent;
-  border: none;
-  /* keep pointer events so it can still be connected */
-  pointer-events: all;
-}
-/* Target handles: show as an inward-pointing arrow */
-.react-flow__handle.targetHandle {
-  width: 1px;
-  height: 1px;
-  background: transparent;
-  border: none;
+  transition: opacity 350ms ease;
 }
 
-.react-flow__handle.targetHandle::before {
-  display: none;
-  /* content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  border-style: solid; */
-}
-/* Remove arrow from junction target handles */
-.junction-node .react-flow__handle.targetHandle::before {
-  display: none;
-}
-
-.junction-node .react-flow__handle::before {
-  display: none;
-}
-
-
-/* INWARD arrows (toward node center) */
-.react-flow__handle.targetHandle.react-flow__handle-top::before {
-  /* point DOWN into node */
-  border-width: 10px 7px 0 7px;
-  border-color: #555 transparent transparent transparent;
-}
-
-.react-flow__handle.targetHandle.react-flow__handle-bottom::before {
-  /* point UP into node */
-  border-width: 0 7px 10px 7px;
-  border-color: transparent transparent #555 transparent;
-}
-
-.react-flow__handle.targetHandle.react-flow__handle-left::before {
-  /* point RIGHT into node */
-  border-width: 7px 0 7px 10px;
-  border-color: transparent transparent transparent #555;
-}
-
-.react-flow__handle.targetHandle.react-flow__handle-right::before {
-  /* point LEFT into node */
-  border-width: 7px 10px 7px 0;
-  border-color: transparent #555 transparent transparent;
-}
-
-.react-flow__edge-text-bg {
-  display: none;
-}
-
-/* SVG labels (safe to keep) */
-.react-flow__edge-text-bg {
-  display: none;
-}
-
-/* HTML labels (this is the key part) */
-.react-flow__edge-label {
-  background: transparent !important;
-  padding: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-.junction-node {
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  background: transparent;
-  border: none;
-}
-
-
-/* Hide handles visually */
-.junction-node .react-flow__handle {
-  width: 6px;
-  height: 6px;
-  background: transparent;
-  border: none;
-}
-
-
-/* Base animation-ready state */
+/* New-node animation */
 .node-animate {
   opacity: 1;
   transform: scale(1);
@@ -176,8 +52,6 @@
   will-change: opacity, transform;
 }
 
-/* Only applied briefly when the node is newly revealed */
-/* Only applied briefly when the node is newly revealed */
 .node-animate--in {
   animation: nodePopIn 320ms ease-out, eyeCatchGlow 900ms ease-out;
 }
@@ -197,43 +71,63 @@
   }
 }
 
-
-/* Keep the handle visible, but hide border when ghost */
-.ghostHandle {
-  border-color: transparent !important;   /* or border: none */
-  box-shadow: none !important;           /* if you have glow/shadow */
+/* Junction node (invisible tiny node) */
+.junction-node {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
-/* If you want border to fade with content instead of instant */
+/* Junction handles hidden */
+.junction-node .react-flow__handle {
+  width: 6px;
+  height: 6px;
+  background: transparent;
+  border: none;
+}
+
+.junction-node .react-flow__handle::before {
+  display: none;
+}
+
+/* Handles */
+.react-flow__handle.sourceHandle {
+  opacity: 0;
+  background: transparent;
+  border: none;
+  pointer-events: all;
+}
+
+.react-flow__handle.targetHandle {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  border: none;
+}
+
+.react-flow__handle.targetHandle::before {
+  display: none; /* you’re currently hiding all arrows */
+}
+
+/* Edge label HTML reset */
+.react-flow__edge-label {
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ghost handle (if used) */
 .ghostHandle {
+  border-color: transparent !important;
+  box-shadow: none !important;
   transition: border-color 350ms ease, box-shadow 350ms ease;
 }
 
-/* New wrapper: no border/background */
-.nodeWrapper {
-  position: relative;
-}
-
-/* Keep your existing .nodeStyle, but remove border/background from it if you want,
-   OR keep it and override via .nodeContent (shown below). */
-
-/* Put border/background on the content layer */
-.nodeContent {
-  background: white;
-  color: #111;
-  border: 1px solid #222138;
-  padding: 6px 16px;
-  font-size: 14px;
-}
-
-/* Ghost: fade the content (and therefore its border) */
-.ghostContent {
-  opacity: 0;
-  transition: opacity 350ms ease;
-}
-
 /* =========================
-   Lesson Panel (lp*)
+   Lesson / Quiz Panel (lp*)
    ========================= */
 
 .lpPanel {
@@ -279,7 +173,7 @@
   font-size: 12px;
   line-height: 1.2;
   color: rgba(15, 23, 42, 0.6);
-  min-height: 14px; /* keeps header stable */
+  min-height: 14px;
 }
 
 .lpProgressPill {
@@ -299,7 +193,7 @@
   font-size: 13.5px;
   line-height: 1.6;
   color: rgba(15, 23, 42, 0.92);
-  white-space: pre-wrap; /* \n becomes new line, sequences of spaces still collapse */
+  white-space: pre-wrap;
 }
 
 .lpHighlight {
@@ -339,8 +233,7 @@
   font-weight: 900;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, border-color 120ms ease,
-    opacity 120ms ease;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, border-color 120ms ease, opacity 120ms ease;
 }
 
 .lpBtnPrimary {
@@ -412,18 +305,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-
   width: 100%;
   padding: 12px 12px;
   border-radius: 12px;
-
   border: 1px solid rgba(15, 23, 42, 0.1);
   background: #fff;
   color: #0b1220;
-
   cursor: pointer;
   text-align: left;
-
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
   transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
 }
@@ -455,7 +344,6 @@
   opacity: 0.8;
 }
 
-/* Feedback states */
 .lpQOptionBtn.isCorrect {
   border-color: rgba(34, 197, 94, 0.45);
   background: rgba(34, 197, 94, 0.10);
@@ -475,6 +363,7 @@
   cursor: not-allowed;
   transform: none;
 }
+
 .lpQFeedbackWrap {
   margin-top: 12px;
   display: flex;
@@ -496,19 +385,59 @@
   color: #8a1c1c;
 }
 
-.lpQRetryBtn {
-  align-self: flex-start;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  padding: 8px 12px;
-  background: white;
-  cursor: pointer;
+/* =========================================================
+   FORCE QUIZ PANEL STYLE (place at very bottom of App.css)
+   ========================================================= */
+
+/* Make sure quiz panel expands */
+.lpPanel.lpPanel--quiz {
+  width: min(92vw, 1100px) !important;
+  height: 88vh !important;
+  max-height: 88vh !important;
+
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+
+  z-index: 9999 !important;
 }
 
-/* Small screens */
-@media (max-width: 520px) {
-  .lpPanel {
-    width: 92vw;
-    left: 4vw;
-  }
+/* Ensure inner area scrolls and bottom controls stay visible */
+.lpPanel.lpPanel--quiz .lpQCard {
+  flex: 1 1 auto !important;
+  overflow: auto !important;
+}
+
+.lpPanel.lpPanel--quiz .lpControlsRow {
+  flex: 0 0 auto !important;
+  margin-top: 12px !important;
+}
+
+/* --- Typography fixes: stop the bold --- */
+
+/* Prompt: slightly stronger than options, but not heavy */
+.lpPanel.lpPanel--quiz .lpQPrompt {
+  font-weight: 700 !important;
+  color: rgba(15, 23, 42, 0.92) !important;
+}
+
+/* Options: regular weight */
+.lpPanel.lpPanel--quiz .lpQOptionText {
+  font-weight: 400 !important;
+  color: rgba(15, 23, 42, 0.78) !important;
+  letter-spacing: 0 !important;
+}
+
+/* Feedback: regular weight */
+.lpPanel.lpPanel--quiz .lpQFeedback {
+  font-weight: 400 !important;
+}
+
+/* Optional: Next button not ultra-bold */
+.lpPanel.lpPanel--quiz .lpBtn {
+  font-weight: 700 !important;
 }

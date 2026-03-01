@@ -21,6 +21,8 @@ export function LessonPanel({
   waitingForAnswer,
   onAnswer,
   questionFeedback,
+  showTakeQuizNow,
+  onTakeQuizNow,
 }) {
   const isQuestionMode = !!(waitingForAnswer && question);
 
@@ -130,11 +132,16 @@ export function LessonPanel({
           </button>
         )}
 
-        {started && (
-          <button onClick={onNext} disabled={!canGoNext} className={`lpBtn lpBtnSecondary  ${!canGoNext ? "isDisabled" : ""}`} type="button">
-            Next
-          </button>
-        )}
+        {started &&
+          (showTakeQuizNow ? (
+            <button onClick={onTakeQuizNow} className="lpBtn lpBtnPrimary" type="button" style={{ flex: 1 }}>
+              Take Quiz
+            </button>
+          ) : (
+            <button onClick={onNext} disabled={!canGoNext} className={`lpBtn lpBtnSecondary ${!canGoNext ? "isDisabled" : ""}`} type="button">
+              Next
+            </button>
+          ))}
       </div>
     </div>
   );

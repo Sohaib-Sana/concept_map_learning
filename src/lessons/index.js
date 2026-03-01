@@ -3,6 +3,7 @@ import { initialNodes as statesNodes, initialEdges as statesEdges } from "../sto
 
 import { storySteps as atomsStory } from "../story/MakingSenseOfStuff/storySteps";
 import { initialNodes as atomsNodes, initialEdges as atomsEdges } from "../story/MakingSenseOfStuff/nodeBank";
+import { QUIZZES } from "../quiz/quizzes";
 
 export const LESSONS = {
   statesOfMatter: {
@@ -18,5 +19,6 @@ export const LESSONS = {
     storySteps: atomsStory,
     initialNodes: atomsNodes,
     initialEdges: atomsEdges,
+    quiz: QUIZZES.atomsElementsCompounds,
   },
 };
