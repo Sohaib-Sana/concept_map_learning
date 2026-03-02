@@ -1,8 +1,8 @@
 import { storySteps as statesStory } from "../story/StatesOfMatter/storySteps";
 import { initialNodes as statesNodes, initialEdges as statesEdges } from "../story/StatesOfMatter/nodeBank";
 
-import { storySteps as atomsStory } from "../story/MakingSenseOfStuff/storySteps";
-import { initialNodes as atomsNodes, initialEdges as atomsEdges } from "../story/MakingSenseOfStuff/nodeBank";
+import { storySteps as makingSenseOfStuff } from "../story/MakingSenseOfStuff/storySteps";
+import { initialNodes as makingSenseOfStuffNodes, initialEdges as makingSenseOfStuffEdges } from "../story/MakingSenseOfStuff/nodeBank";
 import { QUIZZES } from "../quiz/quizzes";
 
 export const LESSONS = {
@@ -16,9 +16,9 @@ export const LESSONS = {
   makingSenseOfStuff: {
     id: "makingSenseOfStuff",
     name: "Making Sense of Stuff",
-    storySteps: atomsStory,
-    initialNodes: atomsNodes,
-    initialEdges: atomsEdges,
-    quiz: QUIZZES.atomsElementsCompounds,
+    storySteps: makingSenseOfStuff,
+    initialNodes: makingSenseOfStuffNodes,
+    initialEdges: makingSenseOfStuffEdges,
+    quiz: QUIZZES.makingSenseOfStuffQuiz,
   },
 };

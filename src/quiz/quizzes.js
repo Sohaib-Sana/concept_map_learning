@@ -1,8 +1,8 @@
 // src/quiz/quizzes.js
 
 export const QUIZZES = {
-  atomsElementsCompounds: {
-    id: "atomsElementsCompounds-quiz",
+  makingSenseOfStuffQuiz: {
+    id: "makingSenseOfStuff-quiz",
     title: "QUIZ",
     questions: [
       {

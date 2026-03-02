@@ -12,12 +12,6 @@ export const storySteps = [
         focus: "n1",
         images: ["/images/things-everyday-objects.png"],
       },
-      // {
-      //   narration: "What about air?\nYou can’t see it… but you can feel it when the wind blows, or when you breathe.\nAll of these count as things.",
-      //   reveal: { nodes: ["n1"], edges: [] },
-      //   focus: "n1",
-      //   images: ["/images/things-air-wind.png"],
-      // },
     ],
   },
 
@@ -456,7 +450,7 @@ export const storySteps = [
     ],
   },
   {
-    id: "step-4",
+    id: "step-5",
     title: "Concept Recap",
     beats: [
       {
