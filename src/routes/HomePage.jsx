@@ -4,9 +4,7 @@ import { LESSONS as STORIES } from "../lessons/index";
 
 export default function HomePage() {
   const navigate = useNavigate();
-
   const storyList = useMemo(() => Object.values(STORIES), []);
-  console.log(storyList);
 
   return (
     <div style={{ minHeight: "100vh", background: "#fff" }}>
@@ -19,7 +17,7 @@ export default function HomePage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
             gap: 16,
           }}
         >
@@ -27,34 +25,84 @@ export default function HomePage() {
             <div
               key={s.id}
               style={{
-                border: "1px solid #e6e6e6",
-                borderRadius: 14,
+                border: "1px solid #e9e9e9",
+                borderRadius: 16,
                 overflow: "hidden",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.04)",
+                boxShadow: "0 10px 24px rgba(0,0,0,0.06)",
+                background: "#fff",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              <div style={{ height: 160, background: "#f6f6f6" }}>
+              {/* Image frame */}
+              <div
+                style={{
+                  // Use aspect ratio so it scales nicely with card width
+                  aspectRatio: "16 / 9",
+                  background: "linear-gradient(180deg, #fafafa, #f3f3f3)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 12,
+                }}
+              >
                 {s.coverImage ? (
-                  <img src={s.coverImage} alt={s.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+                  <img
+                    src={s.coverImage}
+                    alt={s.name}
+                    loading="lazy"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain", // ✅ key change for diagrams
+                      objectPosition: "center", // keeps it centered
+                      borderRadius: 10, // softer inside frame
+                    }}
+                  />
                 ) : null}
-                {s.name && <div style={{ padding: 16, color: "#333", fontWeight: 600 }}>{s.name}</div>}
               </div>
 
-              <div style={{ padding: 16 }}>
-                <h2 style={{ margin: 0, fontSize: 18 }}>{s.title}</h2>
-                <p style={{ marginTop: 8, marginBottom: 14, color: "#555", lineHeight: 1.4 }}>{s.description}</p>
+              {/* Body */}
+              <div
+                style={{
+                  padding: 16,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
+                  flex: 1,
+                }}
+              >
+                {/* Add a title (big visual improvement) */}
+                <div style={{ fontWeight: 700, fontSize: 16, lineHeight: 1.2 }}>{s.name}</div>
+
+                <p
+                  style={{
+                    margin: 0,
+                    color: "#555",
+                    lineHeight: 1.45,
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3, // ✅ clamp to keep cards even
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }}
+                >
+                  {s.description}
+                </p>
+
+                {/* Spacer pushes button to bottom for consistent layout */}
+                <div style={{ flex: 1 }} />
 
                 <button
                   onClick={() => navigate(`/lesson/${encodeURIComponent(s.id)}`)}
                   style={{
                     width: "100%",
                     padding: "10px 12px",
-                    borderRadius: 10,
+                    borderRadius: 12,
                     border: "1px solid #111",
                     background: "#111",
                     color: "#fff",
                     cursor: "pointer",
-                    fontWeight: 600,
+                    fontWeight: 700,
                   }}
                 >
                   Start
@@ -64,9 +112,9 @@ export default function HomePage() {
           ))}
         </div>
 
-        <footer style={{ marginTop: 18, color: "#777", fontSize: 13 }}>
+        {/* <footer style={{ marginTop: 18, color: "#777", fontSize: 13 }}>
           Tip: You can bookmark a lesson URL like <code>/lesson/matter</code>.
-        </footer>
+        </footer> */}
       </div>
     </div>
   );

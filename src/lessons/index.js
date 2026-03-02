@@ -8,14 +8,19 @@ import { QUIZZES } from "../quiz/quizzes";
 export const LESSONS = {
   statesOfMatter: {
     id: "statesOfMatter",
-    name: "States of Matter",
+    title: "States of Matter",
+    description: "Explore the different states of matter and how they change from one to another.",
+    coverImage: "/images/states-of-matter.png",
     storySteps: statesStory,
     initialNodes: statesNodes,
     initialEdges: statesEdges,
+    quiz: QUIZZES.statesOfMatterQuiz,
   },
   makingSenseOfStuff: {
     id: "makingSenseOfStuff",
-    name: "Making Sense of Stuff",
+    title: "Making Sense of Stuff",
+    description: "Learn how to make sense of complex scientific concepts.",
+    coverImage: "/images/making-sense-of-stuff.png",
     storySteps: makingSenseOfStuff,
     initialNodes: makingSenseOfStuffNodes,
     initialEdges: makingSenseOfStuffEdges,
