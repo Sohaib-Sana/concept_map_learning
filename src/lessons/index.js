@@ -14,7 +14,7 @@ export const LESSONS = {
     storySteps: statesStory,
     initialNodes: statesNodes,
     initialEdges: statesEdges,
-    quiz: QUIZZES.statesOfMatterQuiz,
+    // quiz: QUIZZES.statesOfMatterQuiz,
   },
   makingSenseOfStuff: {
     id: "makingSenseOfStuff",

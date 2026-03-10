@@ -605,7 +605,7 @@ export default function LessonFlowPage() {
             onAnswer={handleAnswer}
             onRetryQuestion={handleRetryQuestion}
             questionFeedback={questionFeedback}
-            showTakeQuizNow={isLessonComplete}
+            showTakeQuizNow={isLessonComplete && story.quiz}
             onTakeQuizNow={handleTakeQuizNow}
           />
         )}
