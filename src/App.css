@@ -38,10 +38,135 @@
   padding: 6px 16px;
   font-size: 14px;
 }
+/* =========================
+   Lesson-specific node styles
+   ========================= */
+
+.nodeContent--containerTitle {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 18px 18px 14px 18px;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  border: 1.5px solid #222138;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.nodeContent--device {
+  min-width: 120px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  background: #fff;
+}
+
+.nodeContent--main {
+  min-width: 220px;
+  padding: 12px 16px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.nodeContent--branch {
+  min-width: 120px;
+  padding: 10px 14px;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.nodeContent--examples {
+  min-width: 150px;
+  padding: 6px 4px;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
+  white-space: pre-line;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.nodeContent--os {
+  min-width: 190px;
+  padding: 12px 14px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+/* .nodeContent--osExamples {
+  min-width: 145px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+  white-space: pre-line;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+} */
 
 .ghostContent {
   opacity: 0;
   transition: opacity 350ms ease;
+}
+
+/* =========================
+   Group node: Computing Devices
+   ========================= */
+
+.groupNode {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid #222138;
+  padding: 18px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.groupNode__title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+.groupNode__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  width: 100%;
+  justify-items: center;
+}
+
+.groupNode__item {
+  border: 1px solid #222138;
+  padding: 10px;
+  width: 130px;
+  text-align: center;
+  background: #fff;
+}
+
+.groupNode__itemText {
+  white-space: pre-line;
+  color: #111;
+}
+
+.groupNode__item--spacer {
+  visibility: hidden;
 }
 
 /* New-node animation */

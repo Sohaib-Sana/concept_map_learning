@@ -3,6 +3,10 @@ import { initialNodes as statesNodes, initialEdges as statesEdges } from "../sto
 
 import { storySteps as makingSenseOfStuff } from "../story/MakingSenseOfStuff/storySteps";
 import { initialNodes as makingSenseOfStuffNodes, initialEdges as makingSenseOfStuffEdges } from "../story/MakingSenseOfStuff/nodeBank";
+
+import { storySteps as computersHelpUsStory } from "../story/ComputersHelpsUs/storySteps";
+import { initialNodes as computersHelpUsNodes, initialEdges as computersHelpUsEdges } from "../story/ComputersHelpsUs/nodeBank";
+
 import { QUIZZES } from "../quiz/quizzes";
 
 export const LESSONS = {
@@ -16,6 +20,7 @@ export const LESSONS = {
     initialEdges: statesEdges,
     // quiz: QUIZZES.statesOfMatterQuiz,
   },
+
   makingSenseOfStuff: {
     id: "makingSenseOfStuff",
     title: "Making Sense of Stuff",
@@ -25,5 +30,16 @@ export const LESSONS = {
     initialNodes: makingSenseOfStuffNodes,
     initialEdges: makingSenseOfStuffEdges,
     quiz: QUIZZES.makingSenseOfStuffQuiz,
+  },
+
+  computersHelpUs: {
+    id: "computersHelpUs",
+    title: "Computers Help Us Have Fun, Connect and Work",
+    description: "Learn how computing devices, apps and operating systems work together.",
+    coverImage: "/images/computers-help-us.png",
+    storySteps: computersHelpUsStory,
+    initialNodes: computersHelpUsNodes,
+    initialEdges: computersHelpUsEdges,
+    // quiz: QUIZZES.computersHelpUsQuiz,
   },
 };
