@@ -10,8 +10,8 @@ import { initialNodes as computersHelpUsNodes, initialEdges as computersHelpUsEd
 import { storySteps as shortHistoryStory } from "../story/ShortHistoryOfComputers/storySteps";
 import { initialNodes as shortHistoryNodes, initialEdges as shortHistoryEdges } from "../story/ShortHistoryOfComputers/nodeBank";
 
-// import { storySteps as countLikeWeDoStory } from "../story/ComputersDontCountLikeWeDo/storySteps";
-// import { initialNodes as countLikeWeDoNodes, initialEdges as countLikeWeDoEdges } from "../story/ComputersDontCountLikeWeDo/nodeBank";
+import { storySteps as countLikeWeDoStory } from "../story/ComputersDontCountLikeWeDo/storySteps";
+import { initialNodes as countLikeWeDoNodes, initialEdges as countLikeWeDoEdges } from "../story/ComputersDontCountLikeWeDo/nodeBank";
 
 // import { storySteps as electricityCreatesStory } from "../story/HowElectricityCreates0sAnd1s/storySteps";
 // import { initialNodes as electricityCreatesNodes, initialEdges as electricityCreatesEdges } from "../story/HowElectricityCreates0sAnd1s/nodeBank";
@@ -88,15 +88,15 @@ export const LESSONS = {
     initialEdges: shortHistoryEdges,
   },
 
-  // computersDontCountLikeWeDo: {
-  //   id: "computersDontCountLikeWeDo",
-  //   title: "Computers Don't Count Like We Do!",
-  //   description: "Learn why computers use binary instead of decimal, and how 0s and 1s fit electricity.",
-  //   coverImage: "/images/Computer/computers-dont-count-like-we-do.png",
-  //   storySteps: countLikeWeDoStory,
-  //   initialNodes: countLikeWeDoNodes,
-  //   initialEdges: countLikeWeDoEdges,
-  // },
+  computersDontCountLikeWeDo: {
+    id: "computersDontCountLikeWeDo",
+    title: "Computers Don't Count Like We Do!",
+    description: "Learn why computers use binary instead of decimal, and how 0s and 1s fit electricity.",
+    coverImage: "/images/Computer/computers-dont-count-like-we-do.png",
+    storySteps: countLikeWeDoStory,
+    initialNodes: countLikeWeDoNodes,
+    initialEdges: countLikeWeDoEdges,
+  },
 
   // howElectricityCreates0sAnd1s: {
   //   id: "howElectricityCreates0sAnd1s",
