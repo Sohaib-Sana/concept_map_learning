@@ -1,4 +1,3 @@
-// api/tts.js
 import crypto from "node:crypto";
 import { head, put } from "@vercel/blob";
 
@@ -93,7 +92,7 @@ async function fetchWithRetry(url, options, { retries = 4, baseDelayMs = 300 } =
 }
 
 // Bump this if you want to invalidate ALL old cached audio at once
-const CACHE_VERSION = "tts-v3-elevenlabs-autovoice";
+const CACHE_VERSION = "tts-v5-elevenlabs-force-refresh";
 
 function normalizeText(s) {
   return String(s ?? "")
@@ -101,7 +100,7 @@ function normalizeText(s) {
     .trim();
 }
 
-function makeCacheKey({ requestedVoiceId, usedVoiceId, modelId, outputFormat, voiceSettings, text }) {
+function makeCacheKey({ requestedVoiceId, usedVoiceId, modelId, outputFormat, voiceSettings, text, refreshToken = "" }) {
   const canonical = {
     v: CACHE_VERSION,
     provider: "elevenlabs",
@@ -111,7 +110,9 @@ function makeCacheKey({ requestedVoiceId, usedVoiceId, modelId, outputFormat, vo
     outputFormat: outputFormat || "",
     voiceSettings: voiceSettings || null,
     text: normalizeText(text),
+    refreshToken,
   };
+
   return crypto.createHash("sha256").update(JSON.stringify(canonical)).digest("hex");
 }
 
@@ -119,6 +120,7 @@ async function getVoices(apiKey) {
   const resp = await fetch("https://api.elevenlabs.io/v1/voices", {
     headers: { "xi-api-key": apiKey },
   });
+
   const data = await resp.json().catch(() => ({}));
   if (!resp.ok) {
     const err = new Error("Failed to fetch voices");
@@ -126,11 +128,11 @@ async function getVoices(apiKey) {
     err.details = JSON.stringify(data);
     throw err;
   }
+
   return data.voices ?? [];
 }
 
 function pickFallbackVoiceId(voices) {
-  // simplest: first voice returned by the account
   return voices?.[0]?.voice_id || null;
 }
 
@@ -163,15 +165,19 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Use POST" });
 
   const apiKey = process.env.ELEVENLABS_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: "Missing ELEVENLABS_API_KEY env var" });
+  if (!apiKey) {
+    return res.status(500).json({ error: "Missing ELEVENLABS_API_KEY env var" });
+  }
 
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     return res.status(500).json({ error: "Missing BLOB_READ_WRITE_TOKEN (Vercel Blob)" });
   }
 
+  const DEFAULT_VOICE_ID = process.env.ELEVENLABS_VOICE_ID || process.env.VITE_ELEVENLABS_VOICE_ID || "";
+
   const {
     text,
-    voiceId: requestedVoiceId = "", // may be empty
+    voiceId: requestedVoiceId = "",
     modelId = "eleven_multilingual_v2",
     outputFormat = "mp3_44100_128",
     voiceSettings = {
@@ -180,31 +186,44 @@ export default async function handler(req, res) {
       style: 0.2,
       use_speaker_boost: true,
     },
+    forceRefresh = false,
   } = req.body || {};
 
   const raw = String(text ?? "");
   if (!raw.trim()) return res.status(400).json({ error: "Missing text" });
 
-  // Limit overall concurrency to reduce ElevenLabs 429s (best-effort per instance)
+  // Avoid browser/proxy caching of the API redirect response
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+
   const release = await ttsSemaphore.acquire();
 
   try {
-    // 1) Resolve voice
     let voices = null;
-    let usedVoiceId = requestedVoiceId;
+    let usedVoiceId = requestedVoiceId || DEFAULT_VOICE_ID;
 
     if (!usedVoiceId) {
       voices = await getVoices(apiKey);
       usedVoiceId = pickFallbackVoiceId(voices);
+
       if (!usedVoiceId) {
         return res.status(500).json({ error: "No voices available on this ElevenLabs account." });
       }
+
       res.setHeader("X-TTS-Voice", "AUTO");
-    } else {
+    } else if (requestedVoiceId) {
       res.setHeader("X-TTS-Voice", "REQUESTED");
+    } else {
+      res.setHeader("X-TTS-Voice", "DEFAULT_ENV");
     }
 
-    // 2) Cache key includes requested + used
+    res.setHeader("X-TTS-Requested-Voice-Id", requestedVoiceId || "");
+    res.setHeader("X-TTS-Used-Voice-Id", usedVoiceId || "");
+    res.setHeader("X-TTS-Force-Refresh", forceRefresh ? "1" : "0");
+
+    const refreshToken = forceRefresh ? String(Date.now()) : "";
+
     const key = makeCacheKey({
       requestedVoiceId,
       usedVoiceId,
@@ -212,13 +231,14 @@ export default async function handler(req, res) {
       outputFormat,
       voiceSettings,
       text: raw,
+      refreshToken,
     });
 
     const ext = "mp3";
     const pathname = `tts/${key}.${ext}`;
 
-    // 3) Cache lookup
-    const cached = await head(pathname).catch(() => null);
+    // Cache lookup
+    const cached = forceRefresh ? null : await head(pathname).catch(() => null);
     if (cached?.url) {
       res.setHeader("X-TTS-Cache", "HIT");
       res.statusCode = 303;
@@ -226,8 +246,8 @@ export default async function handler(req, res) {
       return res.end();
     }
 
-    // 3.5) Single-flight: if same key is being generated, await it.
-    if (inFlightByKey.has(key)) {
+    // Single-flight
+    if (!forceRefresh && inFlightByKey.has(key)) {
       const blobUrl = await inFlightByKey.get(key);
       res.setHeader("X-TTS-Cache", "WAIT");
       res.statusCode = 303;
@@ -236,8 +256,8 @@ export default async function handler(req, res) {
     }
 
     const generationPromise = (async () => {
-      // 4) Generate audio (with fallback if 402)
       let audioBuffer;
+
       try {
         audioBuffer = await callElevenLabsTts({
           apiKey,
@@ -259,7 +279,6 @@ export default async function handler(req, res) {
           }
 
           usedVoiceId = fallbackId;
-          // Note: headers will be set on the outer response; for single-flight callers, cache key already decided.
           audioBuffer = await callElevenLabsTts({
             apiKey,
             voiceId: usedVoiceId,
@@ -273,33 +292,36 @@ export default async function handler(req, res) {
         }
       }
 
-      // 5) Store in Blob (public) with long cache max-age
       const blob = await put(pathname, audioBuffer, {
         access: "public",
         addRandomSuffix: false,
         allowOverwrite: false,
         contentType: "audio/mpeg",
-        cacheControlMaxAge: 60 * 60 * 24 * 365, // 1 year
+        cacheControlMaxAge: 60 * 60 * 24 * 365,
       });
 
       return blob.url;
     })();
 
-    inFlightByKey.set(key, generationPromise);
+    if (!forceRefresh) {
+      inFlightByKey.set(key, generationPromise);
+    }
 
     let blobUrl;
     try {
       blobUrl = await generationPromise;
     } finally {
-      inFlightByKey.delete(key);
+      if (!forceRefresh) {
+        inFlightByKey.delete(key);
+      }
     }
 
-    res.setHeader("X-TTS-Cache", "MISS");
+    res.setHeader("X-TTS-Used-Voice-Id", usedVoiceId || "");
+    res.setHeader("X-TTS-Cache", forceRefresh ? "REFRESH" : "MISS");
     res.statusCode = 303;
     res.setHeader("Location", blobUrl);
     return res.end();
   } catch (e) {
-    // If we still hit 429 (multi-instance scale), pass back Retry-After if known
     if (e?.status === 429 && e?.retryAfterMs != null) {
       res.setHeader("Retry-After", String(Math.ceil(e.retryAfterMs / 1000)));
     }

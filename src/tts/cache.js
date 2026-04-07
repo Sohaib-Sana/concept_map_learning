@@ -1,9 +1,9 @@
 // src/tts/cache.js
-const TTS_CACHE_NAME = "gemini-tts-v1";
+const TTS_CACHE_NAME = "elevenlabs-tts-v2";
 
 // Create a stable cache key URL (must be a valid URL for CacheStorage)
 function makeCacheRequest(hash) {
-  return new Request(`https://tts-cache.local/${hash}.wav`, { method: "GET" });
+  return new Request(`https://tts-cache.local/${hash}.mp3`, { method: "GET" });
 }
 
 export async function sha256Base64Url(input) {
@@ -35,7 +35,7 @@ export async function putCachedAudioBlob(hash, blob) {
     const req = makeCacheRequest(hash);
     const res = new Response(blob, {
       headers: {
-        "Content-Type": blob.type || "audio/wav",
+        "Content-Type": blob.type || "audio/mpeg",
         "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
@@ -47,7 +47,7 @@ export async function putCachedAudioBlob(hash, blob) {
 
 export async function hashForTtsRequest(ttsReq) {
   // The hash MUST be derived from exactly what affects the output.
-  const payload = JSON.stringify({ v: 1, ...ttsReq });
+  const payload = JSON.stringify({ v: 2, ...ttsReq });
   try {
     return await sha256Base64Url(payload);
   } catch {
