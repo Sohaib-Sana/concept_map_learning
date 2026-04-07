@@ -13,8 +13,8 @@ import { initialNodes as shortHistoryNodes, initialEdges as shortHistoryEdges } 
 import { storySteps as countLikeWeDoStory } from "../story/ComputersDontCountLikeWeDo/storySteps";
 import { initialNodes as countLikeWeDoNodes, initialEdges as countLikeWeDoEdges } from "../story/ComputersDontCountLikeWeDo/nodeBank";
 
-// import { storySteps as electricityCreatesStory } from "../story/HowElectricityCreates0sAnd1s/storySteps";
-// import { initialNodes as electricityCreatesNodes, initialEdges as electricityCreatesEdges } from "../story/HowElectricityCreates0sAnd1s/nodeBank";
+import { storySteps as electricityCreatesStory } from "../story/HowElectricityCreates0sAnd1s/storySteps";
+import { initialNodes as electricityCreatesNodes, initialEdges as electricityCreatesEdges } from "../story/HowElectricityCreates0sAnd1s/nodeBank";
 
 // import { storySteps as oneInstructionStory } from "../story/OneInstructionAtATime/storySteps";
 // import { initialNodes as oneInstructionNodes, initialEdges as oneInstructionEdges } from "../story/OneInstructionAtATime/nodeBank";
@@ -98,15 +98,15 @@ export const LESSONS = {
     initialEdges: countLikeWeDoEdges,
   },
 
-  // howElectricityCreates0sAnd1s: {
-  //   id: "howElectricityCreates0sAnd1s",
-  //   title: "How Electricity Creates 0s and 1s",
-  //   description: "See how circuits, switches, and binary let computers represent data.",
-  //   coverImage: "/images/Computer/how-electricity-creates-0s-and-1s.png",
-  //   storySteps: electricityCreatesStory,
-  //   initialNodes: electricityCreatesNodes,
-  //   initialEdges: electricityCreatesEdges,
-  // },
+  howElectricityCreates0sAnd1s: {
+    id: "howElectricityCreates0sAnd1s",
+    title: "How Electricity Creates 0s and 1s",
+    description: "See how circuits, switches, and binary let computers represent data.",
+    coverImage: "/images/Computer/how-electricity-creates-0s-and-1s.png",
+    storySteps: electricityCreatesStory,
+    initialNodes: electricityCreatesNodes,
+    initialEdges: electricityCreatesEdges,
+  },
 
   // oneInstructionAtATime: {
   //   id: "oneInstructionAtATime",

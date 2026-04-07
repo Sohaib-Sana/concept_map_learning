@@ -14,7 +14,7 @@ export const initialNodes = [
   },
   {
     id: "n2",
-    position: { x: 320, y: 140 },
+    position: { x: 400, y: 140 },
     data: {
       label: "Electric Circuits",
       className: "nodeContent--main",
@@ -29,7 +29,7 @@ export const initialNodes = [
   },
   {
     id: "n3",
-    position: { x: 660, y: 60 },
+    position: { x: 740, y: 60 },
     data: {
       label: "CLOSED (ON)",
       className: "nodeContent--branch",
@@ -43,7 +43,7 @@ export const initialNodes = [
   },
   {
     id: "n4",
-    position: { x: 660, y: 230 },
+    position: { x: 740, y: 230 },
     data: {
       label: "OPEN (OFF)",
       className: "nodeContent--branch",
@@ -57,7 +57,7 @@ export const initialNodes = [
   },
   {
     id: "n5",
-    position: { x: 960, y: 60 },
+    position: { x: 1120, y: 60 },
     data: {
       label: "1",
       className: "nodeContent--main",
@@ -68,7 +68,7 @@ export const initialNodes = [
   },
   {
     id: "n6",
-    position: { x: 960, y: 230 },
+    position: { x: 1120, y: 230 },
     data: {
       label: "0",
       className: "nodeContent--main",
@@ -77,91 +77,91 @@ export const initialNodes = [
     },
     type: "customNode",
   },
-  {
-    id: "n7",
-    position: { x: 260, y: 430 },
-    data: {
-      label: "Data",
-      className: "nodeContent--main",
-      style: { minWidth: 140 },
-      handles: [
-        { id: "out1", type: "source", position: Position.Top, offset: -80 },
-        { id: "out2", type: "source", position: Position.Top, offset: -20 },
-        { id: "out3", type: "source", position: Position.Top, offset: 40 },
-        { id: "out4", type: "source", position: Position.Top, offset: 100 },
-        { id: "outRight", type: "source", position: Position.Right },
-      ],
-    },
-    type: "customNode",
-  },
-  {
-    id: "n8",
-    position: { x: 60, y: 570 },
-    data: {
-      label: "Text",
-      className: "nodeContent--branch",
-      handles: [{ id: "in", type: "target", position: Position.Top }],
-    },
-    type: "customNode",
-  },
-  {
-    id: "n9",
-    position: { x: 220, y: 570 },
-    data: {
-      label: "Images",
-      className: "nodeContent--branch",
-      handles: [{ id: "in", type: "target", position: Position.Top }],
-    },
-    type: "customNode",
-  },
-  {
-    id: "n10",
-    position: { x: 380, y: 570 },
-    data: {
-      label: "Audio",
-      className: "nodeContent--branch",
-      handles: [{ id: "in", type: "target", position: Position.Top }],
-    },
-    type: "customNode",
-  },
-  {
-    id: "n11",
-    position: { x: 540, y: 570 },
-    data: {
-      label: "Video",
-      className: "nodeContent--branch",
-      handles: [{ id: "in", type: "target", position: Position.Top }],
-    },
-    type: "customNode",
-  },
-  {
-    id: "n12",
-    position: { x: 560, y: 430 },
-    data: {
-      label: "Numbers",
-      className: "nodeContent--main",
-      style: { minWidth: 170 },
-      handles: [
-        { id: "in", type: "target", position: Position.Left },
-        { id: "out", type: "source", position: Position.Right },
-      ],
-    },
-    type: "customNode",
-  },
-  {
-    id: "n13",
-    position: { x: 860, y: 430 },
-    data: {
-      label: "Binary\n(0s and 1s)",
-      className: "nodeContent--main",
-      style: { whiteSpace: "pre-line", minWidth: 180 },
-      handles: [
-        { id: "in1", type: "target", position: Position.Left },
-        { id: "in2", type: "target", position: Position.Top },
-      ],
-    },
-    type: "customNode",
-  },
+  // {
+  //   id: "n7",
+  //   position: { x: 260, y: 430 },
+  //   data: {
+  //     label: "Data",
+  //     className: "nodeContent--main",
+  //     style: { minWidth: 140 },
+  //     handles: [
+  //       { id: "out1", type: "source", position: Position.Top, offset: -80 },
+  //       { id: "out2", type: "source", position: Position.Top, offset: -20 },
+  //       { id: "out3", type: "source", position: Position.Top, offset: 40 },
+  //       { id: "out4", type: "source", position: Position.Top, offset: 100 },
+  //       { id: "outRight", type: "source", position: Position.Right },
+  //     ],
+  //   },
+  //   type: "customNode",
+  // },
+  // {
+  //   id: "n8",
+  //   position: { x: 60, y: 570 },
+  //   data: {
+  //     label: "Text",
+  //     className: "nodeContent--branch",
+  //     handles: [{ id: "in", type: "target", position: Position.Top }],
+  //   },
+  //   type: "customNode",
+  // },
+  // {
+  //   id: "n9",
+  //   position: { x: 220, y: 570 },
+  //   data: {
+  //     label: "Images",
+  //     className: "nodeContent--branch",
+  //     handles: [{ id: "in", type: "target", position: Position.Top }],
+  //   },
+  //   type: "customNode",
+  // },
+  // {
+  //   id: "n10",
+  //   position: { x: 380, y: 570 },
+  //   data: {
+  //     label: "Audio",
+  //     className: "nodeContent--branch",
+  //     handles: [{ id: "in", type: "target", position: Position.Top }],
+  //   },
+  //   type: "customNode",
+  // },
+  // {
+  //   id: "n11",
+  //   position: { x: 540, y: 570 },
+  //   data: {
+  //     label: "Video",
+  //     className: "nodeContent--branch",
+  //     handles: [{ id: "in", type: "target", position: Position.Top }],
+  //   },
+  //   type: "customNode",
+  // },
+  // {
+  //   id: "n12",
+  //   position: { x: 560, y: 430 },
+  //   data: {
+  //     label: "Numbers",
+  //     className: "nodeContent--main",
+  //     style: { minWidth: 170 },
+  //     handles: [
+  //       { id: "in", type: "target", position: Position.Left },
+  //       { id: "out", type: "source", position: Position.Right },
+  //     ],
+  //   },
+  //   type: "customNode",
+  // },
+  // {
+  //   id: "n13",
+  //   position: { x: 860, y: 430 },
+  //   data: {
+  //     label: "Binary\n(0s and 1s)",
+  //     className: "nodeContent--main",
+  //     style: { whiteSpace: "pre-line", minWidth: 180 },
+  //     handles: [
+  //       { id: "in1", type: "target", position: Position.Left },
+  //       { id: "in2", type: "target", position: Position.Top },
+  //     ],
+  //   },
+  //   type: "customNode",
+  // },
 ];
 
 export const initialEdges = [
@@ -196,7 +196,7 @@ export const initialEdges = [
     sourceHandle: "out",
     target: "n5",
     targetHandle: "in",
-    label: "electricity flows →",
+    label: "electricity flows",
     markerEnd: { type: "arrowclosed" },
   },
   {
@@ -205,51 +205,51 @@ export const initialEdges = [
     sourceHandle: "out",
     target: "n6",
     targetHandle: "in",
-    label: "electricity does not flow →",
+    label: "electricity does not flow",
     markerEnd: { type: "arrowclosed" },
   },
-  {
-    id: "n8-n12",
-    source: "n8",
-    target: "n12",
-    label: "represented by",
-    markerEnd: { type: "arrowclosed" },
-  },
-  {
-    id: "n9-n12",
-    source: "n9",
-    target: "n12",
-    label: "",
-    markerEnd: { type: "arrowclosed" },
-  },
-  {
-    id: "n10-n12",
-    source: "n10",
-    target: "n12",
-    label: "",
-    markerEnd: { type: "arrowclosed" },
-  },
-  {
-    id: "n11-n12",
-    source: "n11",
-    target: "n12",
-    label: "",
-    markerEnd: { type: "arrowclosed" },
-  },
-  {
-    id: "n12-n13",
-    source: "n12",
-    target: "n13",
-    label: "converted to",
-    markerEnd: { type: "arrowclosed" },
-  },
-  {
-    id: "n7-n13",
-    source: "n7",
-    sourceHandle: "outRight",
-    target: "n13",
-    targetHandle: "in2",
-    label: "stored as",
-    markerEnd: { type: "arrowclosed" },
-  },
+  // {
+  //   id: "n8-n12",
+  //   source: "n8",
+  //   target: "n12",
+  //   label: "represented by",
+  //   markerEnd: { type: "arrowclosed" },
+  // },
+  // {
+  //   id: "n9-n12",
+  //   source: "n9",
+  //   target: "n12",
+  //   label: "",
+  //   markerEnd: { type: "arrowclosed" },
+  // },
+  // {
+  //   id: "n10-n12",
+  //   source: "n10",
+  //   target: "n12",
+  //   label: "",
+  //   markerEnd: { type: "arrowclosed" },
+  // },
+  // {
+  //   id: "n11-n12",
+  //   source: "n11",
+  //   target: "n12",
+  //   label: "",
+  //   markerEnd: { type: "arrowclosed" },
+  // },
+  // {
+  //   id: "n12-n13",
+  //   source: "n12",
+  //   target: "n13",
+  //   label: "converted to",
+  //   markerEnd: { type: "arrowclosed" },
+  // },
+  // {
+  //   id: "n7-n13",
+  //   source: "n7",
+  //   sourceHandle: "outRight",
+  //   target: "n13",
+  //   targetHandle: "in2",
+  //   label: "stored as",
+  //   markerEnd: { type: "arrowclosed" },
+  // },
 ];

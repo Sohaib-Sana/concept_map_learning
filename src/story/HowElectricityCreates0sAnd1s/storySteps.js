@@ -61,66 +61,66 @@ export const storySteps = [
           nodes: ["n1", "n2", "n3", "n4", "n5", "n6"],
           edges: ["n1-n2", "n2-n3", "n2-n4", "n3-n5", "n4-n6"],
         },
-        focus: ["n2", "n3", "n4"],
+        focus: ["n1", "n2", "n3", "n4", "n5", "n6"],
         images: [],
       },
     ],
   },
-  {
-    id: "step-3",
-    title: "From Things to Numbers",
-    beats: [
-      {
-        narration:
-          "At first, computers were mainly used for working with numbers.\n\nBut over time, people realised something very important:\n\nA computer does not need to understand things in the same way humans do. It just needs a way to represent them using numbers.",
-        reveal: { nodes: ["n7", "n12"], edges: [] },
-        focus: ["n7", "n12"],
-        images: [],
-      },
-      {
-        narration: "Anything we can read or write, see, or hear can be turned into numbers.",
-        reveal: {
-          nodes: ["n7", "n8", "n9", "n10", "n11", "n12"],
-          edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12"],
-        },
-        focus: ["n8", "n9", "n10", "n11", "n12"],
-        images: [],
-      },
-      {
-        narration:
-          "Text can be turned into numbers by giving each letter, number, or symbol its own code.\n\nImages can be turned into numbers by breaking them into tiny parts and storing the colour of each part as numbers.\n\nSound can be turned into numbers by measuring the sound wave and storing those measurements.\n\nVideo can be turned into numbers too, because a video is really a series of images shown one after another, often with sound as well.",
-        reveal: {
-          nodes: ["n7", "n8", "n9", "n10", "n11", "n12"],
-          edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12"],
-        },
-        focus: ["n12"],
-        images: [],
-      },
-    ],
-  },
-  {
-    id: "step-4",
-    title: "Binary Data",
-    beats: [
-      {
-        narration: "Because computers use binary, all of these numbers can then be represented using 0s and 1s.",
-        reveal: {
-          nodes: ["n7", "n8", "n9", "n10", "n11", "n12", "n13"],
-          edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12", "n12-n13", "n7-n13"],
-        },
-        focus: ["n12", "n13"],
-        images: [],
-      },
-      {
-        narration:
-          "So here we meet an important new concept: data.\n\nNumbers, text, images, audio, and video are all forms of data, and computers store that data as binary.",
-        reveal: {
-          nodes: ["n7", "n8", "n9", "n10", "n11", "n12", "n13"],
-          edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12", "n12-n13", "n7-n13"],
-        },
-        focus: ["n7", "n13"],
-        images: [],
-      },
-    ],
-  },
+  // {
+  //   id: "step-3",
+  //   title: "From Things to Numbers",
+  //   beats: [
+  //     {
+  //       narration:
+  //         "At first, computers were mainly used for working with numbers.\n\nBut over time, people realised something very important:\n\nA computer does not need to understand things in the same way humans do. It just needs a way to represent them using numbers.",
+  //       reveal: { nodes: ["n7", "n12"], edges: [] },
+  //       focus: ["n7", "n12"],
+  //       images: [],
+  //     },
+  //     {
+  //       narration: "Anything we can read or write, see, or hear can be turned into numbers.",
+  //       reveal: {
+  //         nodes: ["n7", "n8", "n9", "n10", "n11", "n12"],
+  //         edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12"],
+  //       },
+  //       focus: ["n8", "n9", "n10", "n11", "n12"],
+  //       images: [],
+  //     },
+  //     {
+  //       narration:
+  //         "Text can be turned into numbers by giving each letter, number, or symbol its own code.\n\nImages can be turned into numbers by breaking them into tiny parts and storing the colour of each part as numbers.\n\nSound can be turned into numbers by measuring the sound wave and storing those measurements.\n\nVideo can be turned into numbers too, because a video is really a series of images shown one after another, often with sound as well.",
+  //       reveal: {
+  //         nodes: ["n7", "n8", "n9", "n10", "n11", "n12"],
+  //         edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12"],
+  //       },
+  //       focus: ["n12"],
+  //       images: [],
+  //     },
+  //   ],
+  // },
+  // {
+  //   id: "step-4",
+  //   title: "Binary Data",
+  //   beats: [
+  //     {
+  //       narration: "Because computers use binary, all of these numbers can then be represented using 0s and 1s.",
+  //       reveal: {
+  //         nodes: ["n7", "n8", "n9", "n10", "n11", "n12", "n13"],
+  //         edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12", "n12-n13", "n7-n13"],
+  //       },
+  //       focus: ["n12", "n13"],
+  //       images: [],
+  //     },
+  //     {
+  //       narration:
+  //         "So here we meet an important new concept: data.\n\nNumbers, text, images, audio, and video are all forms of data, and computers store that data as binary.",
+  //       reveal: {
+  //         nodes: ["n7", "n8", "n9", "n10", "n11", "n12", "n13"],
+  //         edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12", "n12-n13", "n7-n13"],
+  //       },
+  //       focus: ["n7", "n13"],
+  //       images: [],
+  //     },
+  //   ],
+  // },
 ];
