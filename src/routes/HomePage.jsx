@@ -49,7 +49,7 @@ export default function HomePage() {
                 {s.coverImage ? (
                   <img
                     src={s.coverImage}
-                    alt={s.name}
+                    alt={s.title}
                     loading="lazy"
                     style={{
                       width: "100%",
@@ -72,8 +72,16 @@ export default function HomePage() {
                   flex: 1,
                 }}
               >
-                {/* Add a title (big visual improvement) */}
-                <div style={{ fontWeight: 700, fontSize: 16, lineHeight: 1.2 }}>{s.name}</div>
+                <div
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 16,
+                    lineHeight: 1.2,
+                    color: "#111",
+                  }}
+                >
+                  {s.title}
+                </div>
 
                 <p
                   style={{

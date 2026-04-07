@@ -1,0 +1,182 @@
+import { Position } from "@xyflow/react";
+
+export const initialNodes = [
+  {
+    id: "n1",
+    position: { x: 60, y: 110 },
+    data: {
+      label: "Computing Devices",
+      className: "nodeContent--main",
+      style: { minWidth: 190 },
+      handles: [{ id: "out", type: "source", position: Position.Right }],
+    },
+    type: "customNode",
+  },
+  {
+    id: "n2",
+    position: { x: 360, y: 110 },
+    data: {
+      label: "Permanent Storage",
+      className: "nodeContent--main",
+      style: { minWidth: 210, border: "2px solid #e0a100" },
+      handles: [
+        { id: "in", type: "target", position: Position.Left },
+        { id: "out1", type: "source", position: Position.Bottom, offset: -90 },
+        { id: "out2", type: "source", position: Position.Bottom, offset: 90 },
+        { id: "out3", type: "source", position: Position.Right },
+      ],
+    },
+    type: "customNode",
+  },
+  {
+    id: "n3",
+    position: { x: 180, y: 330 },
+    data: {
+      label: "Apps and OS",
+      className: "nodeContent--branch",
+      style: { minWidth: 180 },
+      handles: [{ id: "in", type: "target", position: Position.Top }],
+    },
+    type: "customNode",
+  },
+  {
+    id: "n4",
+    position: { x: 470, y: 330 },
+    data: {
+      label: "User Files",
+      className: "nodeContent--branch",
+      style: { minWidth: 160 },
+      handles: [
+        { id: "in", type: "target", position: Position.Top },
+        { id: "out1", type: "source", position: Position.Bottom, offset: -80 },
+        { id: "out2", type: "source", position: Position.Bottom },
+        { id: "out3", type: "source", position: Position.Bottom, offset: 80 },
+      ],
+    },
+    type: "customNode",
+  },
+  {
+    id: "n5",
+    position: { x: 300, y: 520 },
+    data: {
+      label: "Documents",
+      className: "nodeContent--branch",
+      handles: [{ id: "in", type: "target", position: Position.Top }],
+    },
+    type: "customNode",
+  },
+  {
+    id: "n6",
+    position: { x: 470, y: 520 },
+    data: {
+      label: "Music",
+      className: "nodeContent--branch",
+      handles: [{ id: "in", type: "target", position: Position.Top }],
+    },
+    type: "customNode",
+  },
+  {
+    id: "n7",
+    position: { x: 640, y: 520 },
+    data: {
+      label: "Photos & Videos",
+      className: "nodeContent--branch",
+      style: { minWidth: 180 },
+      handles: [{ id: "in", type: "target", position: Position.Top }],
+    },
+    type: "customNode",
+  },
+  {
+    id: "n8",
+    position: { x: 760, y: 60 },
+    data: {
+      label: "Hard Drive",
+      className: "nodeContent--branch",
+      handles: [{ id: "in", type: "target", position: Position.Left }],
+    },
+    type: "customNode",
+  },
+  {
+    id: "n9",
+    position: { x: 760, y: 160 },
+    data: {
+      label: "SSD",
+      className: "nodeContent--branch",
+      handles: [{ id: "in", type: "target", position: Position.Left }],
+    },
+    type: "customNode",
+  },
+];
+
+export const initialEdges = [
+  {
+    id: "n1-n2",
+    source: "n1",
+    target: "n2",
+    label: "have",
+    markerEnd: { type: "arrowclosed" },
+  },
+  {
+    id: "n2-n3",
+    source: "n2",
+    sourceHandle: "out1",
+    target: "n3",
+    targetHandle: "in",
+    label: "to permanently store",
+    markerEnd: { type: "arrowclosed" },
+  },
+  {
+    id: "n2-n4",
+    source: "n2",
+    sourceHandle: "out2",
+    target: "n4",
+    targetHandle: "in",
+    label: "and",
+    markerEnd: { type: "arrowclosed" },
+  },
+  {
+    id: "n4-n5",
+    source: "n4",
+    sourceHandle: "out1",
+    target: "n5",
+    targetHandle: "in",
+    label: "such as",
+    markerEnd: { type: "arrowclosed" },
+  },
+  {
+    id: "n4-n6",
+    source: "n4",
+    sourceHandle: "out2",
+    target: "n6",
+    targetHandle: "in",
+    label: "",
+    markerEnd: { type: "arrowclosed" },
+  },
+  {
+    id: "n4-n7",
+    source: "n4",
+    sourceHandle: "out3",
+    target: "n7",
+    targetHandle: "in",
+    label: "",
+    markerEnd: { type: "arrowclosed" },
+  },
+  {
+    id: "n2-n8",
+    source: "n2",
+    sourceHandle: "out3",
+    target: "n8",
+    targetHandle: "in",
+    label: "such as",
+    markerEnd: { type: "arrowclosed" },
+  },
+  {
+    id: "n2-n9",
+    source: "n2",
+    sourceHandle: "out3",
+    target: "n9",
+    targetHandle: "in",
+    label: "",
+    markerEnd: { type: "arrowclosed" },
+  },
+];
