@@ -10,7 +10,7 @@ export const storySteps = [
           "Look around you. There are things everywhere.\n\nYour phone.\nYour desk.\nYour clothes.\nThe air around you.\n\nOur world is full of different things — big things, small things, and even things we cannot see.",
         reveal: { nodes: ["n1"], edges: [] },
         focus: "n1",
-        images: ["/images/things-everyday-objects.png"],
+        images: ["/images/Chemistry/things-everyday-objects.png"],
       },
     ],
   },
@@ -24,7 +24,7 @@ export const storySteps = [
           "But here’s something interesting…\n All of these different things are made from something.\n\nDifferent things are made from different materials or substances.\n\nFor example:\nA water bottle is made of plastic.\nA window is made of glass.\nA metal spoon is made of steel.",
         reveal: { nodes: ["n1"], ghostNodes: ["n2"], edges: [] },
         focus: "n2",
-        images: ["/images/materials-question-mark.png"],
+        images: ["/images/Chemistry/materials-question-mark.png"],
       },
     ],
   },
@@ -58,7 +58,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3"],
         },
         focus: "n4",
-        images: ["/images/zoom-in-magnify.png"],
+        images: ["/images/Chemistry/zoom-in-magnify.png"],
       },
       {
         narration:
@@ -68,7 +68,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4"],
         },
         focus: "n4",
-        images: ["/images/particles-tiny-dots.png"],
+        images: ["/images/Chemistry/particles-tiny-dots.png"],
       },
 
       // Atoms/Molecules branch (junction j2)
@@ -80,7 +80,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8"],
         },
         focus: ["n7", "n8"],
-        images: ["/images/atoms-vs-molecules-simple.png"],
+        images: ["/images/Chemistry/atoms-vs-molecules-simple.png"],
       },
 
       // Attraction/Movement branch (junction j1)
@@ -91,7 +91,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1"],
         },
         focus: "n4",
-        images: ["/images/particles-two-rules.png"],
+        images: ["/images/Chemistry/particles-two-rules.png"],
       },
       {
         narration: "First — particles are attracted to each other.\nThat means they pull towards one another.",
@@ -100,7 +100,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5"],
         },
         focus: "n5",
-        images: ["/images/particle-attraction-arrows.png"],
+        images: ["/images/Chemistry/particle-attraction-arrows.png"],
       },
       {
         narration: "Second — particles are always moving.\nEven in a solid, where things look completely still,\nthe particles are still moving.",
@@ -109,7 +109,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6"],
         },
         focus: "n6",
-        images: ["/images/particle-motion-wiggle.png"],
+        images: ["/images/Chemistry/particle-motion-wiggle.png"],
       },
 
       // Balance -> State of Matter (junction j3 + state)
@@ -120,7 +120,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6"],
         },
         focus: ["n5", "n6"],
-        images: ["/images/attraction-vs-motion-tug-of-war.png"],
+        images: ["/images/Chemistry/attraction-vs-motion-tug-of-war.png"],
       },
       {
         narration:
@@ -130,7 +130,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3"],
         },
         focus: "j3",
-        images: ["/images/balance-scale-attraction-motion.png"],
+        images: ["/images/Chemistry/balance-scale-attraction-motion.png"],
       },
       {
         narration: "This balance is what determines the state of matter.",
@@ -139,7 +139,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9"],
         },
         focus: "n9",
-        images: ["/images/state-of-matter-bridge.png"],
+        images: ["/images/Chemistry/state-of-matter-bridge.png"],
       },
 
       // Solid / Liquid / Gas reveals one-by-one
@@ -150,7 +150,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9"],
         },
         focus: "n9",
-        images: ["/images/three-states-overview.png"],
+        images: ["/images/Chemistry/three-states-overview.png"],
       },
       {
         narration:
@@ -160,7 +160,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9", "n9-n10"],
         },
         focus: "n10",
-        images: ["/images/solid-particles-packed.png"],
+        images: ["/images/Chemistry/solid-particles-packed.png"],
       },
       {
         narration:
@@ -170,7 +170,7 @@ export const storySteps = [
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-j2", "j2-n7", "j2-n8", "n4-j1", "j1-n5", "j1-n6", "n5-j3", "n6-j3", "j3-n9", "n9-n10", "n9-n11"],
         },
         focus: "n11",
-        images: ["/images/liquid-particles-slide.png"],
+        images: ["/images/Chemistry/liquid-particles-slide.png"],
       },
       {
         narration:
@@ -196,7 +196,7 @@ export const storySteps = [
           ],
         },
         focus: "n12",
-        images: ["/images/gas-particles-spread.png"],
+        images: ["/images/Chemistry/gas-particles-spread.png"],
       },
       {
         narration: "So what controls how much particles move?",

@@ -4,13 +4,13 @@ export const storySteps = [
     title: "Everyday Devices",
     beats: [
       {
-        narration: "Hello!\n\nYou probably use one or more of these every single day.",
+        narration: " Hello!\n\n You probably use one or more of these every single day.",
         reveal: {
           nodes: [],
           edges: [],
         },
         focus: "",
-        images: ["/images/computersHelpUs/computing-devices.png"],
+        images: ["/images/Computer/computing-devices.png"],
       },
     ],
   },
@@ -20,7 +20,7 @@ export const storySteps = [
     title: "Computing Devices",
     beats: [
       {
-        narration: "Even though these might look different, we group all of them under one term — computing devices.",
+        narration: "Even though these might look different, we group all of them under one single term — computing devices.",
         reveal: {
           nodes: ["n1"],
           edges: [],
@@ -30,7 +30,7 @@ export const storySteps = [
       },
       {
         narration:
-          "Now imagine for a moment… life without any of these.\n\nNo smartphone. No laptop.\n\nThat would mean…\nno texting your friends,\nno social media…\nno watching videos, no games…\nand no instant access to information.",
+          "Now imagine for a moment… life without any of these.\n\nNo smartphone. No laptop.\n\nThat would mean…\nno texting your friends,\nno social media…\nno watching videos, no games... \nand no instant access to information.",
         reveal: {
           nodes: ["n1"],
           edges: [],
