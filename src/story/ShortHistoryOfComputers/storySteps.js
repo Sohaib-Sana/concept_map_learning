@@ -4,7 +4,7 @@ export const storySteps = [
     title: "A (very) Short History of Computers",
     beats: [
       {
-        narration: "Hi! Today we’re going to go back in time…\n\nto when the word computer meant something completely different.",
+        narration: "Hi! Today we’re going to go back in time…\n\nto when the word 'computer' meant something completely different.",
         reveal: {
           nodes: [],
           edges: [],
@@ -20,17 +20,27 @@ export const storySteps = [
     beats: [
       {
         narration:
-          "The word computer did not originally mean a machine at all.\n\nIt meant a person whose job was to carry out calculations.\n\nThese human computers were given a set of detailed instructions for a calculation and had to follow them carefully, step by step.",
+          "The word computer did not originally mean a machine at all. It meant a person whose job was to carry out calculations.\n\nThese human computers were given a set of detailed instructions for a calculation and had to follow them carefully, step by step.",
         reveal: {
-          nodes: ["n1"],
+          nodes: [""],
           edges: [],
         },
-        focus: "n1",
-        images: [],
+        revealTriggers: [
+          {
+            phrase: "human computers",
+            reveal: {
+              nodes: ["n1"],
+              edges: [""],
+            },
+            focus: ["n1"],
+          },
+        ],
+        focus: "",
+        images: ["/images/Computer/human-computer.png"],
       },
       {
         narration:
-          "However, this approach had some clear problems.\n\nIt could take a long time, people could make mistakes, and if lots of calculations were needed, many people might be required, making the process slow and difficult to manage.",
+          "However, this approach had some clear problems.\n\n* It could take a long time,\n* people could make mistakes,\n* and if lots of calculations were needed, many people might be required, making the process slow and difficult to manage",
         reveal: {
           nodes: ["n1"],
           edges: [],
@@ -50,6 +60,26 @@ export const storySteps = [
           nodes: ["n1", "n2"],
           edges: ["n1-n2"],
         },
+        revealTriggers: [
+          {
+            phrase: "calculations",
+            reveal: {
+              nodes: [],
+              edges: [],
+            },
+            revealTriggers: [
+              {
+                phrase: "calculations",
+                reveal: {
+                  nodes: ["n2"],
+                  edges: ["n1-n2"],
+                },
+                focus: ["n1"],
+              },
+            ],
+            focus: [],
+          },
+        ],
         focus: ["n1", "n2"],
         images: [],
       },
@@ -71,17 +101,27 @@ export const storySteps = [
     beats: [
       {
         narration:
-          "The real breakthrough came when computers were developed that could be told what calculation to do instead of being built to do just one.",
+          "The real breakthrough came when computers were developed that could be told what calculation to do instead of being built to do just one.\n\nThis was a huge change because the same machine could now solve many different problems.",
         reveal: {
           nodes: ["n1", "n2", "n3"],
           edges: ["n1-n2", "n2-n3"],
         },
+        revealTriggers: [
+          {
+            phrase: "told what calculation to do",
+            reveal: {
+              nodes: ["n3"],
+              edges: ["n2-n3"],
+            },
+            focus: ["n3"],
+          },
+        ],
         focus: "n3",
         images: [],
       },
       {
         narration:
-          "This was a huge change because the same machine could now solve many different problems.\n\nThe newer computers still had physical parts, but instead of being built for one fixed job, they were built to take instructions and carry them out.\n\nBy changing the instructions, the same computer could be used for different calculations.",
+          "The newer computers still had physical parts, but instead of being built for one fixed job, they were built to take instructions and carry them out.\n\nBy changing the instructions, the same computer could be used for different calculations.",
         reveal: {
           nodes: ["n1", "n2", "n3"],
           edges: ["n1-n2", "n2-n3"],
@@ -96,7 +136,8 @@ export const storySteps = [
     title: "Hardware and Software",
     beats: [
       {
-        narration: "This leads us to two very important ideas.\n\nThe physical parts of a computer are called hardware.",
+        narration:
+          "This leads us to two very important ideas.\n\nThe physical parts of a computer are called hardware.\n\nThe instructions that tell the hardware what to do are called software.\n\nThe computing devices you use are hardware, and the apps and operating system are software.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4"],
           edges: ["n1-n2", "n2-n3", "n3-n4"],
@@ -105,17 +146,8 @@ export const storySteps = [
         images: [],
       },
       {
-        narration: "The instructions that tell the hardware what to do are called software.",
-        reveal: {
-          nodes: ["n1", "n2", "n3", "n4", "n5"],
-          edges: ["n1-n2", "n2-n3", "n3-n4", "n3-n5", "n5-n4"],
-        },
-        focus: ["n5", "n4"],
-        images: [],
-      },
-      {
         narration:
-          "The computing devices you use are hardware, and the apps and operating system are software.\n\nSo, over time, computers changed from human calculators to machines that could be told what to do.\n\nThat is why modern computers are made of hardware that runs software.",
+          "So, over time, computers changed from human calculators to machines that could be told what to do.\n\nThat is why modern computers are made of hardware that runs software.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "n5"],
           edges: ["n1-n2", "n2-n3", "n3-n4", "n3-n5", "n5-n4"],
