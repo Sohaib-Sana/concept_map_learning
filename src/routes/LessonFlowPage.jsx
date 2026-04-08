@@ -132,13 +132,27 @@ export default function LessonFlowPage() {
     setGhostNodeIds((prev) => Array.from(new Set([...prev, ...addGhostNodes])));
     setVisibleEdgeIds((prev) => Array.from(new Set([...prev, ...addEdges])));
 
+    // compute focus ids (either provided via triggerFocus or declared on the reveal)
+    const focusIds = triggerFocus
+      ? Array.isArray(triggerFocus)
+        ? triggerFocus
+        : [triggerFocus]
+      : reveal?.focus
+        ? Array.isArray(reveal.focus)
+          ? reveal.focus
+          : [reveal.focus]
+        : [];
+
     setVisibleNodeIds((prev) => {
       const prevSet = new Set(prev);
       const added = addNodes.filter((id) => !prevSet.has(id));
 
-      setNewNodeIds(added);
+      // highlight both newly added nodes and nodes that are being focused
+      const highlightIds = Array.from(new Set([...(added || []), ...(focusIds || [])]));
 
-      if (added.length > 0) {
+      setNewNodeIds(highlightIds);
+
+      if (highlightIds.length > 0) {
         window.setTimeout(() => setNewNodeIds([]), 750);
       } else {
         setNewNodeIds([]);

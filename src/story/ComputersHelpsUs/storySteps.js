@@ -32,7 +32,7 @@ export const storySteps = [
     beats: [
       {
         narration:
-          "Imagine life without these devices.\n\nNo smartphone. No laptop.\n\nThat means no texting, no social media, no videos, no games, and no instant access to information.\n\nSchoolwork would be harder too. Researching topics, typing homework, joining online lessons, and revising with apps or websites would not be easy.\n\nThese devices are such a normal part of life that we often forget how much they help us.",
+          "Imagine life without these devices.\n\nNo smartphone. No laptop.\n\nThat means no texting, no social media, no videos, no games, and no instant access to information.\n\nSchoolwork would be harder too. Researching topics, typing homework, joining online lessons, and revising with apps or websites would not be possible.\n\nThese devices are such a normal part of life that we often forget how much they help us.",
         reveal: {
           nodes: ["n1"],
           edges: [],
@@ -171,6 +171,41 @@ export const storySteps = [
           nodes: ["n1", "n7", "j1", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15"],
           edges: ["n1-n7", "n7-j1", "j1-n8", "j1-n9", "j1-n10", "n14-n1"],
         },
+        revealTriggers: [
+          {
+            phrase: "computing devices",
+            reveal: {
+              nodes: [],
+              edges: [],
+            },
+            focus: ["n1"],
+          },
+
+          {
+            phrase: "apps",
+            reveal: {
+              nodes: [],
+              edges: [],
+            },
+            focus: ["n7"],
+          },
+          {
+            phrase: "operating system",
+            reveal: {
+              nodes: [],
+              edges: [],
+            },
+            focus: ["n14"],
+          },
+          {
+            phrase: "use and",
+            reveal: {
+              nodes: [],
+              edges: [],
+            },
+            focus: ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15"],
+          },
+        ],
         focus: ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15"],
         images: [],
       },
