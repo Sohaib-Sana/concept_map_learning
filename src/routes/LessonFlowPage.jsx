@@ -19,12 +19,15 @@ import { QuizPanel } from "../components/quizPanelBig";
 import { useParams, Navigate } from "react-router-dom";
 import { LESSONS as STORIES } from "../lessons/index";
 
+import { findPhraseTokenRange } from "../tts/timing";
+
 // you can later move these constants elsewhere if you want
 const nodeTypes = { customNode };
 const edgeTypes = { PhaseEdge };
 
 export default function LessonFlowPage() {
   const DEV_DISABLE_TTS = import.meta.env.VITE_DISABLE_TTS === "true";
+  const BEAT_DELAY_MS = 1500;
 
   // Story Selection
   const { storyId } = useParams();
@@ -42,27 +45,30 @@ export default function LessonFlowPage() {
 
   // Lesson state
   const [started, setStarted] = useState(false);
-  const [stepIndex, setStepIndex] = useState(-1);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [beatIndex, setBeatIndex] = useState(0);
+
+  const activeBeatRef = useRef({
+    stepIndex: 0,
+    beatIndex: 0,
+    narration: story.storySteps?.[0]?.beats?.[0]?.narration ?? "",
+  });
 
   // remember correct answers per beat so user can't skip later
   const [answeredCorrectByBeat, setAnsweredCorrectByBeat] = useState({});
   // key format: `${stepIndex}:${beatIndex}` -> true
 
   // Visible graph state
-  const [visibleNodeIds, setVisibleNodeIds] = useState([""]);
+  const [visibleNodeIds, setVisibleNodeIds] = useState([]);
   const [visibleEdgeIds, setVisibleEdgeIds] = useState([]);
   const [newNodeIds, setNewNodeIds] = useState([]);
-
-  const step = storySteps[stepIndex];
-  const [beatIndex, setBeatIndex] = useState(0);
-  const currentBeat = step?.beats?.[beatIndex];
   const [ghostNodeIds, setGhostNodeIds] = useState([]);
+  const [activeFocusIds, setActiveFocusIds] = useState(null);
+
+  const triggeredRevealKeysRef = useRef(new Set());
 
   // teaching tone toggle
   const [teachingToneOn, setTeachingToneOn] = useState(true);
-
-  // if invalid storyId, redirect to home
-  if (!story) return <Navigate to="/" replace />;
 
   // Autoplay flag
   const [autoplayOn, setAutoplayOn] = useState(false);
@@ -84,6 +90,9 @@ export default function LessonFlowPage() {
     setWaitingForAnswer(false);
   }, []);
 
+  const step = storySteps[stepIndex];
+  const currentBeat = step?.beats?.[beatIndex];
+
   // Prefetch hook
   const { prefetchUpcomingBeats, PREFETCH_AHEAD } = useTtsPrefetch({
     storySteps,
@@ -99,12 +108,94 @@ export default function LessonFlowPage() {
     [prefetchUpcomingBeats, DEV_DISABLE_TTS],
   );
 
+  // Base reveal (on beat start)
+  const applyBaseBeatReveal = useCallback((beat) => {
+    const nextVisible = beat.reveal?.nodes ?? [];
+    const nextGhost = beat.reveal?.ghostNodes ?? [];
+
+    setGhostNodeIds(nextGhost);
+    setVisibleEdgeIds(beat.reveal?.edges ?? []);
+    setVisibleNodeIds(nextVisible);
+    setNewNodeIds([]);
+
+    const baseFocus = beat.focus ? (Array.isArray(beat.focus) ? beat.focus : [beat.focus]) : null;
+
+    setActiveFocusIds(baseFocus);
+  }, []);
+
+  // Incremental reveal (on word trigger)
+  const applyIncrementalReveal = useCallback((reveal, triggerFocus = null) => {
+    const addNodes = reveal?.nodes ?? [];
+    const addEdges = reveal?.edges ?? [];
+    const addGhostNodes = reveal?.ghostNodes ?? [];
+
+    setGhostNodeIds((prev) => Array.from(new Set([...prev, ...addGhostNodes])));
+    setVisibleEdgeIds((prev) => Array.from(new Set([...prev, ...addEdges])));
+
+    setVisibleNodeIds((prev) => {
+      const prevSet = new Set(prev);
+      const added = addNodes.filter((id) => !prevSet.has(id));
+
+      setNewNodeIds(added);
+
+      if (added.length > 0) {
+        window.setTimeout(() => setNewNodeIds([]), 750);
+      } else {
+        setNewNodeIds([]);
+      }
+
+      return Array.from(new Set([...prev, ...addNodes]));
+    });
+
+    const nextFocus = triggerFocus
+      ? Array.isArray(triggerFocus)
+        ? triggerFocus
+        : [triggerFocus]
+      : reveal?.focus
+        ? Array.isArray(reveal.focus)
+          ? reveal.focus
+          : [reveal.focus]
+        : null;
+
+    if (nextFocus) {
+      setActiveFocusIds(nextFocus);
+    }
+  }, []);
+
+  const handleTokenChange = useCallback(
+    ({ tokenIndex }) => {
+      if (typeof tokenIndex !== "number") return;
+
+      const active = activeBeatRef.current;
+      const beat = storySteps[active.stepIndex]?.beats?.[active.beatIndex];
+      if (!beat?.revealTriggers?.length) return;
+
+      beat.revealTriggers.forEach((trigger, triggerIdx) => {
+        const key = `${active.stepIndex}:${active.beatIndex}:${triggerIdx}`;
+
+        if (triggeredRevealKeysRef.current.has(key)) return;
+
+        const phraseRange = findPhraseTokenRange(active.narration || beat.narration, trigger.phrase);
+
+        if (!phraseRange) return;
+
+        // Trigger when the last token of the phrase has been spoken
+        if (tokenIndex >= phraseRange.end) {
+          triggeredRevealKeysRef.current.add(key);
+          applyIncrementalReveal(trigger.reveal, trigger.focus);
+        }
+      });
+    },
+    [storySteps, applyIncrementalReveal],
+  );
+
   // TTS player hook
   const { speak, stopVoice, pauseVoice, resumeVoice, speakingState, ttsRange, canResume, setCanResume } = useTtsPlayer({
     teachingToneOn,
     fetchTtsBlobWithRetry,
     prefetchUpcomingBeats: (sIdx, bIdx) => safePrefetch(sIdx, bIdx, PREFETCH_AHEAD),
     highlightConfig: { highlightWords: 6, lookaheadWords: 1 },
+    onTokenChange: handleTokenChange,
   });
 
   // ---------- Panel Location ----------
@@ -155,28 +246,9 @@ export default function LessonFlowPage() {
     [visibleNodeIds],
   );
 
-  // Helper: apply a step's reveal config + compute newly revealed nodes
-  const applyStepReveal = useCallback((beat) => {
-    const nextVisible = beat.reveal.nodes ?? [];
-    const nextGhost = beat.reveal.ghostNodes ?? [];
-
-    setGhostNodeIds(nextGhost);
-    setVisibleEdgeIds(beat.reveal.edges ?? []);
-
-    setVisibleNodeIds((prev) => {
-      const prevSet = new Set(prev);
-      const added = nextVisible.filter((id) => !prevSet.has(id));
-      setNewNodeIds(added);
-
-      if (added.length > 0) window.setTimeout(() => setNewNodeIds([]), 750);
-      else setNewNodeIds([]);
-
-      return nextVisible;
-    });
-  }, []);
-
   const goToBeat = useCallback(
     (sIdx, bIdx) => {
+      triggeredRevealKeysRef.current = new Set();
       clearQuestionGate();
       setQuestionFeedback(null);
 
@@ -190,11 +262,18 @@ export default function LessonFlowPage() {
       setBeatIndex(safeBeat);
 
       const beat = beats[safeBeat];
-      if (beat) applyStepReveal(beat);
+
+      activeBeatRef.current = {
+        stepIndex: safeStep,
+        beatIndex: safeBeat,
+        narration: beat?.narration ?? "",
+      };
+
+      if (beat) applyBaseBeatReveal(beat);
 
       return { stepIndex: safeStep, beatIndex: safeBeat };
     },
-    [applyStepReveal, clearQuestionGate, storySteps],
+    [applyBaseBeatReveal, clearQuestionGate, storySteps],
   );
 
   // Show question and pause autoplay
@@ -219,12 +298,19 @@ export default function LessonFlowPage() {
   const speakBeatAndAutoadvance = useCallback(
     (sIdx, bIdx) => {
       if (DEV_DISABLE_TTS) return;
+
       const stepObj = storySteps[sIdx];
       if (!stepObj) return;
 
       const beats = stepObj.beats ?? [];
       const beat = beats[bIdx];
       if (!beat) return;
+
+      activeBeatRef.current = {
+        stepIndex: sIdx,
+        beatIndex: bIdx,
+        narration: beat.narration ?? "",
+      };
 
       speak(beat.narration, {
         stepIdxForPrefetch: sIdx,
@@ -244,24 +330,34 @@ export default function LessonFlowPage() {
           const isLastStep = sIdx >= storySteps.length - 1;
 
           if (!isLastBeatInStep) {
-            const next = goToBeat(sIdx, bIdx + 1);
-            safePrefetch(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
+            const nextStepIndex = sIdx;
+            const nextBeatIndex = bIdx + 1;
+
+            safePrefetch(nextStepIndex, nextBeatIndex, PREFETCH_AHEAD);
 
             window.setTimeout(() => {
               if (!autoplayRef.current) return;
+
+              const next = goToBeat(nextStepIndex, nextBeatIndex);
               speakBeatAndAutoadvance(next.stepIndex, next.beatIndex);
-            }, 250);
+            }, BEAT_DELAY_MS);
+
             return;
           }
 
           if (!isLastStep) {
-            const next = goToBeat(sIdx + 1, 0);
-            safePrefetch(next.stepIndex, next.beatIndex, PREFETCH_AHEAD);
+            const nextStepIndex = sIdx + 1;
+            const nextBeatIndex = 0;
+
+            safePrefetch(nextStepIndex, nextBeatIndex, PREFETCH_AHEAD);
 
             window.setTimeout(() => {
               if (!autoplayRef.current) return;
+
+              const next = goToBeat(nextStepIndex, nextBeatIndex);
               speakBeatAndAutoadvance(next.stepIndex, next.beatIndex);
-            }, 250);
+            }, BEAT_DELAY_MS);
+
             return;
           }
 
@@ -320,11 +416,12 @@ export default function LessonFlowPage() {
       resumeVoice();
       return;
     }
+
     startFromHere();
   }, [DEV_DISABLE_TTS, canResume, resumeVoice, startFromHere, setCanResume]);
 
   const handleStopLesson = useCallback(() => {
-    if (DEV_DISABLE_TTS) return; // nothing to pause
+    if (DEV_DISABLE_TTS) return;
     setAutoplayOn(false);
     autoplayRef.current = false;
 
@@ -373,12 +470,10 @@ export default function LessonFlowPage() {
     const key = `${stepIndex}:${beatIndex}`;
 
     if (current?.question && !answeredCorrectByBeat[key]) {
-      // if user hasn't selected anything yet, show question and stop
       if (!questionFeedback) {
         showQuestionForBeat(stepIndex, beatIndex);
         return;
       }
-      // user selected something (even if wrong) → allow Next to proceed
     }
 
     const stepObj = storySteps[stepIndex];
@@ -453,12 +548,13 @@ export default function LessonFlowPage() {
   }, [allEdges, visibleEdgeIds]);
 
   const focusTarget = useMemo(() => {
-    const f = currentBeat?.focus;
-    if (!f) return null;
-    const arr = Array.isArray(f) ? f : [f];
+    if (!activeFocusIds) return null;
+
+    const arr = Array.isArray(activeFocusIds) ? activeFocusIds : [activeFocusIds];
     const filtered = arr.filter((id) => visibleNodeIds.includes(id));
+
     return filtered.length > 0 ? filtered : null;
-  }, [currentBeat, visibleNodeIds]);
+  }, [activeFocusIds, visibleNodeIds]);
 
   const totalBeats = useMemo(() => storySteps.reduce((sum, s) => sum + (s.beats?.length ?? 0), 0), [storySteps]);
 
@@ -478,18 +574,14 @@ export default function LessonFlowPage() {
   const isLastStep = stepIndex >= storySteps.length - 1;
 
   const isQuestionMode = waitingForAnswer && activeQuestion;
-
-  // enable Next if not in question mode OR user has selected an option
   const allowForward = !isQuestionMode || !!questionFeedback;
 
   const canGoNext = started && !(isLastStep && isLastBeatInStep) && allowForward;
-
   const isLessonComplete = started && isLastStep && isLastBeatInStep;
 
   const inQuiz = quiz.mode === "inProgress";
 
   const handleTakeQuizNow = useCallback(() => {
-    // stop any voice/autoplay
     setAutoplayOn(false);
     autoplayRef.current = false;
     setCanResume(false);
@@ -503,7 +595,6 @@ export default function LessonFlowPage() {
     (selectedIndex) => {
       if (!activeQuestion) return;
 
-      // prevent changing answer unless user hits "Try again"
       if (questionFeedback) return;
 
       const correctIndex = activeQuestion.correctIndex;
@@ -533,14 +624,21 @@ export default function LessonFlowPage() {
     setAllEdges(story.initialEdges);
 
     setStarted(false);
-    setStepIndex(-1);
+    setStepIndex(0);
     setBeatIndex(0);
 
+    activeBeatRef.current = {
+      stepIndex: 0,
+      beatIndex: 0,
+      narration: story.storySteps?.[0]?.beats?.[0]?.narration ?? "",
+    };
+
     setAnsweredCorrectByBeat({});
-    setVisibleNodeIds([""]);
+    setVisibleNodeIds([]);
     setVisibleEdgeIds([]);
     setNewNodeIds([]);
     setGhostNodeIds([]);
+    setActiveFocusIds(null);
 
     setActiveQuestion(null);
     setWaitingForAnswer(false);
@@ -549,7 +647,6 @@ export default function LessonFlowPage() {
     setAutoplayOn(false);
     autoplayRef.current = false;
 
-    // stop voice if currently playing
     stopVoice?.();
     setCanResume(false);
   }, [storyId]); // eslint-disable-line react-hooks/exhaustive-deps

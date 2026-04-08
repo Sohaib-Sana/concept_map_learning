@@ -4,7 +4,7 @@ import { buildTtsRequest } from "../tts/request";
 import { getCachedAudioBlob, hashForTtsRequest, putCachedAudioBlob } from "../tts/cache";
 import { buildCumulativeTimes, buildSpans, findTokenIndexAtTime, highlightRangeFromToken } from "../tts/timing";
 
-export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUpcomingBeats, highlightConfig }) {
+export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUpcomingBeats, highlightConfig, onTokenChange }) {
   const HIGHLIGHT_WORDS = highlightConfig?.highlightWords ?? 6;
   const LOOKAHEAD_WORDS = highlightConfig?.lookaheadWords ?? 1;
 
@@ -142,6 +142,10 @@ export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUp
       const url = URL.createObjectURL(blob);
       audioUrlRef.current = url;
 
+      // Pre-compute estimated cumulative times immediately so onTokenChange
+      // can run even if the audio element hasn't fired `loadedmetadata` yet.
+      cumTimeRef.current = buildCumulativeTimes(raw, spansRef.current, a.duration || 0);
+
       const tick = () => {
         const a2 = audioRef.current;
         if (!a2 || a2.paused || a2.ended) return;
@@ -151,6 +155,18 @@ export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUp
 
         if (cum?.length && spans2?.length) {
           const idx = findTokenIndexAtTime(cum, a2.currentTime);
+          if (Number.isFinite(idx)) {
+            // include cumulative times and current playback time so callers
+            // can compute more reliable trigger points
+            onTokenChange?.({
+              tokenIndex: idx,
+              rawText: raw,
+              spans: spans2,
+              cum,
+              currentTime: a2.currentTime,
+            });
+          }
+
           const range = highlightRangeFromToken(raw, spans2, idx, HIGHLIGHT_WORDS, LOOKAHEAD_WORDS);
 
           const prev = lastRangeRef.current;
@@ -164,6 +180,7 @@ export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUp
       };
 
       a.onloadedmetadata = () => {
+        // overwrite with more accurate duration-derived times if available
         cumTimeRef.current = buildCumulativeTimes(raw, spansRef.current, a.duration || 0);
       };
 
@@ -217,7 +234,7 @@ export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUp
         cleanupAfterEndOrError();
       }
     },
-    [stopVoice, teachingToneOn, fetchTtsBlobWithRetry, prefetchUpcomingBeats, cleanupAudioUrl, HIGHLIGHT_WORDS, LOOKAHEAD_WORDS],
+    [stopVoice, teachingToneOn, fetchTtsBlobWithRetry, prefetchUpcomingBeats, cleanupAudioUrl, HIGHLIGHT_WORDS, LOOKAHEAD_WORDS, onTokenChange],
   );
 
   useEffect(() => {

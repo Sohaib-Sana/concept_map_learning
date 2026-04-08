@@ -116,7 +116,7 @@ export const initialNodes = [
 
   {
     id: "n14",
-    position: { x: 1020, y: 120 },
+    position: { x: 1020, y: 130 },
     data: {
       label: "Operating Systems",
       className: "nodeContent--os",
@@ -126,7 +126,7 @@ export const initialNodes = [
   },
   {
     id: "n15",
-    position: { x: 1030, y: 210 },
+    position: { x: 1030, y: 200 },
     data: {
       label: "• Windows\n• MacOS\n• iOS\n• Android",
       className: "nodeContent--examples",
@@ -155,6 +155,7 @@ export const initialEdges = [
     target: "n8",
     sourceHandle: "out1",
     targetHandle: "h1",
+    type: "step",
     markerEnd: { type: "arrowclosed" },
   },
   {
@@ -163,6 +164,7 @@ export const initialEdges = [
     target: "n9",
     sourceHandle: "out2",
     targetHandle: "h1",
+    type: "step",
     markerEnd: { type: "arrowclosed" },
   },
   {
@@ -171,6 +173,7 @@ export const initialEdges = [
     target: "n10",
     sourceHandle: "out3",
     targetHandle: "h1",
+    type: "step",
     markerEnd: { type: "arrowclosed" },
   },
   {
