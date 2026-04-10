@@ -14,113 +14,108 @@ export const storySteps = [
   },
   {
     id: "step-1",
-    title: "Circuits",
+    title: "Electical Circuits",
     beats: [
       {
         narration:
           "Inside a computer, there are huge numbers of tiny electrical circuits.\n\nA circuit is simply a path that electricity can flow through.",
-        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
-        focus: ["n1", "n2"],
-        images: [],
-      },
-      {
-        narration:
-          "In a basic circuit, there are only two possibilities.\n\nEither the path is complete and electricity can flow, or the path is broken and electricity cannot flow.",
-        reveal: { nodes: ["n1", "n2", "n3", "n4"], edges: ["n1-n2", "n2-n3", "n2-n4"] },
-        focus: ["n3", "n4"],
+        reveal: { nodes: ["n1"], edges: [] },
+        revealTriggers: [{ phrase: "tiny electrical circuits", reveal: { nodes: ["n2"], edges: ["n1-n2"] }, focus: ["n1", "n2"] }],
+        focus: ["n1"],
         images: [],
       },
     ],
   },
   {
     id: "step-2",
-    title: "0 and 1",
+    title: "Circuits",
     beats: [
       {
-        narration: "A computer uses these two states to represent 1 and 0.\n\nElectricity flowing represents 1.",
-        reveal: {
-          nodes: ["n1", "n2", "n3", "n4", "n5"],
-          edges: ["n1-n2", "n2-n3", "n2-n4", "n3-n5"],
-        },
-        focus: ["n3", "n5"],
-        images: [],
-      },
-      {
-        narration: "Electricity not flowing represents 0.",
-        reveal: {
-          nodes: ["n1", "n2", "n3", "n4", "n5", "n6"],
-          edges: ["n1-n2", "n2-n3", "n2-n4", "n3-n5", "n4-n6"],
-        },
-        focus: ["n4", "n6"],
+        narration:
+          "In a basic circuit, there are only two possibilities.\n\nEither the path is complete and electricity can flow, or the path is broken and electricity cannot flow.\n\n Or the path is complete and electricity can flow.\n\nA switch controls this path.\n\nWhen the switch is open, the path is broken and the bulb is off.\n\nWhen the switch is closed, the path is complete and the bulb lights up.",
+        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
+        focus: [],
         images: [],
       },
       {
         narration:
-          "We can control whether electricity flows by using switches.\n\nThis is similar to how we use a switch at home to turn a light on or off.\n\nComputers use the same basic idea, but with tiny switches inside their circuits.",
-        reveal: {
-          nodes: ["n1", "n2", "n3", "n4", "n5", "n6"],
-          edges: ["n1-n2", "n2-n3", "n2-n4", "n3-n5", "n4-n6"],
-        },
-        focus: ["n1", "n2", "n3", "n4", "n5", "n6"],
+          "This gives us two clear states: electricity not flowing and electricity flowing. \n\nA computer uses these two states to represent 0 and 1.\n\nJust to clarify. Inside a computer:\n\nElectricity not flowing represents 0.\n\nElectricity flowing represents 1.",
+        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
+        focus: [],
         images: [],
       },
     ],
   },
-  // {
-  //   id: "step-3",
-  //   title: "From Things to Numbers",
-  //   beats: [
-  //     {
-  //       narration:
-  //         "At first, computers were mainly used for working with numbers.\n\nBut over time, people realised something very important:\n\nA computer does not need to understand things in the same way humans do. It just needs a way to represent them using numbers.",
-  //       reveal: { nodes: ["n7", "n12"], edges: [] },
-  //       focus: ["n7", "n12"],
-  //       images: [],
-  //     },
-  //     {
-  //       narration: "Anything we can read or write, see, or hear can be turned into numbers.",
-  //       reveal: {
-  //         nodes: ["n7", "n8", "n9", "n10", "n11", "n12"],
-  //         edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12"],
-  //       },
-  //       focus: ["n8", "n9", "n10", "n11", "n12"],
-  //       images: [],
-  //     },
-  //     {
-  //       narration:
-  //         "Text can be turned into numbers by giving each letter, number, or symbol its own code.\n\nImages can be turned into numbers by breaking them into tiny parts and storing the colour of each part as numbers.\n\nSound can be turned into numbers by measuring the sound wave and storing those measurements.\n\nVideo can be turned into numbers too, because a video is really a series of images shown one after another, often with sound as well.",
-  //       reveal: {
-  //         nodes: ["n7", "n8", "n9", "n10", "n11", "n12"],
-  //         edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12"],
-  //       },
-  //       focus: ["n12"],
-  //       images: [],
-  //     },
-  //   ],
-  // },
-  // {
-  //   id: "step-4",
-  //   title: "Binary Data",
-  //   beats: [
-  //     {
-  //       narration: "Because computers use binary, all of these numbers can then be represented using 0s and 1s.",
-  //       reveal: {
-  //         nodes: ["n7", "n8", "n9", "n10", "n11", "n12", "n13"],
-  //         edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12", "n12-n13", "n7-n13"],
-  //       },
-  //       focus: ["n12", "n13"],
-  //       images: [],
-  //     },
-  //     {
-  //       narration:
-  //         "So here we meet an important new concept: data.\n\nNumbers, text, images, audio, and video are all forms of data, and computers store that data as binary.",
-  //       reveal: {
-  //         nodes: ["n7", "n8", "n9", "n10", "n11", "n12", "n13"],
-  //         edges: ["n8-n12", "n9-n12", "n10-n12", "n11-n12", "n12-n13", "n7-n13"],
-  //       },
-  //       focus: ["n7", "n13"],
-  //       images: [],
-  //     },
-  //   ],
-  // },
+  {
+    id: "step-3",
+    title: "Switches",
+    beats: [
+      {
+        narration:
+          "Inside a computer, there are also tiny switches as part of these tiny circuits.\n\nThese switches control the flow of electricity.",
+        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
+        revealTriggers: [
+          {
+            phrase: "tiny switches",
+            reveal: { nodes: ["n3"], edges: ["n2-n3"] },
+            focus: "n3",
+          },
+        ],
+        focus: [],
+        images: [],
+      },
+      {
+        narration: "If a switch is open, electricity cannot flow, so the circuit represents 0.",
+        reveal: { nodes: ["n1", "n2", "n3"], edges: ["n1-n2", "n2-n3"] },
+        revealTriggers: [
+          {
+            phrase: "electricity cannot flow",
+            reveal: { nodes: ["n4"], edges: ["n3-n4"] },
+            focus: ["n4"],
+          },
+          {
+            phrase: "circuit represents",
+            reveal: { nodes: ["n6"], edges: ["n4-n6"] },
+            focus: ["n6"],
+          },
+        ],
+
+        focus: [],
+        images: [],
+      },
+      {
+        narration: "If a switch is closed, electricity can flow, so the circuit represents 1.",
+        reveal: { nodes: ["n1", "n2", "n3", "n4", "n6"], edges: ["n1-n2", "n2-n3", "n3-n4", "n4-n6"] },
+        revealTriggers: [
+          {
+            phrase: "electricity can flow",
+            reveal: { nodes: ["n5"], edges: ["n3-n5"] },
+            focus: ["n5"],
+          },
+          {
+            phrase: "circuit represents",
+            reveal: { nodes: ["n7"], edges: ["n5-n7"] },
+            focus: ["n7"],
+          },
+        ],
+        focus: [],
+        images: [],
+      },
+    ],
+  },
+  {
+    id: "step-4",
+    title: "Summary",
+    beats: [
+      {
+        narration: "This is how computers use tiny circuits and tiny switches to create 0s and 1s.",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4", "n5", "n6", "n7"],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n3-n5", "n4-n6", "n5-n7"],
+        },
+        focus: ["n1", "n2", "n3", "n4", "n5", "n6", "n7"],
+        images: [],
+      },
+    ],
+  },
 ];
