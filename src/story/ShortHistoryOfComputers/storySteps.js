@@ -27,7 +27,7 @@ export const storySteps = [
         },
         revealTriggers: [
           {
-            phrase: "human computers",
+            phrase: "step by step",
             reveal: {
               nodes: ["n1"],
               edges: [""],
@@ -57,30 +57,21 @@ export const storySteps = [
       {
         narration: "To solve these problems, people began building machines that ran on electricity to carry out calculations.",
         reveal: {
-          nodes: ["n1", "n2"],
-          edges: ["n1-n2"],
+          nodes: ["n1"],
+          edges: [],
         },
         revealTriggers: [
           {
             phrase: "calculations",
             reveal: {
-              nodes: [],
-              edges: [],
+              nodes: ["n2"],
+              edges: ["n1-n2"],
             },
-            revealTriggers: [
-              {
-                phrase: "calculations",
-                reveal: {
-                  nodes: ["n2"],
-                  edges: ["n1-n2"],
-                },
-                focus: ["n1"],
-              },
-            ],
-            focus: [],
+
+            focus: ["n2"],
           },
         ],
-        focus: ["n1", "n2"],
+        focus: ["n1"],
         images: [],
       },
       {
@@ -103,12 +94,12 @@ export const storySteps = [
         narration:
           "The real breakthrough came when computers were developed that could be told what calculation to do instead of being built to do just one.\n\nThis was a huge change because the same machine could now solve many different problems.",
         reveal: {
-          nodes: ["n1", "n2", "n3"],
-          edges: ["n1-n2", "n2-n3"],
+          nodes: ["n1", "n2"],
+          edges: ["n1-n2"],
         },
         revealTriggers: [
           {
-            phrase: "told what calculation to do",
+            phrase: "built to do just one",
             reveal: {
               nodes: ["n3"],
               edges: ["n2-n3"],
@@ -116,7 +107,7 @@ export const storySteps = [
             focus: ["n3"],
           },
         ],
-        focus: "n3",
+        focus: "",
         images: [],
       },
       {
@@ -137,17 +128,65 @@ export const storySteps = [
     beats: [
       {
         narration:
-          "This leads us to two very important ideas.\n\nThe physical parts of a computer are called hardware.\n\nThe instructions that tell the hardware what to do are called software.\n\nThe computing devices you use are hardware, and the apps and operating system are software.",
+          "This leads us to two very important ideas.\n\nThe physical parts of a computer are called hardware.\n\nThese are the parts you can see and touch, like the keyboard, mouse, screen, and the parts inside the computer.",
+        reveal: {
+          nodes: ["n1", "n2", "n3"],
+          edges: ["n1-n2", "n2-n3"],
+        },
+        revealTriggers: [
+          {
+            phrase: "These",
+            reveal: {
+              nodes: ["n4"],
+              edges: ["n3-n4"],
+            },
+            focus: ["n4"],
+          },
+        ],
+        focus: "",
+        images: [],
+      },
+      {
+        narration: "The instructions that tell the hardware what to do are called software.\n\nThe apps and OS are software.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4"],
           edges: ["n1-n2", "n2-n3", "n3-n4"],
         },
-        focus: "n4",
+        revealTriggers: [
+          {
+            phrase: "software",
+            reveal: {
+              nodes: ["n5"],
+              edges: ["n3-n5", "n5-n4"],
+            },
+            focus: ["n5"],
+          },
+        ],
+        focus: ["n1", "n2", "n3", "n4"],
+        images: [],
+      },
+      {
+        narration: "So essentially:\n\nThe physical parts (hardware) do what the instructions (software) tell them to do.",
+        reveal: {
+          nodes: ["n1", "n2", "n3", "n4", "n5"],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n3-n5"],
+        },
+        revealTriggers: [
+          {
+            phrase: "do what the instructions (software) tell them to do",
+            reveal: {
+              nodes: [],
+              edges: ["n5-n4"],
+            },
+            focus: ["n4", "n5"],
+          },
+        ],
+        focus: ["n1", "n2", "n3", "n4", "n5"],
         images: [],
       },
       {
         narration:
-          "So, over time, computers changed from human calculators to machines that could be told what to do.\n\nThat is why modern computers are made of hardware that runs software.",
+          "As we have seen, over time, computers changed from human calculators to machines that could be told what to do.\n\nThat is why modern computers are made of hardware that runs software.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "n5"],
           edges: ["n1-n2", "n2-n3", "n3-n4", "n3-n5", "n5-n4"],

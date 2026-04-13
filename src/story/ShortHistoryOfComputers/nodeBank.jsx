@@ -98,6 +98,7 @@ export const initialEdges = [
     target: "n4",
     targetHandle: "in1",
     label: "physical bits called",
+    type: "step",
     markerEnd: { type: "arrowclosed" },
   },
   {

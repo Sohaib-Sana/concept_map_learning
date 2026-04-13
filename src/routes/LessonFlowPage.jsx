@@ -441,6 +441,64 @@ export default function LessonFlowPage() {
     pauseVoice();
   }, [DEV_DISABLE_TTS, pauseVoice, setCanResume]);
 
+  const handleStartOver = useCallback(() => {
+    // Reset all state to beginning
+    setStarted(false);
+    setStepIndex(0);
+    setBeatIndex(0);
+
+    activeBeatRef.current = {
+      stepIndex: 0,
+      beatIndex: 0,
+      narration: story.storySteps?.[0]?.beats?.[0]?.narration ?? "",
+    };
+
+    setAnsweredCorrectByBeat({});
+    setVisibleNodeIds([]);
+    setVisibleEdgeIds([]);
+    setNewNodeIds([]);
+    setGhostNodeIds([]);
+    setActiveFocusIds(null);
+
+    setActiveQuestion(null);
+    setWaitingForAnswer(false);
+    setQuestionFeedback(null);
+
+    setCanResume(false);
+    stopVoice?.();
+
+    // Then start the lesson from the beginning
+    // Use a timeout to ensure state is updated before starting
+    window.setTimeout(() => {
+      setStarted(true);
+
+      const sIdx = 0;
+      const bIdx = 0;
+
+      goToBeat(sIdx, bIdx);
+
+      if (DEV_DISABLE_TTS) {
+        setAutoplayOn(false);
+        autoplayRef.current = false;
+        setCanResume(false);
+        return;
+      }
+
+      setAutoplayOn(true);
+      autoplayRef.current = true;
+
+      setCanResume(false);
+      stopVoice?.();
+
+      safePrefetch(sIdx, bIdx, PREFETCH_AHEAD);
+
+      window.setTimeout(() => {
+        if (!autoplayRef.current) return;
+        speakBeatAndAutoadvance(sIdx, bIdx);
+      }, 200);
+    }, 0);
+  }, [story, DEV_DISABLE_TTS, stopVoice, goToBeat, safePrefetch, PREFETCH_AHEAD, speakBeatAndAutoadvance]);
+
   const handleBack = useCallback(() => {
     if (!DEV_DISABLE_TTS) stopVoice();
     setCanResume(false);
@@ -717,6 +775,8 @@ export default function LessonFlowPage() {
             showTakeQuizNow={isLessonComplete && story.quiz}
             onTakeQuizNow={handleTakeQuizNow}
             description={story.description}
+            isLessonComplete={isLessonComplete}
+            onStartOver={handleStartOver}
           />
         )}
       </div>

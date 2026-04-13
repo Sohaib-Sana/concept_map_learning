@@ -24,12 +24,25 @@ export function LessonPanel({
   showTakeQuizNow,
   onTakeQuizNow,
   description,
+  isLessonComplete,
+  onStartOver,
 }) {
   const isQuestionMode = !!(waitingForAnswer && question);
 
-  const primaryLabel = !started ? "Start" : isRunning ? (speakingState === "loading" ? "Loading..." : "Pause") : canResume ? "Resume" : "Start";
+  const primaryLabel =
+    isLessonComplete && !isRunning
+      ? "Start Over"
+      : !started
+        ? "Start"
+        : isRunning
+          ? speakingState === "loading"
+            ? "Loading..."
+            : "Pause"
+          : canResume
+            ? "Resume"
+            : "Start";
 
-  const onPrimaryClick = !started ? onStart : isRunning ? onStop : canResume ? onResume : onStart;
+  const onPrimaryClick = isLessonComplete && !isRunning ? onStartOver : !started ? onStart : isRunning ? onStop : canResume ? onResume : onStart;
 
   const disablePrimary = started && isRunning && speakingState !== "speaking";
 
@@ -46,7 +59,7 @@ export function LessonPanel({
                 ? "Correct — press Next to continue"
                 : "Choose one option to continue"
               : started
-                ? "Lesson"
+                ? ""
                 : ""}
           </div>
         </div>
