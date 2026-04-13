@@ -1,7 +1,7 @@
 export const storySteps = [
   {
     id: "step-0",
-    title: "Everyday Devices",
+    title: "Computers Help Us Have Fun, Connect and Work",
     beats: [
       {
         narration:

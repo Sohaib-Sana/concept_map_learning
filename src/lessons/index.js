@@ -16,8 +16,8 @@ import { initialNodes as countLikeWeDoNodes, initialEdges as countLikeWeDoEdges 
 import { storySteps as electricityCreatesStory } from "../story/HowElectricityCreates0sAnd1s/storySteps";
 import { initialNodes as electricityCreatesNodes, initialEdges as electricityCreatesEdges } from "../story/HowElectricityCreates0sAnd1s/nodeBank";
 
-// import { storySteps as oneInstructionStory } from "../story/OneInstructionAtATime/storySteps";
-// import { initialNodes as oneInstructionNodes, initialEdges as oneInstructionEdges } from "../story/OneInstructionAtATime/nodeBank";
+import { storySteps as oneInstructionStory } from "../story/OneInstructionAtATime/storySteps";
+import { initialNodes as oneInstructionNodes, initialEdges as oneInstructionEdges } from "../story/OneInstructionAtATime/nodeBank";
 
 // import { storySteps as keepingThingsSafeStory } from "../story/KeepingThingsSafeWhenComputerLosesPower/storySteps";
 // import {
@@ -54,7 +54,6 @@ export const LESSONS = {
     storySteps: statesStory,
     initialNodes: statesNodes,
     initialEdges: statesEdges,
-    // quiz: QUIZZES.statesOfMatterQuiz,
   },
 
   makingSenseOfStuff: {
@@ -108,15 +107,15 @@ export const LESSONS = {
     initialEdges: electricityCreatesEdges,
   },
 
-  // oneInstructionAtATime: {
-  //   id: "oneInstructionAtATime",
-  //   title: "One Instruction at a Time",
-  //   description: "Learn how the CPU carries out software instructions using fetch, decode, and execute.",
-  //   coverImage: "/images/Computer/one-instruction-at-a-time.png",
-  //   storySteps: oneInstructionStory,
-  //   initialNodes: oneInstructionNodes,
-  //   initialEdges: oneInstructionEdges,
-  // },
+  oneInstructionAtATime: {
+    id: "oneInstructionAtATime",
+    title: "One Instruction at a Time",
+    description: "Learn how the CPU carries out software instructions using fetch, decode, and execute.",
+    coverImage: "/images/Computer/one-instruction-at-a-time.png",
+    storySteps: oneInstructionStory,
+    initialNodes: oneInstructionNodes,
+    initialEdges: oneInstructionEdges,
+  },
 
   // keepingThingsSafeWhenComputerLosesPower: {
   //   id: "keepingThingsSafeWhenComputerLosesPower",

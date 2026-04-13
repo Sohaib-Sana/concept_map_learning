@@ -23,6 +23,7 @@ export function LessonPanel({
   questionFeedback,
   showTakeQuizNow,
   onTakeQuizNow,
+  description,
 }) {
   const isQuestionMode = !!(waitingForAnswer && question);
 
@@ -56,7 +57,7 @@ export function LessonPanel({
       {/* Body (hidden in question mode) */}
       {!isQuestionMode && (
         <>
-          <div className="lpBodyText">{started ? renderHighlighted(beatText, highlightRange) : "Tap Start to begin the lesson."}</div>
+          <div className="lpBodyText">{started ? renderHighlighted(beatText, highlightRange) : description}</div>
 
           {started && beatImages?.length > 0 && (
             <div className="lpImageGrid">

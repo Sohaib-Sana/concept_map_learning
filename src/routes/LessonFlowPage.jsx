@@ -80,10 +80,8 @@ export default function LessonFlowPage() {
 
   // Lesson question gate
   const [activeQuestion, setActiveQuestion] = useState(null);
-  // shape: { stepIndex, beatIndex, prompt, options, correctIndex }
   const [waitingForAnswer, setWaitingForAnswer] = useState(false);
   const [questionFeedback, setQuestionFeedback] = useState(null);
-  // shape: { selectedIndex, isCorrect }
 
   const clearQuestionGate = useCallback(() => {
     setActiveQuestion(null);
@@ -125,9 +123,9 @@ export default function LessonFlowPage() {
 
   // Incremental reveal (on word trigger)
   const applyIncrementalReveal = useCallback((reveal, triggerFocus = null) => {
-    const addNodes = reveal?.nodes ?? [];
-    const addEdges = reveal?.edges ?? [];
-    const addGhostNodes = reveal?.ghostNodes ?? [];
+    const addNodes = Array.isArray(reveal?.nodes) ? reveal.nodes : [];
+    const addEdges = Array.isArray(reveal?.edges) ? reveal.edges : [];
+    const addGhostNodes = Array.isArray(reveal?.ghostNodes) ? reveal.ghostNodes : [];
 
     setGhostNodeIds((prev) => Array.from(new Set([...prev, ...addGhostNodes])));
     setVisibleEdgeIds((prev) => Array.from(new Set([...prev, ...addEdges])));
@@ -718,6 +716,7 @@ export default function LessonFlowPage() {
             questionFeedback={questionFeedback}
             showTakeQuizNow={isLessonComplete && story.quiz}
             onTakeQuizNow={handleTakeQuizNow}
+            description={story.description}
           />
         )}
       </div>
