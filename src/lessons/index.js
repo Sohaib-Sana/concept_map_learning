@@ -16,8 +16,8 @@ import { initialNodes as countLikeWeDoNodes, initialEdges as countLikeWeDoEdges 
 import { storySteps as electricityCreatesStory } from "../story/HowElectricityCreates0sAnd1s/storySteps";
 import { initialNodes as electricityCreatesNodes, initialEdges as electricityCreatesEdges } from "../story/HowElectricityCreates0sAnd1s/nodeBank";
 
-import { storySteps as oneInstructionStory } from "../story/OneInstructionAtATime/storySteps";
-import { initialNodes as oneInstructionNodes, initialEdges as oneInstructionEdges } from "../story/OneInstructionAtATime/nodeBank";
+// import { storySteps as oneInstructionStory } from "../story/OneInstructionAtATime/storySteps";
+// import { initialNodes as oneInstructionNodes, initialEdges as oneInstructionEdges } from "../story/OneInstructionAtATime/nodeBank";
 
 // import { storySteps as keepingThingsSafeStory } from "../story/KeepingThingsSafeWhenComputerLosesPower/storySteps";
 // import {
@@ -25,11 +25,11 @@ import { initialNodes as oneInstructionNodes, initialEdges as oneInstructionEdge
 //   initialEdges as keepingThingsSafeEdges,
 // } from "../story/KeepingThingsSafeWhenComputerLosesPower/nodeBank";
 
-// import { storySteps as helpingCpuStory } from "../story/HelpingTheCpuGetWhatItNeedsFaster/storySteps";
-// import { initialNodes as helpingCpuNodes, initialEdges as helpingCpuEdges } from "../story/HelpingTheCpuGetWhatItNeedsFaster/nodeBank";
+import { storySteps as helpingCpuStory } from "../story/HelpingTheCpuGetWhatItNeedsFaster/storySteps";
+import { initialNodes as helpingCpuNodes, initialEdges as helpingCpuEdges } from "../story/HelpingTheCpuGetWhatItNeedsFaster/nodeBank";
 
-// import { storySteps as cacheStory } from "../story/SpeedingUpTheComputerFurther/storySteps";
-// import { initialNodes as cacheNodes, initialEdges as cacheEdges } from "../story/SpeedingUpTheComputerFurther/nodeBank";
+import { storySteps as cacheStory } from "../story/SpeedingUpTheComputerFurther/storySteps";
+import { initialNodes as cacheNodes, initialEdges as cacheEdges } from "../story/SpeedingUpTheComputerFurther/nodeBank";
 
 // import { storySteps as ramFillsStory } from "../story/WhatHappensWhenRamFillsUp/storySteps";
 // import { initialNodes as ramFillsNodes, initialEdges as ramFillsEdges } from "../story/WhatHappensWhenRamFillsUp/nodeBank";
@@ -108,15 +108,15 @@ export const LESSONS = {
     initialEdges: electricityCreatesEdges,
   },
 
-  oneInstructionAtATime: {
-    id: "oneInstructionAtATime",
-    title: "One Instruction at a Time",
-    description: "Learn how the CPU carries out software instructions using fetch, decode, and execute.",
-    coverImage: "/images/Computer/one-instruction-at-a-time.png",
-    storySteps: oneInstructionStory,
-    initialNodes: oneInstructionNodes,
-    initialEdges: oneInstructionEdges,
-  },
+  // oneInstructionAtATime: {
+  //   id: "oneInstructionAtATime",
+  //   title: "One Instruction at a Time",
+  //   description: "Learn how the CPU carries out software instructions using fetch, decode, and execute.",
+  //   coverImage: "/images/Computer/one-instruction-at-a-time.png",
+  //   storySteps: oneInstructionStory,
+  //   initialNodes: oneInstructionNodes,
+  //   initialEdges: oneInstructionEdges,
+  // },
 
   // keepingThingsSafeWhenComputerLosesPower: {
   //   id: "keepingThingsSafeWhenComputerLosesPower",
@@ -128,25 +128,25 @@ export const LESSONS = {
   //   initialEdges: keepingThingsSafeEdges,
   // },
 
-  // helpingTheCpuGetWhatItNeedsFaster: {
-  //   id: "helpingTheCpuGetWhatItNeedsFaster",
-  //   title: "Helping the CPU Get What It Needs Faster",
-  //   description: "Learn how RAM helps the CPU access instructions and data more quickly.",
-  //   coverImage: "/images/Computer/helping-the-cpu-get-what-it-needs-faster.png",
-  //   storySteps: helpingCpuStory,
-  //   initialNodes: helpingCpuNodes,
-  //   initialEdges: helpingCpuEdges,
-  // },
+  helpingTheCpuGetWhatItNeedsFaster: {
+    id: "helpingTheCpuGetWhatItNeedsFaster",
+    title: "Helping the CPU Get What It Needs Faster",
+    description: "Learn how RAM helps the CPU access instructions and data more quickly.",
+    coverImage: "/images/Computer/helping-the-cpu-get-what-it-needs-faster.png",
+    storySteps: helpingCpuStory,
+    initialNodes: helpingCpuNodes,
+    initialEdges: helpingCpuEdges,
+  },
 
-  // speedingUpTheComputerFurther: {
-  //   id: "speedingUpTheComputerFurther",
-  //   title: "Speeding Up the Computer Further",
-  //   description: "See how cache gives the CPU very fast access to frequently needed information.",
-  //   coverImage: "/images/Computer/speeding-up-the-computer-further.png",
-  //   storySteps: cacheStory,
-  //   initialNodes: cacheNodes,
-  //   initialEdges: cacheEdges,
-  // },
+  speedingUpTheComputerFurther: {
+    id: "speedingUpTheComputerFurther",
+    title: "Speeding Up the Computer Further",
+    description: "See how cache gives the CPU very fast access to frequently needed information.",
+    coverImage: "/images/Computer/speeding-up-the-computer-further.png",
+    storySteps: cacheStory,
+    initialNodes: cacheNodes,
+    initialEdges: cacheEdges,
+  },
 
   // whatHappensWhenRamFillsUp: {
   //   id: "whatHappensWhenRamFillsUp",
