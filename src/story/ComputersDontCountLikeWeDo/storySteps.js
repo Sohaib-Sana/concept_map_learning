@@ -21,7 +21,7 @@ export const storySteps = [
     beats: [
       {
         narration:
-          "Computers were first made to do calculations, but they do not deal with numbers in the same way we do.\n\nHumans normally use the decimal number system, which uses ten digits:\n\n0, 1, 2, 3, 4, 5, 6, 7, 8, 9\n\nComputers, however, use only two digits:\n\n0 and 1\n\nThis is called binary.",
+          "Computers were first made to do calculations, but they do not deal with numbers in the same way we do.\n\nHumans normally use the decimal number system, which uses ten digits i.e. 0 to 9.\n\nComputers, however, use only two digits:\n\n0 and 1\n\nThis is called binary.",
         reveal: {
           nodes: ["n1"],
           edges: [],
@@ -44,15 +44,15 @@ export const storySteps = [
         },
         revealTriggers: [
           {
-            phrase: "computers use electricity to represent numbers",
+            phrase: "using different levels",
             reveal: {
               nodes: ["n2"],
               edges: ["n1-n2"],
             },
-            focus: ["n1", "n2"],
+            focus: ["n1"],
           },
         ],
-        focus: "n3",
+        focus: "n1",
         images: [],
       },
       {
@@ -64,7 +64,7 @@ export const storySteps = [
         },
         revealTriggers: [
           {
-            phrase: "ten different electrical levels",
+            phrase: "to 9",
             reveal: {
               nodes: ["n3"],
               edges: ["n2-n3"],
@@ -72,7 +72,7 @@ export const storySteps = [
             focus: "n3",
           },
         ],
-        focus: "",
+        focus: "n2",
         images: [],
       },
       {
@@ -84,7 +84,7 @@ export const storySteps = [
         },
         revealTriggers: [
           {
-            phrase: "small change in the electrical signal",
+            phrase: "for 6",
             reveal: {
               nodes: ["n4"],
               edges: ["n3-n4"],
@@ -92,7 +92,7 @@ export const storySteps = [
             focus: "n4",
           },
         ],
-        focus: "",
+        focus: "n3",
         images: [],
       },
     ],
@@ -118,7 +118,7 @@ export const storySteps = [
             focus: "n5",
           },
         ],
-        focus: "",
+        focus: "n4",
         images: [],
       },
       {
@@ -130,15 +130,15 @@ export const storySteps = [
         },
         revealTriggers: [
           {
-            phrase: "Even though binary uses only 0 and 1",
+            phrase: "Even though binary uses only 0 and 1,",
             reveal: {
-              nodes: [""],
+              nodes: [],
               edges: ["n2-n5"],
             },
-            focus: "",
+            focus: ["n2", "n5"],
           },
         ],
-        focus: ["n2", "n5"],
+        focus: ["n5"],
         images: [],
       },
     ],
@@ -148,12 +148,12 @@ export const storySteps = [
     title: "Summary",
     beats: [
       {
-        narration: "So, computers use binary (0 and 1), not decimal (0-9), because this works reliably with electricity.",
+        narration: "So, computers use binary (0 and 1), not decimal (0 - 9), because this works reliably with electricity.",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "n5"],
-          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-n5"],
+          edges: ["n1-n2", "n2-n3", "n3-n4", "n4-n5", "n2-n5"],
         },
-        focus: "n5",
+        focus: ["n1", "n2", "n3", "n4", "n5"],
         images: [],
       },
     ],

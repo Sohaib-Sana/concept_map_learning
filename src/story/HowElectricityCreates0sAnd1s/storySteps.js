@@ -32,20 +32,40 @@ export const storySteps = [
     beats: [
       {
         narration:
-          "In a basic circuit, there are only two possibilities.\n\nEither the path is complete and electricity can flow, or the path is broken and electricity cannot flow.\n\n Or the path is complete and electricity can flow.\n\nA switch controls this path.\n\nWhen the switch is open, the path is broken and the bulb is off.\n\nWhen the switch is closed, the path is complete and the bulb lights up.",
+          "In a basic circuit, there are only two possibilities:\n\nEither the path is broken and electricity cannot flow.\n\nOr the path is complete and electricity can flow.\n\nA switch controls this path.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: [],
         images: [],
       },
       {
+        narration: "When the switch is open, the path is broken and the bulb is off.",
+        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
+        focus: [],
+        images: ["/images/Computer/open-circuit.png"],
+      },
+      {
+        narration: "When the switch is closed, the path is complete and the bulb lights up.",
+        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
+        focus: [],
+        images: ["/images/Computer/closed-circuit.png"],
+      },
+      {
         narration:
-          "This gives us two clear states: electricity not flowing and electricity flowing. \n\nA computer uses these two states to represent 0 and 1.\n\nJust to clarify. Inside a computer:\n\nElectricity not flowing represents 0.\n\nElectricity flowing represents 1.",
+          "This gives us two clear states: electricity not flowing and electricity flowing. \n\nA computer uses these two states to represent 0 and 1.",
+        reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
+        focus: [],
+        images: [],
+      },
+      {
+        narration: "Just to clarify. Inside a computer:\n\nElectricity not flowing represents 0.\n\nElectricity flowing represents 1.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: [],
         images: [],
       },
     ],
   },
+
+  //  --------------------------- --------------------------- --------------------------- ---------------------------//
   {
     id: "step-3",
     title: "Switches",
