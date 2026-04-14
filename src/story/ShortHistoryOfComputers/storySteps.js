@@ -162,7 +162,7 @@ export const storySteps = [
             focus: ["n5"],
           },
         ],
-        focus: ["n1", "n2", "n3", "n4"],
+        focus: [],
         images: [],
       },
       {

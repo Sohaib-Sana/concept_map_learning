@@ -50,7 +50,7 @@ export const initialNodes = [
   },
   {
     id: "n4",
-    position: { x: 920, y: 320 },
+    position: { x: 850, y: 320 },
     data: {
       label: "Hardware",
       className: "nodeContent--branch",
@@ -63,7 +63,7 @@ export const initialNodes = [
   },
   {
     id: "n5",
-    position: { x: 1250, y: 320 },
+    position: { x: 1350, y: 320 },
     data: {
       label: "Software",
       className: "nodeContent--branch",
@@ -108,6 +108,7 @@ export const initialEdges = [
     target: "n5",
     targetHandle: "in",
     label: "instructions called",
+    type: "step",
     markerEnd: { type: "arrowclosed" },
   },
   {
