@@ -7,9 +7,7 @@ export const storySteps = [
         narration:
           "Hi! In the last lesson, we saw how RAM helps the CPU get instructions and data more quickly.\n\nBut even with RAM, the CPU can still end up waiting.\n\nSo how can we make the computer even faster?",
         reveal: {},
-        revealTriggers: [
-          { phrase: "how RAM helps the CPU", reveal: { nodes: ["n1", "n2", "n3"], edges: ["n1-n2", "n2-n1", "n3-n2"] }, focus: ["n1", "n2", "n3"] },
-        ],
+        revealTriggers: [{ phrase: "quickly", reveal: { nodes: ["n1", "n2", "n3"], edges: ["n1-n2", "n2-n1", "n3-n2"] }, focus: ["n1", "n2", "n3"] }],
         focus: "",
         images: [],
       },
@@ -38,12 +36,25 @@ export const storySteps = [
         reveal: { nodes: ["n1", "n2", "n3", "n4"], edges: ["n1-n2", "n2-n1", "n3-n2"] },
         revealTriggers: [
           {
-            phrase: "It stores instructions and data",
+            phrase: "RAM",
             reveal: { nodes: ["n4"], edges: ["n1-n4"] },
             focus: ["n1", "n4"],
           },
         ],
         focus: ["n1", "n2", "n3"],
+        images: [],
+      },
+    ],
+  },
+  {
+    id: "step-2",
+    title: "Summary",
+    beats: [
+      {
+        narration:
+          "So, the closer the data is to the CPU, the faster the CPU can use it.\n\nCache helps by keeping useful instructions and data extremely close by, ready for quick access.\n\nThis means the CPU spends even less time waiting and the computer can run even faster.",
+        reveal: { nodes: ["n1", "n2", "n3", "n4"], edges: ["n1-n2", "n2-n1", "n3-n2", "n1-n4"] },
+        focus: ["n1", "n2", "n3", "n4"],
         images: [],
       },
     ],

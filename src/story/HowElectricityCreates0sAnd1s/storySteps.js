@@ -38,20 +38,20 @@ export const storySteps = [
         images: [],
       },
       {
-        narration: "When the switch is open, the path is broken and the bulb is off.",
+        narration: "When the switch is open, the path is broken, so no electric current flows and the bulb is off.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: [],
         images: ["/images/Computer/open-circuit.png"],
       },
       {
-        narration: "When the switch is closed, the path is complete and the bulb lights up.",
+        narration: "When the switch is closed, the path is complete, so electric current flows and the bulb lights up.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: [],
         images: ["/images/Computer/closed-circuit.png"],
       },
       {
         narration:
-          "This gives us two clear states: electricity not flowing and electricity flowing. \n\nA computer uses these two states to represent 0 and 1.",
+          "This gives us two clear states: electricity not flowing and electricity flowing. \n\nA computer uses:\n\nElectricity not flowing represents 0.\n\nElectricity flowing represents 1.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         focus: [],
         images: [],
@@ -76,7 +76,7 @@ export const storySteps = [
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
         revealTriggers: [
           {
-            phrase: "tiny switches",
+            phrase: "flow of electricity",
             reveal: { nodes: ["n3"], edges: ["n2-n3"] },
             focus: "n3",
           },

@@ -21,7 +21,7 @@ export const storySteps = [
     beats: [
       {
         narration:
-          "Computers were first made to do calculations, but they do not deal with numbers in the same way we do.\n\nHumans normally use the decimal number system, which uses ten digits i.e. 0 to 9.\n\nComputers, however, use only two digits:\n\n0 and 1\n\nThis is called binary.",
+          "Computers were first made to do calculations, but they do not deal with numbers in the same way we do.\n\nHumans normally use the decimal number system, which uses ten digits: 0 to 9.\n\nComputers, however, use only two digits:\n\n0 and 1\n\nThis is called binary.",
         reveal: {
           nodes: ["n1"],
           edges: [],
@@ -123,7 +123,7 @@ export const storySteps = [
       },
       {
         narration:
-          "Even though binary uses only 0 and 1, it can still represent ordinary numbers.\n\nFor example:\n\nDecimal 1 = Binary 1\nDecimal 2 = Binary 10\nDecimal 3 = Binary 11\nDecimal 4 = Binary 100\nDecimal 5 = Binary 101",
+          "Even though binary uses only 0 and 1, it can still represent ordinary numbers.\n\nFor example:\n\nDecimal 1 is Binary 1\nDecimal 2 is Binary 10\nDecimal 3 is Binary 11\nDecimal 4 is Binary 100\nDecimal 5 is Binary 101",
         reveal: {
           nodes: ["n1", "n2", "n3", "n4", "n5"],
           edges: ["n1-n2", "n2-n3", "n3-n4", "n4-n5"],
