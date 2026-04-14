@@ -34,7 +34,7 @@ export const initialNodes = [
     id: "n3",
     position: { x: 780, y: 170 },
     data: {
-      label: "Storage (stores Os, Apps and User Files",
+      label: "Storage (stores OS, Apps and User Files",
       className: "nodeContent--main",
       style: { minWidth: 140 },
       handles: [{ id: "in", type: "source", position: Position.Left }],

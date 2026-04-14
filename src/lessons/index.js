@@ -19,11 +19,11 @@ import { initialNodes as electricityCreatesNodes, initialEdges as electricityCre
 import { storySteps as oneInstructionStory } from "../story/OneInstructionAtATime/storySteps";
 import { initialNodes as oneInstructionNodes, initialEdges as oneInstructionEdges } from "../story/OneInstructionAtATime/nodeBank";
 
-// import { storySteps as keepingThingsSafeStory } from "../story/KeepingThingsSafeWhenComputerLosesPower/storySteps";
-// import {
-//   initialNodes as keepingThingsSafeNodes,
-//   initialEdges as keepingThingsSafeEdges,
-// } from "../story/KeepingThingsSafeWhenComputerLosesPower/nodeBank";
+import { storySteps as keepingThingsSafeStory } from "../story/KeepingThingsSafeWhenComputerLosesPower/storySteps";
+import {
+  initialNodes as keepingThingsSafeNodes,
+  initialEdges as keepingThingsSafeEdges,
+} from "../story/KeepingThingsSafeWhenComputerLosesPower/nodeBank";
 
 import { storySteps as helpingCpuStory } from "../story/HelpingTheCpuGetWhatItNeedsFaster/storySteps";
 import { initialNodes as helpingCpuNodes, initialEdges as helpingCpuEdges } from "../story/HelpingTheCpuGetWhatItNeedsFaster/nodeBank";
@@ -117,15 +117,15 @@ export const LESSONS = {
     initialEdges: oneInstructionEdges,
   },
 
-  // keepingThingsSafeWhenComputerLosesPower: {
-  //   id: "keepingThingsSafeWhenComputerLosesPower",
-  //   title: "Keeping Things Safe When your Computer Loses Power",
-  //   description: "Learn why computing devices need permanent storage for software and user files.",
-  //   coverImage: "/images/Computer/keeping-things-safe-when-computer-loses-power.png",
-  //   storySteps: keepingThingsSafeStory,
-  //   initialNodes: keepingThingsSafeNodes,
-  //   initialEdges: keepingThingsSafeEdges,
-  // },
+  keepingThingsSafeWhenComputerLosesPower: {
+    id: "keepingThingsSafeWhenComputerLosesPower",
+    title: "Keeping Things Safe When your Computer Loses Power",
+    description: "Learn why computing devices need permanent storage for software and user files.",
+    coverImage: "/images/Computer/keeping-things-safe-when-computer-loses-power.png",
+    storySteps: keepingThingsSafeStory,
+    initialNodes: keepingThingsSafeNodes,
+    initialEdges: keepingThingsSafeEdges,
+  },
 
   helpingTheCpuGetWhatItNeedsFaster: {
     id: "helpingTheCpuGetWhatItNeedsFaster",
