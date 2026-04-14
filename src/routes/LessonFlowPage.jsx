@@ -16,7 +16,7 @@ import { useTtsPlayer } from "../hooks/useTtsPlayer";
 import { useQuiz } from "../hooks/useQuiz";
 import { QuizPanel } from "../components/quizPanelBig";
 
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { LESSONS as STORIES } from "../lessons/index";
 
 import { findPhraseTokenRange } from "../tts/timing";
@@ -28,6 +28,7 @@ const edgeTypes = { PhaseEdge };
 export default function LessonFlowPage() {
   const DEV_DISABLE_TTS = import.meta.env.VITE_DISABLE_TTS === "true";
   const BEAT_DELAY_MS = 1500;
+  const navigate = useNavigate();
 
   // Story Selection
   const { storyId } = useParams();
@@ -723,6 +724,9 @@ export default function LessonFlowPage() {
 
   return (
     <ReactFlowProvider>
+      <button onClick={() => navigate("/")} className="backButton">
+        ← Back
+      </button>
       <div style={{ backgroundColor: "white", width: "100vw", height: "100vh" }}>
         <div style={{ height: "100vh" }}>
           <FlowCanvas

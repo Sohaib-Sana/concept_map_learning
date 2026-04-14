@@ -258,7 +258,7 @@
 .lpPanel {
   position: fixed;
   left: 16px;
-  top: 16px;
+  top: 70px;
   width: 320px;
   z-index: 50;
 
@@ -400,6 +400,31 @@
   opacity: 0.55;
   cursor: not-allowed;
   transform: none;
+}
+
+/* Back button */
+.backButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  padding: 8px 12px;
+  font-size: 18px;
+  background-color: transparent;
+  color: #111;
+  /* border: 1px solid rgba(15, 23, 42, 0.2); */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.backButton:hover {
+  background-color: rgba(15, 23, 42, 0.05);
+  border-color: rgba(15, 23, 42, 0.3);
+}
+
+.backButton:active {
+  background-color: rgba(15, 23, 42, 0.1);
 }
 
 /* Question */
