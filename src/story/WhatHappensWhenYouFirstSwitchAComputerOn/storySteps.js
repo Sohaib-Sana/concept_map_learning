@@ -42,7 +42,7 @@ export const storySteps = [
         revealTriggers: [
           {
             phrase: "BIOS",
-            reveal: { nodes: ["n3"], edges: [] },
+            reveal: { nodes: ["n3"], edges: ["n2-n3"] },
             focus: ["n3"],
           },
           {
