@@ -37,8 +37,8 @@ import { initialNodes as cacheNodes, initialEdges as cacheEdges } from "../story
 import { storySteps as switchOnStory } from "../story/WhatHappensWhenYouFirstSwitchAComputerOn/storySteps";
 import { initialNodes as switchOnNodes, initialEdges as switchOnEdges } from "../story/WhatHappensWhenYouFirstSwitchAComputerOn/nodeBank";
 
-// import { storySteps as communicateStory } from "../story/WhatIfDevicesCouldNotCommunicate/storySteps";
-// import { initialNodes as communicateNodes, initialEdges as communicateEdges } from "../story/WhatIfDevicesCouldNotCommunicate/nodeBank";
+import { storySteps as communicateStory } from "../story/WhatIfDevicesCouldNotCommunicate/storySteps";
+import { initialNodes as communicateNodes, initialEdges as communicateEdges } from "../story/WhatIfDevicesCouldNotCommunicate/nodeBank";
 
 // import { storySteps as connectivityStory } from "../story/TheOtherSideOfConnectivity/storySteps";
 // import { initialNodes as connectivityNodes, initialEdges as connectivityEdges } from "../story/TheOtherSideOfConnectivity/nodeBank";
@@ -167,15 +167,15 @@ export const LESSONS = {
     initialEdges: switchOnEdges,
   },
 
-  // whatIfDevicesCouldNotCommunicate: {
-  //   id: "whatIfDevicesCouldNotCommunicate",
-  //   title: "What if Devices Could Not Communicate?",
-  //   description: "Understand why networks make computing devices far more useful.",
-  //   coverImage: "/images/Computer/what-if-devices-could-not-communicate.png",
-  //   storySteps: communicateStory,
-  //   initialNodes: communicateNodes,
-  //   initialEdges: communicateEdges,
-  // },
+  whatIfDevicesCouldNotCommunicate: {
+    id: "whatIfDevicesCouldNotCommunicate",
+    title: "What if Devices Could Not Communicate?",
+    description: "Understand why networks make computing devices far more useful.",
+    coverImage: "/images/Computer/what-if-devices-could-not-communicate.png",
+    storySteps: communicateStory,
+    initialNodes: communicateNodes,
+    initialEdges: communicateEdges,
+  },
 
   // theOtherSideOfConnectivity: {
   //   id: "theOtherSideOfConnectivity",
