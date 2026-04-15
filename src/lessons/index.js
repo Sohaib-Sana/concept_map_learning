@@ -34,8 +34,8 @@ import { initialNodes as cacheNodes, initialEdges as cacheEdges } from "../story
 // import { storySteps as ramFillsStory } from "../story/WhatHappensWhenRamFillsUp/storySteps";
 // import { initialNodes as ramFillsNodes, initialEdges as ramFillsEdges } from "../story/WhatHappensWhenRamFillsUp/nodeBank";
 
-// import { storySteps as switchOnStory } from "../story/WhatHappensWhenYouFirstSwitchAComputerOn/storySteps";
-// import { initialNodes as switchOnNodes, initialEdges as switchOnEdges } from "../story/WhatHappensWhenYouFirstSwitchAComputerOn/nodeBank";
+import { storySteps as switchOnStory } from "../story/WhatHappensWhenYouFirstSwitchAComputerOn/storySteps";
+import { initialNodes as switchOnNodes, initialEdges as switchOnEdges } from "../story/WhatHappensWhenYouFirstSwitchAComputerOn/nodeBank";
 
 // import { storySteps as communicateStory } from "../story/WhatIfDevicesCouldNotCommunicate/storySteps";
 // import { initialNodes as communicateNodes, initialEdges as communicateEdges } from "../story/WhatIfDevicesCouldNotCommunicate/nodeBank";
@@ -157,15 +157,15 @@ export const LESSONS = {
   //   initialEdges: ramFillsEdges,
   // },
 
-  // whatHappensWhenYouFirstSwitchAComputerOn: {
-  //   id: "whatHappensWhenYouFirstSwitchAComputerOn",
-  //   title: "What Happens When You First Switch a Computer On?",
-  //   description: "Learn how ROM and BIOS help a computer start up and load the operating system.",
-  //   coverImage: "/images/Computer/what-happens-when-you-first-switch-a-computer-on.png",
-  //   storySteps: switchOnStory,
-  //   initialNodes: switchOnNodes,
-  //   initialEdges: switchOnEdges,
-  // },
+  whatHappensWhenYouFirstSwitchAComputerOn: {
+    id: "whatHappensWhenYouFirstSwitchAComputerOn",
+    title: "What Happens When You First Switch a Computer On?",
+    description: "Learn how ROM and BIOS help a computer start up and load the operating system.",
+    coverImage: "/images/Computer/what-happens-when-you-first-switch-a-computer-on.png",
+    storySteps: switchOnStory,
+    initialNodes: switchOnNodes,
+    initialEdges: switchOnEdges,
+  },
 
   // whatIfDevicesCouldNotCommunicate: {
   //   id: "whatIfDevicesCouldNotCommunicate",
