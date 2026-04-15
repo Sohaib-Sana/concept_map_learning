@@ -27,7 +27,7 @@ export const storySteps = [
         narration:
           "When you turn your laptop or phone back on, the operating system still needs to be there so the device can start up properly. \n\nYour apps also need to still be there, ready to open and use.",
         reveal: { nodes: ["n1", "n2"], edges: ["n1-n2"] },
-        revealTriggers: [{ phrase: "open and use", reveal: { nodes: ["n3"], edges: ["n2-n3"] }, focus: "n3" }],
+        revealTriggers: [{ phrase: "open and use", reveal: { nodes: ["j1", "n3"], edges: ["j1-n3", "n2-j1"] }, focus: "n3" }],
         focus: "n2",
         images: [],
       },
@@ -40,14 +40,14 @@ export const storySteps = [
       {
         narration:
           "Of course it is not just software that needs to be stored. \n\nWe also want the computer to keep our own data, such as:\n\n* documents & photos\n* videos & music\n* messages\n* saved game data\n\n\n\nWithout permanent storage, everything would disappear every time the device was turned off.",
+        reveal: { nodes: ["n1", "n2", "j1", "n3"], edges: ["n1-n2", "n2-j1", "j1-n3"] },
         revealTriggers: [
           {
             phrase: "saved game data",
-            reveal: { nodes: ["n4"], edges: ["n2-n4"] },
+            reveal: { nodes: ["n4"], edges: ["j1-n4"] },
             focus: "n4",
           },
         ],
-        reveal: { nodes: ["n1", "n2", "n3"], edges: ["n1-n2", "n2-n3"] },
         focus: "n3",
         images: [],
       },
@@ -60,17 +60,17 @@ export const storySteps = [
       {
         narration:
           "Permanent storage is needed in computing devices to keep the operating system, the apps, and the user’s files and data safe for later use.\n\nThat is why computing devices have storage such as a hard drive or SSD.",
+        reveal: {
+          nodes: ["n1", "n2", "j1", "n3", "n4"],
+          edges: ["n1-n2", "n2-j1", "j1-n3", "j1-n4"],
+        },
         revealTriggers: [
           {
             phrase: "hard drive or SSD",
-            reveal: { nodes: ["j1", "n5", "n6"], edges: ["n2-j1", "j1-n5", "j1-n6"] },
-            focus: ["n5", "n6"],
+            reveal: { nodes: ["j2", "n8", "n9"], edges: ["n2-j2", "j2-n8", "j2-n9"] },
+            focus: ["n8", "n9"],
           },
         ],
-        reveal: {
-          nodes: ["n1", "n2", "n3", "n4"],
-          edges: ["n1-n2", "n2-n3", "n2-n4"],
-        },
         focus: "n2",
         images: [],
       },
