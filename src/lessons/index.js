@@ -40,8 +40,8 @@ import { initialNodes as switchOnNodes, initialEdges as switchOnEdges } from "..
 import { storySteps as communicateStory } from "../story/WhatIfDevicesCouldNotCommunicate/storySteps";
 import { initialNodes as communicateNodes, initialEdges as communicateEdges } from "../story/WhatIfDevicesCouldNotCommunicate/nodeBank";
 
-// import { storySteps as connectivityStory } from "../story/TheOtherSideOfConnectivity/storySteps";
-// import { initialNodes as connectivityNodes, initialEdges as connectivityEdges } from "../story/TheOtherSideOfConnectivity/nodeBank";
+import { storySteps as connectivityStory } from "../story/TheOtherSideOfConnectivity/storySteps";
+import { initialNodes as connectivityNodes, initialEdges as connectivityEdges } from "../story/TheOtherSideOfConnectivity/nodeBank";
 
 import { QUIZZES } from "../quiz/quizzes";
 
@@ -177,13 +177,13 @@ export const LESSONS = {
     initialEdges: communicateEdges,
   },
 
-  // theOtherSideOfConnectivity: {
-  //   id: "theOtherSideOfConnectivity",
-  //   title: "The Other Side of Connectivity",
-  //   description: "Explore some of the risks and responsibilities that come with connected devices.",
-  //   coverImage: "/images/Computer/the-other-side-of-connectivity.png",
-  //   storySteps: connectivityStory,
-  //   initialNodes: connectivityNodes,
-  //   initialEdges: connectivityEdges,
-  // },
+  theOtherSideOfConnectivity: {
+    id: "theOtherSideOfConnectivity",
+    title: "The Other Side of Connectivity",
+    description: "Explore some of the risks and responsibilities that come with connected devices.",
+    coverImage: "/images/Computer/the-other-side-of-connectivity.png",
+    storySteps: connectivityStory,
+    initialNodes: connectivityNodes,
+    initialEdges: connectivityEdges,
+  },
 };
