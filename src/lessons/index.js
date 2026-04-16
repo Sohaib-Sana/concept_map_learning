@@ -46,6 +46,9 @@ import { initialNodes as connectivityNodes, initialEdges as connectivityEdges } 
 import { storySteps as softwareStory } from "../story/WhereDoesSoftwareComeFrom/storySteps";
 import { initialNodes as softwareNodes, initialEdges as softwareEdges } from "../story/WhereDoesSoftwareComeFrom/nodeBank";
 
+import { storySteps as partySoftwareStory } from "../story/HowToOrganizePartyAndWriteSoftware/storySteps";
+import { initialNodes as partySoftwareNodes, initialEdges as partySoftwareEdges } from "../story/HowToOrganizePartyAndWriteSoftware//nodeBank";
+
 import { QUIZZES } from "../quiz/quizzes";
 
 export const LESSONS = {
@@ -198,5 +201,15 @@ export const LESSONS = {
     storySteps: softwareStory,
     initialNodes: softwareNodes,
     initialEdges: softwareEdges,
+  },
+
+  howToOrganizePartyAndWriteSoftware: {
+    id: "howToOrganizePartyAndWriteSoftware",
+    title: "How to Organize a Party and Write Software",
+    description: "See how organizing a party is like writing software, and what it takes to do both well.",
+    coverImage: "/images/Computer/how-to-organize-party-and-write-software.png",
+    storySteps: partySoftwareStory,
+    initialNodes: partySoftwareNodes,
+    initialEdges: partySoftwareEdges,
   },
 };

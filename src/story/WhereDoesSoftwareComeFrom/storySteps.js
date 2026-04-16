@@ -85,7 +85,7 @@ export const storySteps = [
     ],
   },
   {
-    id: "step-2",
+    id: "step-3",
     title: "Programming Lanugage - CPU Instructions",
     beats: [
       {
@@ -98,7 +98,7 @@ export const storySteps = [
     ],
   },
   {
-    id: "step-2",
+    id: "step-4",
     title: "Summary",
     beats: [
       {
