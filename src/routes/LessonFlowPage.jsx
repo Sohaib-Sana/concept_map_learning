@@ -27,7 +27,7 @@ const edgeTypes = { PhaseEdge };
 
 export default function LessonFlowPage() {
   const DEV_DISABLE_TTS = import.meta.env.VITE_DISABLE_TTS === "true";
-  const BEAT_DELAY_MS = 1500;
+  const BEAT_DELAY_MS = import.meta.env.VITE_BEAT_DELAY_MS;
   const navigate = useNavigate();
 
   // Story Selection

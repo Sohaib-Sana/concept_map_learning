@@ -43,6 +43,9 @@ import { initialNodes as communicateNodes, initialEdges as communicateEdges } fr
 import { storySteps as connectivityStory } from "../story/TheOtherSideOfConnectivity/storySteps";
 import { initialNodes as connectivityNodes, initialEdges as connectivityEdges } from "../story/TheOtherSideOfConnectivity/nodeBank";
 
+import { storySteps as softwareStory } from "../story/WhereDoesSoftwareComeFrom/storySteps";
+import { initialNodes as softwareNodes, initialEdges as softwareEdges } from "../story/WhereDoesSoftwareComeFrom/nodeBank";
+
 import { QUIZZES } from "../quiz/quizzes";
 
 export const LESSONS = {
@@ -185,5 +188,15 @@ export const LESSONS = {
     storySteps: connectivityStory,
     initialNodes: connectivityNodes,
     initialEdges: connectivityEdges,
+  },
+
+  whereDoesSoftwareComeFrom: {
+    id: "whereDoesSoftwareComeFrom",
+    title: "Where Does Software Come From?",
+    description: "Learn about the development and distribution of software.",
+    coverImage: "/images/Computer/where-does-software-come-from.png",
+    storySteps: softwareStory,
+    initialNodes: softwareNodes,
+    initialEdges: softwareEdges,
   },
 };

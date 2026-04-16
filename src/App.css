@@ -118,7 +118,9 @@
 } */
 
 .ghostContent {
-  opacity: 0;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
   transition: opacity 350ms ease;
 }
 
