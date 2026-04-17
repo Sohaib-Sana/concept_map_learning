@@ -207,7 +207,7 @@ export const LESSONS = {
     id: "howToOrganizePartyAndWriteSoftware",
     title: "How to Organize a Party and Write Software",
     description: "See how organizing a party is like writing software, and what it takes to do both well.",
-    coverImage: "/images/Computer/how-to-organize-party-and-write-software.png",
+    coverImage: "/images/Computer/how-to-organize-a-party-and-write-software.png",
     storySteps: partySoftwareStory,
     initialNodes: partySoftwareNodes,
     initialEdges: partySoftwareEdges,

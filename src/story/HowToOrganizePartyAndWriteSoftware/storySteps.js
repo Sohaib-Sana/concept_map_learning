@@ -145,7 +145,7 @@ export const storySteps = [
           "When solving a problem or creating software, it helps to focus on the important details and break the task into smaller parts so the solution is easier to manage and more likely to succeed. ",
         reveal: {
           nodes: ["n1", "j1", "n2", "n3", "n4", "n5", "j2", "n6", "n7"],
-          edges: ["n1-j1", "j1-n2", "j1-n3", "n2-n4", "n3-n5", "n4-j2", "n5-j2", "j2-n6", "n1-n7"],
+          edges: ["n1-j1", "j1-n2", "j1-n3", "n2-n4", "n3-n5", "n4-j2", "n5-jver2", "j2-n6", "n1-n7"],
         },
         // focus: ["n1", "n2", "n3", "n4", "n5", "n6", "n7"],
         focus: "",
