@@ -49,6 +49,12 @@ import { initialNodes as softwareNodes, initialEdges as softwareEdges } from "..
 import { storySteps as partySoftwareStory } from "../story/HowToOrganizePartyAndWriteSoftware/storySteps";
 import { initialNodes as partySoftwareNodes, initialEdges as partySoftwareEdges } from "../story/HowToOrganizePartyAndWriteSoftware//nodeBank";
 
+import { storySteps as thinkingInStepsStory } from "../story/ThinkingInSteps/storySteps";
+import { initialNodes as thinkingInStepsNodes, initialEdges as thinkingInStepsEdges } from "../story/ThinkingInSteps/nodeBank";
+
+import { storySteps as computationalThinkingStory } from "../story/ComputationalThinking/storySteps";
+import { initialNodes as computationalThinkingNodes, initialEdges as computationalThinkingEdges } from "../story/ComputationalThinking/nodeBank";
+
 import { QUIZZES } from "../quiz/quizzes";
 
 export const LESSONS = {
@@ -211,5 +217,25 @@ export const LESSONS = {
     storySteps: partySoftwareStory,
     initialNodes: partySoftwareNodes,
     initialEdges: partySoftwareEdges,
+  },
+
+  thinkingInSteps: {
+    id: "thinkingInSteps",
+    title: "Thinking in Steps",
+    description: "Learn how to break down complex problems into manageable steps.",
+    coverImage: "/images/Computer/thinking-in-steps.png",
+    storySteps: thinkingInStepsStory,
+    initialNodes: thinkingInStepsNodes,
+    initialEdges: thinkingInStepsEdges,
+  },
+
+  computationalThinking: {
+    id: "computationalThinking",
+    title: "Computational Thinking",
+    description: "Explore the key concepts of computational thinking and how they help us solve problems.",
+    coverImage: "/images/Computer/computational-thinking.png",
+    storySteps: computationalThinkingStory,
+    initialNodes: computationalThinkingNodes,
+    initialEdges: computationalThinkingEdges,
   },
 };
