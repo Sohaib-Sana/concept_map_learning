@@ -16,6 +16,12 @@ import { initialNodes as countLikeWeDoNodes, initialEdges as countLikeWeDoEdges 
 import { storySteps as electricityCreatesStory } from "../story/HowElectricityCreates0sAnd1s/storySteps";
 import { initialNodes as electricityCreatesNodes, initialEdges as electricityCreatesEdges } from "../story/HowElectricityCreates0sAnd1s/nodeBank";
 
+import { storySteps as fromNumbersToWordsPicturesAndSoundStory } from "../story/FromNumbersToWordsPicturesAndSound/storySteps";
+import {
+  initialNodes as fromNumbersToWordsPicturesAndSoundNodes,
+  initialEdges as fromNumbersToWordsPicturesAndSoundEdges,
+} from "../story/FromNumbersToWordsPicturesAndSound/nodeBank";
+
 import { storySteps as oneInstructionStory } from "../story/OneInstructionAtATime/storySteps";
 import { initialNodes as oneInstructionNodes, initialEdges as oneInstructionEdges } from "../story/OneInstructionAtATime/nodeBank";
 
@@ -31,8 +37,8 @@ import { initialNodes as helpingCpuNodes, initialEdges as helpingCpuEdges } from
 import { storySteps as cacheStory } from "../story/SpeedingUpTheComputerFurther/storySteps";
 import { initialNodes as cacheNodes, initialEdges as cacheEdges } from "../story/SpeedingUpTheComputerFurther/nodeBank";
 
-// import { storySteps as ramFillsStory } from "../story/WhatHappensWhenRamFillsUp/storySteps";
-// import { initialNodes as ramFillsNodes, initialEdges as ramFillsEdges } from "../story/WhatHappensWhenRamFillsUp/nodeBank";
+import { storySteps as ramFillsStory } from "../story/WhatHappensWhenRamFillsUp/storySteps";
+import { initialNodes as ramFillsNodes, initialEdges as ramFillsEdges } from "../story/WhatHappensWhenRamFillsUp/nodeBank";
 
 import { storySteps as switchOnStory } from "../story/WhatHappensWhenYouFirstSwitchAComputerOn/storySteps";
 import { initialNodes as switchOnNodes, initialEdges as switchOnEdges } from "../story/WhatHappensWhenYouFirstSwitchAComputerOn/nodeBank";
@@ -119,6 +125,16 @@ export const LESSONS = {
     initialEdges: electricityCreatesEdges,
   },
 
+  fromNumbersToWordsPicturesAndSound: {
+    id: "fromNumbersToWordsPicturesAndSound",
+    title: "From Numbers to Words, Pictures and Sound",
+    description: "Discover how computers turn binary numbers into text, images, and audio you can read, see, and hear.",
+    coverImage: "/images/Computer/from-numbers-to-words-pictures-and-sound.png",
+    storySteps: fromNumbersToWordsPicturesAndSoundStory,
+    initialNodes: fromNumbersToWordsPicturesAndSoundNodes,
+    initialEdges: fromNumbersToWordsPicturesAndSoundEdges,
+  },
+
   oneInstructionAtATime: {
     id: "oneInstructionAtATime",
     title: "One Instruction at a Time",
@@ -159,15 +175,15 @@ export const LESSONS = {
     initialEdges: cacheEdges,
   },
 
-  // whatHappensWhenRamFillsUp: {
-  //   id: "whatHappensWhenRamFillsUp",
-  //   title: "What Happens When RAM Fills Up?",
-  //   description: "Explore virtual memory and why a computer slows down when RAM runs out.",
-  //   coverImage: "/images/Computer/what-happens-when-ram-fills-up.png",
-  //   storySteps: ramFillsStory,
-  //   initialNodes: ramFillsNodes,
-  //   initialEdges: ramFillsEdges,
-  // },
+  whatHappensWhenRamFillsUp: {
+    id: "whatHappensWhenRamFillsUp",
+    title: "What Happens When RAM Fills Up?",
+    description: "Explore virtual memory and why a computer slows down when RAM runs out.",
+    coverImage: "/images/Computer/what-happens-when-ram-fills-up.png",
+    storySteps: ramFillsStory,
+    initialNodes: ramFillsNodes,
+    initialEdges: ramFillsEdges,
+  },
 
   whatHappensWhenYouFirstSwitchAComputerOn: {
     id: "whatHappensWhenYouFirstSwitchAComputerOn",
