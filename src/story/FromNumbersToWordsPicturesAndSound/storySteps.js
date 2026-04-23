@@ -24,14 +24,14 @@ export const storySteps = [
         reveal: { nodes: ["n1", "j1", "n5"], edges: ["n1-j1", "j1-n5"] },
         revealTriggers: [{ phrase: "as numbers", reveal: { nodes: ["n2"], edges: ["n2-j1"] }, focus: ["n2", "n5"] }],
         focus: ["n1", "j1", "n5"],
-        images: [],
+        images: ["/images/Computer/sounds-numbers.png"],
       },
       {
         narration: "Sound can be turned into numbers by measuring the sound wave and storing those measurements.",
         reveal: { nodes: ["n1", "n2", "j1", "n5"], edges: ["n1-j1", "j1-n5", "n2-j1"] },
         revealTriggers: [{ phrase: "measurements", reveal: { nodes: ["n3"], edges: ["n3-j1"] }, focus: ["n3", "n5"] }],
         focus: ["n2", "j1", "n5"],
-        images: [],
+        images: ["/images/Computer/sound-measurement.png"],
       },
       {
         narration:
