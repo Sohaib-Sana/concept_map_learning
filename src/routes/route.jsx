@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import LessonFlowPage from "./LessonFlowPage";
 import HomePage from "./HomePage";
-import AdminStoriesPage from "../admin/adminStoriesPage";
+import AdminStoriesPage from "../admin/AdminStoriesPage";
 import AdminStoryEditorPage from "../admin/AdminStoryEditorPage";
 
 export function makeRouter() {
