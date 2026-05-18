@@ -8,7 +8,7 @@ export default function HomePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#fff" }}>
-      <div style={{ maxWidth: 1020, margin: "0 auto", padding: 24 }}>
+      <div style={{ maxWidth: 980, margin: "0 auto", padding: 24 }}>
         <header style={{ marginBottom: 18 }}>
           <h1 style={{ margin: 0, fontSize: 28 }}>Pick a story</h1>
           <p style={{ marginTop: 8, color: "#444", lineHeight: 1.4 }}>Choose one lesson to begin. You can come back later and start another.</p>
@@ -17,7 +17,7 @@ export default function HomePage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
             gap: 16,
           }}
         >
