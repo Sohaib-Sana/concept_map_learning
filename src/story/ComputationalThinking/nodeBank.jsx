@@ -119,7 +119,7 @@ export const initialNodes = [
   },
   {
     id: "n8",
-    position: { x: 1700, y: 500 },
+    position: { x: 1600, y: 500 },
     data: {
       label: "Examples",
       className: "nodeContent--main",

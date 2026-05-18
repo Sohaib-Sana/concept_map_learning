@@ -66,12 +66,19 @@ export const storySteps = [
         },
         revealTriggers: [
           {
-            phrase: "hard drive or SSD",
-            reveal: { nodes: ["j2", "n8", "n9"], edges: ["n2-j2", "j2-n8", "j2-n9"] },
+            phrase: "storage such as",
+            reveal: { nodes: ["j2", "n8", "n9", "bl-1"], edges: ["n2-j2", "j2-n8", "j2-n9"] },
             focus: ["n8", "n9"],
           },
+          {
+            phrase: "or SSD",
+            // reveal: { nodes: ["j2", "n8", "n9"], edges: ["n2-j2", "j2-n8", "j2-n9"] },
+            // focus: ["n8", "n9"],
+            reveal: {},
+            focus: ["n1", "n4", "bl-1", "n8", "n9"],
+          },
         ],
-        focus: "n2",
+        focus: "n4",
         images: [],
       },
     ],

@@ -51,7 +51,7 @@ export const storySteps = [
       {
         narration: "Numbers, text, images, audio, and video are all forms of data (information), and computers store that data as binary.",
         reveal: { nodes: ["n1", "n2", "n3", "n4", "j1", "n5", "n6"], edges: ["n1-j1", "j1-n5", "n2-j1", "n3-j1", "n4-j1", "n5-n6"] },
-        focus: ["n6"],
+        focus: ["n1", "n2", "n3", "n4", "j1", "n5", "n6"],
         images: [],
       },
     ],

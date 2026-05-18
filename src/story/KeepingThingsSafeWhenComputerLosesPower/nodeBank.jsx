@@ -103,6 +103,17 @@ export const initialNodes = [
     style: { width: 120 },
     type: "customNode",
   },
+  {
+    id: "bl-1",
+    position: { x: 1100, y: 525 },
+
+    data: {
+      className: "border-less",
+      label: "",
+      handles: [],
+    },
+    type: "customNode",
+  },
 ];
 
 export const initialEdges = [

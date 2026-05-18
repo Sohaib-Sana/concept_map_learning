@@ -10,7 +10,7 @@ export default function HomePage() {
     <div style={{ minHeight: "100vh", background: "#fff" }}>
       <div style={{ maxWidth: 980, margin: "0 auto", padding: 24 }}>
         <header style={{ marginBottom: 18 }}>
-          <h1 style={{ margin: 0, fontSize: 28 }}>Pick a story</h1>
+          <h1 style={{ margin: 0, fontSize: 28, color: "#111" }}>Pick a Lesson</h1>
           <p style={{ marginTop: 8, color: "#444", lineHeight: 1.4 }}>Choose one lesson to begin. You can come back later and start another.</p>
         </header>
 

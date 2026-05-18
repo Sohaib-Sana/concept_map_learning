@@ -27,7 +27,7 @@ const edgeTypes = { PhaseEdge };
 
 export default function LessonFlowPage() {
   const DEV_DISABLE_TTS = import.meta.env.VITE_DISABLE_TTS === "true";
-  const BEAT_DELAY_MS = import.meta.env.VITE_BEAT_DELAY_MS;
+  const BEAT_DELAY_MS = import.meta.env.VITE_BEAT_DELAY_MS ? parseInt(import.meta.env.VITE_BEAT_DELAY_MS) : 2500;
   const navigate = useNavigate();
 
   // Story Selection
@@ -734,7 +734,7 @@ export default function LessonFlowPage() {
             edges={edgesToRender}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
-            onNodesChange={onNodesChange}
+            // onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             focusTarget={focusTarget}
