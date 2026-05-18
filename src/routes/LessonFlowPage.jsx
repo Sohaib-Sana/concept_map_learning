@@ -71,6 +71,8 @@ export default function LessonFlowPage() {
   // teaching tone toggle
   const [teachingToneOn, setTeachingToneOn] = useState(true);
 
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+
   // Autoplay flag
   const [autoplayOn, setAutoplayOn] = useState(false);
   const autoplayRef = useRef(false);
@@ -209,6 +211,7 @@ export default function LessonFlowPage() {
     prefetchUpcomingBeats: (sIdx, bIdx) => safePrefetch(sIdx, bIdx, PREFETCH_AHEAD),
     highlightConfig: { highlightWords: 6, lookaheadWords: 1 },
     onTokenChange: handleTokenChange,
+    playbackRate: playbackSpeed,
   });
 
   // ---------- Panel Location ----------
@@ -771,6 +774,8 @@ export default function LessonFlowPage() {
             canResume={canResume}
             highlightRange={ttsRange}
             speakingState={speakingState}
+            playbackSpeed={playbackSpeed}
+            onPlaybackSpeedChange={setPlaybackSpeed}
             question={activeQuestion}
             waitingForAnswer={waitingForAnswer}
             onAnswer={handleAnswer}

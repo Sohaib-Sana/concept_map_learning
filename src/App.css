@@ -330,6 +330,55 @@
   white-space: pre-wrap;
 }
 
+.lpSpeedLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(15, 23, 42, 0.65);
+}
+
+.lpSpeedSelect {
+  padding: 10px 12px;
+  background-color: white;
+  color:black;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 900;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+.lpSpeedSelect:focus-visible {
+  outline: 3px solid rgba(79, 70, 229, 0.35);
+  outline-offset: 2px;
+}
+
+
+.lpSpeedButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lpSpeedBtn {
+  padding: 8px 10px;
+  border-radius: 999px;
+  border-color: rgba(15, 23, 42, 0.1);
+  background: rgba(248, 250, 252, 0.95);
+  color: rgba(15, 23, 42, 0.92);
+  box-shadow: 0 6px 12px rgba(2, 6, 23, 0.06);
+  font-size: 12px;
+  min-width: 56px;
+}
+
+.lpSpeedBtn.isActive {
+  background: rgba(79, 70, 229, 0.14);
+  border-color: rgba(79, 70, 229, 0.35);
+  color: rgba(15, 23, 42, 0.95);
+}
+
 .lpHighlight {
   background: rgba(255, 230, 0, 0.55);
   border-radius: 6px;

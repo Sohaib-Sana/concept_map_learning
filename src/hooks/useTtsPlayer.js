@@ -4,7 +4,7 @@ import { buildTtsRequest } from "../tts/request";
 import { getCachedAudioBlob, hashForTtsRequest, putCachedAudioBlob } from "../tts/cache";
 import { buildCumulativeTimes, buildSpans, findTokenIndexAtTime, highlightRangeFromToken } from "../tts/timing";
 
-export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUpcomingBeats, highlightConfig, onTokenChange }) {
+export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUpcomingBeats, highlightConfig, onTokenChange, playbackRate = 1 }) {
   const HIGHLIGHT_WORDS = highlightConfig?.highlightWords ?? 6;
   const LOOKAHEAD_WORDS = highlightConfig?.lookaheadWords ?? 1;
 
@@ -15,6 +15,7 @@ export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUp
   const audioRef = useRef(null);
   const audioUrlRef = useRef(null);
   const ttsAbortRef = useRef(null);
+  const playbackRateRef = useRef(playbackRate);
 
   const spansRef = useRef([]);
   const cumTimeRef = useRef([]);
@@ -31,6 +32,8 @@ export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUp
   useEffect(() => {
     audioRef.current = new Audio();
     audioRef.current.preload = "auto";
+    audioRef.current.playbackRate = playbackRate;
+    playbackRateRef.current = playbackRate;
 
     return () => {
       try {
@@ -40,6 +43,13 @@ export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUp
       audioRef.current = null;
     };
   }, [cleanupAudioUrl]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = playbackRate;
+    }
+    playbackRateRef.current = playbackRate;
+  }, [playbackRate]);
 
   const stopVoice = useCallback(() => {
     try {
@@ -227,6 +237,7 @@ export function useTtsPlayer({ teachingToneOn, fetchTtsBlobWithRetry, prefetchUp
       };
 
       a.src = url;
+      a.playbackRate = playbackRateRef.current;
 
       try {
         await a.play();

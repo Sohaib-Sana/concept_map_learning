@@ -17,6 +17,8 @@ export function LessonPanel({
   canResume,
   highlightRange,
   speakingState,
+  playbackSpeed,
+  onPlaybackSpeedChange,
   question,
   waitingForAnswer,
   onAnswer,
@@ -156,6 +158,19 @@ export function LessonPanel({
               Next
             </button>
           ))}
+
+        <select
+          id="lp-speed-select"
+          className="lpSpeedSelect"
+          value={playbackSpeed}
+          onChange={(event) => onPlaybackSpeedChange?.(Number(event.target.value))}
+        >
+          {[0.8, 0.9, 1, 1.25, 1.5].map((speed) => (
+            <option key={speed} value={speed}>
+              {speed.toFixed(2)}x
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
