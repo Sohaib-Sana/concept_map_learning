@@ -72,6 +72,7 @@ export const LESSONS = {
     storySteps: statesStory,
     initialNodes: statesNodes,
     initialEdges: statesEdges,
+    category: "sciences",
   },
 
   makingSenseOfStuff: {
@@ -83,6 +84,7 @@ export const LESSONS = {
     initialNodes: makingSenseOfStuffNodes,
     initialEdges: makingSenseOfStuffEdges,
     quiz: QUIZZES.makingSenseOfStuffQuiz,
+    category: "sciences",
   },
 
   computersHelpUs: {
@@ -93,6 +95,7 @@ export const LESSONS = {
     storySteps: computersHelpUsStory,
     initialNodes: computersHelpUsNodes,
     initialEdges: computersHelpUsEdges,
+    category: "computer-science",
   },
 
   shortHistoryOfComputers: {
@@ -103,6 +106,7 @@ export const LESSONS = {
     storySteps: shortHistoryStory,
     initialNodes: shortHistoryNodes,
     initialEdges: shortHistoryEdges,
+    category: "computer-science",
   },
 
   computersDontCountLikeWeDo: {
@@ -113,6 +117,7 @@ export const LESSONS = {
     storySteps: countLikeWeDoStory,
     initialNodes: countLikeWeDoNodes,
     initialEdges: countLikeWeDoEdges,
+    category: "computer-science",
   },
 
   howElectricityCreates0sAnd1s: {
@@ -123,6 +128,7 @@ export const LESSONS = {
     storySteps: electricityCreatesStory,
     initialNodes: electricityCreatesNodes,
     initialEdges: electricityCreatesEdges,
+    category: "computer-science",
   },
 
   fromNumbersToWordsPicturesAndSound: {
@@ -133,6 +139,7 @@ export const LESSONS = {
     storySteps: fromNumbersToWordsPicturesAndSoundStory,
     initialNodes: fromNumbersToWordsPicturesAndSoundNodes,
     initialEdges: fromNumbersToWordsPicturesAndSoundEdges,
+    category: "computer-science",
   },
 
   oneInstructionAtATime: {
@@ -143,6 +150,7 @@ export const LESSONS = {
     storySteps: oneInstructionStory,
     initialNodes: oneInstructionNodes,
     initialEdges: oneInstructionEdges,
+    category: "computer-science",
   },
 
   keepingThingsSafeWhenComputerLosesPower: {
@@ -153,6 +161,7 @@ export const LESSONS = {
     storySteps: keepingThingsSafeStory,
     initialNodes: keepingThingsSafeNodes,
     initialEdges: keepingThingsSafeEdges,
+    category: "computer-science",
   },
 
   helpingTheCpuGetWhatItNeedsFaster: {
@@ -163,6 +172,7 @@ export const LESSONS = {
     storySteps: helpingCpuStory,
     initialNodes: helpingCpuNodes,
     initialEdges: helpingCpuEdges,
+    category: "computer-science",
   },
 
   speedingUpTheComputerFurther: {
@@ -173,6 +183,7 @@ export const LESSONS = {
     storySteps: cacheStory,
     initialNodes: cacheNodes,
     initialEdges: cacheEdges,
+    category: "computer-science",
   },
 
   whatHappensWhenRamFillsUp: {
@@ -183,6 +194,7 @@ export const LESSONS = {
     storySteps: ramFillsStory,
     initialNodes: ramFillsNodes,
     initialEdges: ramFillsEdges,
+    category: "computer-science",
   },
 
   whatHappensWhenYouFirstSwitchAComputerOn: {
@@ -193,6 +205,7 @@ export const LESSONS = {
     storySteps: switchOnStory,
     initialNodes: switchOnNodes,
     initialEdges: switchOnEdges,
+    category: "computer-science",
   },
 
   whatIfDevicesCouldNotCommunicate: {
@@ -203,6 +216,7 @@ export const LESSONS = {
     storySteps: communicateStory,
     initialNodes: communicateNodes,
     initialEdges: communicateEdges,
+    category: "computer-science",
   },
 
   theOtherSideOfConnectivity: {
@@ -213,6 +227,7 @@ export const LESSONS = {
     storySteps: connectivityStory,
     initialNodes: connectivityNodes,
     initialEdges: connectivityEdges,
+    category: "computer-science",
   },
 
   whereDoesSoftwareComeFrom: {
@@ -223,6 +238,7 @@ export const LESSONS = {
     storySteps: softwareStory,
     initialNodes: softwareNodes,
     initialEdges: softwareEdges,
+    category: "computer-science",
   },
 
   howToOrganizePartyAndWriteSoftware: {
@@ -233,6 +249,7 @@ export const LESSONS = {
     storySteps: partySoftwareStory,
     initialNodes: partySoftwareNodes,
     initialEdges: partySoftwareEdges,
+    category: "computer-science",
   },
 
   thinkingInSteps: {
@@ -243,6 +260,7 @@ export const LESSONS = {
     storySteps: thinkingInStepsStory,
     initialNodes: thinkingInStepsNodes,
     initialEdges: thinkingInStepsEdges,
+    category: "computer-science",
   },
 
   computationalThinking: {
@@ -253,5 +271,26 @@ export const LESSONS = {
     storySteps: computationalThinkingStory,
     initialNodes: computationalThinkingNodes,
     initialEdges: computationalThinkingEdges,
+    category: "computer-science",
   },
 };
+
+export const LESSON_CATEGORIES = {
+  sciences: {
+    id: "sciences",
+    title: "Sciences",
+    pathPrefix: "/sciences/lessons",
+  },
+  "computer-science": {
+    id: "computer-science",
+    title: "Computer Science",
+    pathPrefix: "/computer-science/lessons",
+  },
+};
+
+export const LESSONS_BY_CATEGORY = Object.values(LESSONS).reduce((acc, lesson) => {
+  const category = lesson.category || "computer-science";
+  acc[category] = acc[category] ?? [];
+  acc[category].push(lesson);
+  return acc;
+}, {});

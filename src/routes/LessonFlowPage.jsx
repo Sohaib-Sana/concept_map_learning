@@ -16,7 +16,7 @@ import { useTtsPlayer } from "../hooks/useTtsPlayer";
 import { useQuiz } from "../hooks/useQuiz";
 import { QuizPanel } from "../components/quizPanelBig";
 
-import { useParams, Navigate, useNavigate } from "react-router-dom";
+import { useParams, useLocation, Navigate, useNavigate } from "react-router-dom";
 import { LESSONS as STORIES } from "../lessons/index";
 
 import { findPhraseTokenRange } from "../tts/timing";
@@ -32,7 +32,14 @@ export default function LessonFlowPage() {
 
   // Story Selection
   const { storyId } = useParams();
+  const location = useLocation();
+  const subject = location.pathname.split("/")[1] || null;
   const story = STORIES[storyId];
+
+  const correctCategory = story?.category || "computer-science";
+  if (story && subject && subject !== correctCategory) {
+    return <Navigate to={`/${correctCategory}/lessons/${encodeURIComponent(storyId)}`} replace />;
+  }
 
   // if invalid storyId, redirect to home
   if (!story) return <Navigate to="/" replace />;

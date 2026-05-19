@@ -339,15 +339,26 @@
 }
 
 .lpSpeedSelect {
-  padding: 10px 12px;
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+
+  padding: 4px 6px;
   background-color: white;
-  color:black;
-  border-radius: 12px;
+  color: rgba(15, 23, 42, 0.95);
+  border-radius: 999px;
   font-size: 13px;
   font-weight: 900;
-  border: 1px solid transparent;
+  border: 1px solid rgba(15, 23, 42, 0.15);
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+  text-align: center;
 }
 
 .lpSpeedSelect:focus-visible {

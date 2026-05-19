@@ -167,7 +167,7 @@ export function LessonPanel({
         >
           {[0.8, 0.9, 1, 1.25, 1.5].map((speed) => (
             <option key={speed} value={speed}>
-              {speed.toFixed(2)}x
+              {speed}x
             </option>
           ))}
         </select>
